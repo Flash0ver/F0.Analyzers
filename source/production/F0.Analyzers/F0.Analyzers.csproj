@@ -8,18 +8,22 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <PackageId>F0.Analyzers</PackageId>
-    <PackageVersion>0.0.0</PackageVersion>
-    <Authors>Daniela Rabl</Authors>
-    <PackageLicenseUrl>http://LICENSE_URL_HERE_OR_DELETE_THIS_LINE</PackageLicenseUrl>
-    <PackageProjectUrl>http://PROJECT_URL_HERE_OR_DELETE_THIS_LINE</PackageProjectUrl>
-    <PackageIconUrl>http://ICON_URL_HERE_OR_DELETE_THIS_LINE</PackageIconUrl>
-    <RepositoryUrl>http://REPOSITORY_URL_HERE_OR_DELETE_THIS_LINE</RepositoryUrl>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <Description>F0.Analyzers</Description>
+    <PackageId>F0.Analyzers</PackageId>
+    <Version>0.0.0</Version>
+    <Authors>dani.rabl; Flash0ver</Authors>
+    <Company>f[0]</Company>
+    <Product>F0.Analyzers</Product>
+    <Description>C# code refactorings and diagnostic analyzers with code fixes, based on the .NET Compiler Platform (Roslyn).</Description>
+    <Copyright>© f[0]</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/Flash0ver/F0.Analyzers</PackageProjectUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/Flash0ver/F0/master/Branding/NuGet/F0.Analyzers.png</PackageIconUrl>
+    <RepositoryUrl>https://github.com/Flash0ver/F0.Analyzers.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>f[0], f0, analyzers, roslyn, csharp</PackageTags>
     <PackageReleaseNotes>Summary of changes made in this release of the package.</PackageReleaseNotes>
-    <Copyright>Copyright</Copyright>
-    <PackageTags>F0.Analyzers, analyzers</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
