@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>F0.Analyzers</AssemblyName>
+    <RootNamespace>F0</RootNamespace>
     <IncludeBuildOutput>false</IncludeBuildOutput>
   </PropertyGroup>
 
@@ -34,4 +36,5 @@
     <None Update="tools\*.ps1" CopyToOutputDirectory="Always" Pack="true" PackagePath="" />
     <None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
   </ItemGroup>
+
 </Project>
