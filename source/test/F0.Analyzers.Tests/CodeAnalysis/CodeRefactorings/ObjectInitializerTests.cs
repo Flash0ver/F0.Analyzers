@@ -30,12 +30,49 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 			var initialCode =
 				@"
 				using System;
+
+				//class PropertyBag { public string Text { get; set; } }
+
+				class C
+				{
+					void Test()
+					{
+						var tuple = [|new ValueTuple<string>()|];
+					}
+				}";
+
+			var expectedCode =
+				@"
+				using System;
+
+				//class PropertyBag { public string Text { get; set; } }
+
+				class C
+				{
+					void Test()
+					{
+						var tuple = new ValueTuple<string>()
+						{
+							Item1 = default
+						};
+					}
+				}";
+
+			await TestAsync(initialCode, expectedCode);
+		}
+
+		[Fact]
+		public async Task ComputeRefactoringsAsync_ToDo_ToDo3()
+		{
+			var initialCode =
+				@"
+				using System;
 				class C
 				{
 					void Test()
 					{
 						string item1 = string.Empty;
-						[||]var tuple = new ValueTuple<string>();
+						[|var tuple = new ValueTuple<string>();|]
 					}
 				}";
 
@@ -49,12 +86,17 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 						string item1 = string.Empty;
 						var tuple = new ValueTuple<string>
 						{
-							Item1 = item1,
+							Item1 = item1
 						};
 					}
 				}";
 
 			await TestAsync(initialCode, expectedCode);
 		}
+	}
+
+	public class PropertyBag
+	{
+		public string Text { get; set; }
 	}
 }
