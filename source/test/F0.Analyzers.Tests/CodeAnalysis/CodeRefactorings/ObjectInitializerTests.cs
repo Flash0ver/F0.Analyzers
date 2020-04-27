@@ -28,8 +28,7 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 		public async Task ComputeRefactoringsAsync_ToDo_ToDo2()
 		{
 			var initialCode =
-				@"
-				using System;
+				@"using System;
 
 				//class PropertyBag { public string Text { get; set; } }
 
@@ -42,8 +41,7 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 				}";
 
 			var expectedCode =
-				@"
-				using System;
+				@"using System;
 
 				//class PropertyBag { public string Text { get; set; } }
 
@@ -51,10 +49,7 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 				{
 					void Test()
 					{
-						var tuple = new ValueTuple<string>()
-						{
-							Item1 = default
-						};
+						var tuple = new ValueTuple<string>() { Item1 = default };
 					}
 				}";
 
@@ -65,8 +60,7 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 		public async Task ComputeRefactoringsAsync_ToDo_ToDo3()
 		{
 			var initialCode =
-				@"
-				using System;
+				@"using System;
 				class C
 				{
 					void Test()
@@ -77,8 +71,7 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 				}";
 
 			var expectedCode =
-				@"
-				using System;
+				@"using System;
 				class C
 				{
 					void Test()

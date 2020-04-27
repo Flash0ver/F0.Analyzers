@@ -9,7 +9,6 @@ using Microsoft.CodeAnalysis.CodeRefactorings;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Editing;
-using Microsoft.CodeAnalysis.Rename;
 
 namespace F0.CodeAnalysis.CodeRefactorings
 {
@@ -31,13 +30,13 @@ namespace F0.CodeAnalysis.CodeRefactorings
 				return;
 			}
 
-			var action = CodeAction.Create("Reverse type name", c => CreateObjectInitializer(context.Document, objCreationExpr, c));
+			var action = CodeAction.Create("Create Object Initializer", c => CreateObjectInitializer(context.Document, objCreationExpr, c));
 
 			// Register this code action.
 			context.RegisterRefactoring(action);
 		}
 
-		private async Task<Solution> CreateObjectInitializer(Document document, ObjectCreationExpressionSyntax objCreationExpr, CancellationToken cancellationToken)
+		private async Task<Document> CreateObjectInitializer(Document document, ObjectCreationExpressionSyntax objCreationExpr, CancellationToken cancellationToken)
 		{
 			var compilation = CSharpCompilation.Create("TestCompilation")
 				.AddReferences(MetadataReference.CreateFromFile(typeof(string).Assembly.Location))
@@ -54,26 +53,24 @@ namespace F0.CodeAnalysis.CodeRefactorings
 			var properties = typeInfo.Type.GetMembers().OfType<IPropertySymbol>()
 				.Where(p => p.SetMethod is IMethodSymbol setMethod && setMethod.DeclaredAccessibility is Accessibility.Public);
 
-			var argumentList = SyntaxFactory.ArgumentList();
+			var expressionList = SyntaxFactory.SeparatedList<ExpressionSyntax>();
 
 			foreach (var field in fields)
 			{
-				//var expression = SyntaxFactory.AssignmentExpression();
-				//var argument = SyntaxFactory.Argument();
+				var left = SyntaxFactory.IdentifierName(field.Name);
+				var right = SyntaxFactory.LiteralExpression(SyntaxKind.DefaultLiteralExpression, SyntaxFactory.Token(SyntaxKind.DefaultKeyword));
+				var expression = SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, left, right);
+				expressionList = expressionList.Add(expression);
 			}
 
-			var initializer = SyntaxFactory.ConstructorInitializer(SyntaxKind.ObjectInitializerExpression, argumentList);
+			var initializer = SyntaxFactory.InitializerExpression(SyntaxKind.ObjectInitializerExpression, expressionList);
 
-			var newName = "new Name";
-			var typeSymbol = semanticModel.GetDeclaredSymbol(objCreationExpr, cancellationToken);
+			SyntaxNode newNode = objCreationExpr.WithInitializer(initializer);
 
-			// Produce a new solution that has all references to that type renamed, including the declaration.
-			var originalSolution = document.Project.Solution;
-			var optionSet = originalSolution.Workspace.Options;
-			var newSolution = await Renamer.RenameSymbolAsync(document.Project.Solution, typeSymbol, newName, optionSet, cancellationToken).ConfigureAwait(false);
+			var editor = await DocumentEditor.CreateAsync(document, cancellationToken).ConfigureAwait(false);
+			editor.ReplaceNode(objCreationExpr, newNode);
 
-			// Return the new solution with the now-uppercase type name.
-			return newSolution;
+			return editor.GetChangedDocument();
 		}
 	}
 }
