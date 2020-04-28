@@ -1,4 +1,5 @@
-﻿using System.Composition;
+﻿using System.Collections.Generic;
+using System.Composition;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
@@ -9,6 +10,7 @@ using Microsoft.CodeAnalysis.CodeRefactorings;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Editing;
+using Microsoft.CodeAnalysis.Formatting;
 
 namespace F0.CodeAnalysis.CodeRefactorings
 {
@@ -20,10 +22,8 @@ namespace F0.CodeAnalysis.CodeRefactorings
 		{
 			var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
 
-			// Find the node at the selection.
 			var node = root.FindNode(context.Span);
 
-			// Only offer a refactoring if the selected node is a type declaration node.
 			var objCreationExpr = node as ObjectCreationExpressionSyntax;
 			if (objCreationExpr == null)
 			{
@@ -32,7 +32,6 @@ namespace F0.CodeAnalysis.CodeRefactorings
 
 			var action = CodeAction.Create("Create Object Initializer", c => CreateObjectInitializer(context.Document, objCreationExpr, c));
 
-			// Register this code action.
 			context.RegisterRefactoring(action);
 		}
 
@@ -49,28 +48,41 @@ namespace F0.CodeAnalysis.CodeRefactorings
 
 			var typeInfo = semanticModel.GetTypeInfo(objCreationExpr);
 
-			var fields = typeInfo.Type.GetMembers().OfType<IFieldSymbol>().Where(f => f.DeclaredAccessibility is Accessibility.Public);
-			var properties = typeInfo.Type.GetMembers().OfType<IPropertySymbol>()
+			var options = await document.GetOptionsAsync(cancellationToken).ConfigureAwait(false);
+
+			var endOfLineTrivia = SyntaxFactory.EndOfLine(options.GetOption(FormattingOptions.NewLine));
+
+			IEnumerable<ISymbol> mutableFields = typeInfo.Type.GetMembers().OfType<IFieldSymbol>().Where(f => f.DeclaredAccessibility is Accessibility.Public);
+			IEnumerable<ISymbol> mutableProperties = typeInfo.Type.GetMembers().OfType<IPropertySymbol>()
 				.Where(p => p.SetMethod is IMethodSymbol setMethod && setMethod.DeclaredAccessibility is Accessibility.Public);
+
+			var mutableMembers = mutableFields.Concat(mutableProperties);
 
 			var expressionList = SyntaxFactory.SeparatedList<ExpressionSyntax>();
 
-			foreach (var field in fields)
+			foreach (var member in mutableMembers)
 			{
-				var left = SyntaxFactory.IdentifierName(field.Name);
+				var left = SyntaxFactory.IdentifierName(member.Name);
 				var right = SyntaxFactory.LiteralExpression(SyntaxKind.DefaultLiteralExpression, SyntaxFactory.Token(SyntaxKind.DefaultKeyword));
 				var expression = SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, left, right);
+
 				expressionList = expressionList.Add(expression);
+			}
+
+			foreach (var seperator in expressionList.GetSeparators())
+			{
+				expressionList = expressionList.ReplaceSeparator(seperator, seperator.WithTrailingTrivia(endOfLineTrivia));
 			}
 
 			var initializer = SyntaxFactory.InitializerExpression(SyntaxKind.ObjectInitializerExpression, expressionList);
 
 			SyntaxNode newNode = objCreationExpr.WithInitializer(initializer);
 
-			var editor = await DocumentEditor.CreateAsync(document, cancellationToken).ConfigureAwait(false);
-			editor.ReplaceNode(objCreationExpr, newNode);
+			var documentEditor = await DocumentEditor.CreateAsync(document, cancellationToken).ConfigureAwait(false);
 
-			return editor.GetChangedDocument();
+			documentEditor.ReplaceNode(objCreationExpr, newNode);
+
+			return documentEditor.GetChangedDocument();
 		}
 	}
 }

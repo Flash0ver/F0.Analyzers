@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using F0.CodeAnalysis.CodeRefactorings;
 using F0.Testing.CodeAnalysis;
 using Microsoft.CodeAnalysis;
@@ -15,22 +14,10 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 		protected override string LanguageName => LanguageNames.CSharp;
 
 		[Fact]
-		public async Task ComputeRefactoringsAsync_ToDo_ToDo()
-		{
-			var initial = String.Empty;
-
-			var expected = String.Empty;
-
-			await TestAsync(initial, expected);
-		}
-
-		[Fact]
 		public async Task ComputeRefactoringsAsync_ToDo_ToDo2()
 		{
 			var initialCode =
 				@"using System;
-
-				//class PropertyBag { public string Text { get; set; } }
 
 				class C
 				{
@@ -43,13 +30,86 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 			var expectedCode =
 				@"using System;
 
-				//class PropertyBag { public string Text { get; set; } }
+				class C
+				{
+					void Test()
+					{
+						var tuple = new ValueTuple<string>()
+						{
+							Item1 = default
+						};
+					}
+				}";
+
+			await TestAsync(initialCode, expectedCode);
+		}
+
+		[Fact]
+		public async Task ComputeRefactoringsAsync_ClassWithOneProperty_ToDo4()
+		{
+			var initialCode =
+				@"using System;
+
+				class PropertyBag { public string Text { get; set; } }
 
 				class C
 				{
 					void Test()
 					{
-						var tuple = new ValueTuple<string>() { Item1 = default };
+						var propertyBag = [|new PropertyBag()|];
+					}
+				}";
+
+			var expectedCode =
+				@"using System;
+
+				class PropertyBag { public string Text { get; set; } }
+
+				class C
+				{
+					void Test()
+					{
+						var propertyBag = new PropertyBag()
+						{
+							Text = default
+						};
+					}
+				}";
+
+			await TestAsync(initialCode, expectedCode);
+		}
+
+		[Fact]
+		public async Task ComputeRefactoringsAsync_ClassWithMultipleProperties_ToDo4()
+		{
+			var initialCode =
+				@"using System;
+
+				class Model { public string Text { get; set; } public int Number { get; set; } public bool Condition { get; set; } }
+
+				class C
+				{
+					void Test()
+					{
+						var propertyBag = [|new Model()|];
+					}
+				}";
+
+			var expectedCode =
+				@"using System;
+
+				class Model { public string Text { get; set; } public int Number { get; set; } public bool Condition { get; set; } }
+
+				class C
+				{
+					void Test()
+					{
+						var propertyBag = new Model()
+						{
+							Text = default,
+							Number = default,
+							Condition = default
+						};
 					}
 				}";
 
