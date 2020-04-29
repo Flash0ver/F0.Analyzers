@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using Microsoft.CodeAnalysis;
@@ -34,22 +35,24 @@ namespace F0.Testing.CodeAnalysis
 				.GetDocument(documentId);
 		}
 
-		protected void VerifyDocument(string expected, bool compareTokens, Document document)
+		protected async Task VerifyDocumentAsync(string expected, bool compareTokens, Document document)
 		{
 			if (compareTokens)
 			{
-				VerifyTokens(expected, Format(document).ToString());
+				VerifyTokens(expected, (await FormatAsync(document)).ToString());
 			}
 			else
 			{
-				VerifyText(expected, document);
+				await VerifyTextAsync(expected, document);
 			}
 		}
 
-		private SyntaxNode Format(Document document)
+		private async Task<SyntaxNode> FormatAsync(Document document)
 		{
-			var updatedDocument = document.WithSyntaxRoot(document.GetSyntaxRootAsync().Result);
-			return Formatter.FormatAsync(Simplifier.ReduceAsync(updatedDocument, Simplifier.Annotation).Result, Formatter.Annotation).Result.GetSyntaxRootAsync().Result;
+			var updatedDocument = document.WithSyntaxRoot(await document.GetSyntaxRootAsync());
+			var reducedDocument = await Simplifier.ReduceAsync(updatedDocument, Simplifier.Annotation);
+			var formattedDocument = await Formatter.FormatAsync(reducedDocument, Formatter.Annotation);
+			return await formattedDocument.GetSyntaxRootAsync();
 		}
 
 		private IList<SyntaxToken> ParseTokens(string text)
@@ -81,9 +84,9 @@ namespace F0.Testing.CodeAnalysis
 
 		}
 
-		private void VerifyText(string expected, Document document)
+		private async Task VerifyTextAsync(string expected, Document document)
 		{
-			var actual = Format(document).ToString();
+			var actual = (await FormatAsync(document)).ToString();
 			actual.Should().Be(expected);
 		}
 

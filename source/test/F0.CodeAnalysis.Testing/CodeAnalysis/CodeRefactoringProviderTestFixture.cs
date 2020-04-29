@@ -1,4 +1,5 @@
 ﻿// Copyright (c) Microsoft.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -7,6 +8,7 @@ using FluentAssertions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeRefactorings;
+using Microsoft.CodeAnalysis.Formatting;
 using Microsoft.CodeAnalysis.Text;
 
 namespace F0.Testing.CodeAnalysis
@@ -37,6 +39,7 @@ namespace F0.Testing.CodeAnalysis
 			actions.Should().BeNullOrEmpty();
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0049:Simplify Names", Justification = "We prefer the CLR type over the language alias for Constructors.")]
 		protected async Task TestAsync(
 			string markup,
 			string expected,
@@ -53,6 +56,16 @@ namespace F0.Testing.CodeAnalysis
 				expected = expected.Replace("\n", "\r\n");
 			}
 
+			if (markup.Contains('\t'))
+			{
+				markup = markup.Replace("\t", new String(' ', FormattingOptions.IndentationSize.DefaultValue));
+			}
+
+			if (expected.Contains('\t'))
+			{
+				expected = expected.Replace("\t", new String(' ', FormattingOptions.IndentationSize.DefaultValue));
+			}
+
 			MarkupTestFile.GetSpan(markup, out var code, out var span);
 
 			var document = CreateDocument(code);
@@ -63,8 +76,8 @@ namespace F0.Testing.CodeAnalysis
 			var action = actions.ElementAt(actionIndex);
 			action.Should().NotBeNull();
 
-			var edit = action.GetOperationsAsync(CancellationToken.None).Result.OfType<ApplyChangesOperation>().First();
-			VerifyDocument(expected, compareTokens, edit.ChangedSolution.GetDocument(document.Id));
+			var edit = (await action.GetOperationsAsync(CancellationToken.None)).OfType<ApplyChangesOperation>().First();
+			await VerifyDocumentAsync(expected, compareTokens, edit.ChangedSolution.GetDocument(document.Id));
 		}
 
 		protected abstract CodeRefactoringProvider CreateCodeRefactoringProvider { get; }

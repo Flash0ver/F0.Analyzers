@@ -24,8 +24,7 @@ namespace F0.CodeAnalysis.CodeRefactorings
 
 			var node = root.FindNode(context.Span);
 
-			var objCreationExpr = node as ObjectCreationExpressionSyntax;
-			if (objCreationExpr == null)
+			if (!(node is ObjectCreationExpressionSyntax objCreationExpr))
 			{
 				return;
 			}
@@ -43,8 +42,6 @@ namespace F0.CodeAnalysis.CodeRefactorings
 
 			var syntaxTree = await document.GetSyntaxTreeAsync().ConfigureAwait(false);
 			var semanticModel = compilation.GetSemanticModel(syntaxTree);
-
-			var typeSyntax = objCreationExpr.Type;
 
 			var typeInfo = semanticModel.GetTypeInfo(objCreationExpr);
 
@@ -69,9 +66,17 @@ namespace F0.CodeAnalysis.CodeRefactorings
 				expressionList = expressionList.Add(expression);
 			}
 
-			foreach (var seperator in expressionList.GetSeparators())
+			if (expressionList.Count is 1)
 			{
-				expressionList = expressionList.ReplaceSeparator(seperator, seperator.WithTrailingTrivia(endOfLineTrivia));
+				var expression = expressionList.Single();
+				expressionList = expressionList.Replace(expression, expression.WithTrailingTrivia(endOfLineTrivia));
+			}
+			else
+			{
+				foreach (var seperator in expressionList.GetSeparators())
+				{
+					expressionList = expressionList.ReplaceSeparator(seperator, seperator.WithTrailingTrivia(endOfLineTrivia));
+				}
 			}
 
 			var initializer = SyntaxFactory.InitializerExpression(SyntaxKind.ObjectInitializerExpression, expressionList);

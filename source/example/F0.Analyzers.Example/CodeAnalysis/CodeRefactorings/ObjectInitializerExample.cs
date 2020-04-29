@@ -9,15 +9,10 @@
 
 	internal sealed class ObjectInitializerExample
 	{
-		Model GetModel()
+		public Model GetModel()
 		{
-			var model = new Model()
-			{
-				Number = default,
-				Text = default
-			};
+			var model = new Model();
 
-			var model2 = new Model() { Number = default, Text = default };
 
 			return model;
 		}

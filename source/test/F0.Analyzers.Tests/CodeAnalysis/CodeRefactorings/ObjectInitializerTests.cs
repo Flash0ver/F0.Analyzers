@@ -14,7 +14,58 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 		protected override string LanguageName => LanguageNames.CSharp;
 
 		[Fact]
-		public async Task ComputeRefactoringsAsync_ToDo_ToDo2()
+		public async Task ComputeRefactoringsAsync_NotSupportedSelection_NoOp()
+		{
+			var initialCode =
+				@"using System;
+
+				class Empty { }
+
+				class C
+				{
+					void Test()[||]
+					{
+						var empty = new Empty();
+					}
+				}";
+
+			await TestNoActionsAsync(initialCode);
+		}
+
+		[Fact]
+		public async Task ComputeRefactoringsAsync_EmptyClass_EmptyInitializer()
+		{
+			var initialCode =
+				@"using System;
+
+				class Empty { }
+
+				class C
+				{
+					void Test()
+					{
+						var empty = [|new Empty()|];
+					}
+				}";
+
+			var expectedCode =
+				@"using System;
+
+				class Empty { }
+
+				class C
+				{
+					void Test()
+					{
+						var empty = new Empty() { };
+					}
+				}";
+
+			await TestAsync(initialCode, expectedCode);
+		}
+
+		[Fact]
+		public async Task ComputeRefactoringsAsync_GenericStructWithOneField_CreatesObjectInitializerWithOneField()
 		{
 			var initialCode =
 				@"using System;
@@ -45,31 +96,64 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 		}
 
 		[Fact]
-		public async Task ComputeRefactoringsAsync_ClassWithOneProperty_ToDo4()
+		public async Task ComputeRefactoringsAsync_GenericStructWithMultipleField_CreatesObjectInitializerWithMultipleField()
 		{
 			var initialCode =
 				@"using System;
-
-				class PropertyBag { public string Text { get; set; } }
 
 				class C
 				{
 					void Test()
 					{
-						var propertyBag = [|new PropertyBag()|];
+						var tuple = [|new ValueTuple<string, int, bool>()|];
 					}
 				}";
 
 			var expectedCode =
 				@"using System;
 
-				class PropertyBag { public string Text { get; set; } }
+				class C
+				{
+					void Test()
+					{
+						var tuple = new ValueTuple<string, int, bool>()
+						{
+							Item1 = default,
+							Item2 = default,
+							Item3 = default
+						};
+					}
+				}";
+
+			await TestAsync(initialCode, expectedCode);
+		}
+
+		[Fact]
+		public async Task ComputeRefactoringsAsync_ClassWithOneProperty_CreatesObjectInitializerWithOneProperty()
+		{
+			var initialCode =
+				@"using System;
+
+				class Model { public string Text { get; set; } }
 
 				class C
 				{
 					void Test()
 					{
-						var propertyBag = new PropertyBag()
+						var model = [|new Model()|];
+					}
+				}";
+
+			var expectedCode =
+				@"using System;
+
+				class Model { public string Text { get; set; } }
+
+				class C
+				{
+					void Test()
+					{
+						var model = new Model()
 						{
 							Text = default
 						};
@@ -80,7 +164,7 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 		}
 
 		[Fact]
-		public async Task ComputeRefactoringsAsync_ClassWithMultipleProperties_ToDo4()
+		public async Task ComputeRefactoringsAsync_ClassWithMultipleProperties_CreatesObjectInitializerWithMultipleProperties()
 		{
 			var initialCode =
 				@"using System;
@@ -91,7 +175,7 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 				{
 					void Test()
 					{
-						var propertyBag = [|new Model()|];
+						var model = [|new Model()|];
 					}
 				}";
 
@@ -104,7 +188,7 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 				{
 					void Test()
 					{
-						var propertyBag = new Model()
+						var model = new Model()
 						{
 							Text = default,
 							Number = default,
@@ -117,39 +201,38 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 		}
 
 		[Fact]
-		public async Task ComputeRefactoringsAsync_ToDo_ToDo3()
+		public async Task ComputeRefactoringsAsync_ExternalClassWithMultipleProperties_CreatesObjectInitializerWithMultipleProperties()
 		{
 			var initialCode =
 				@"using System;
+				using F0.Tests.Shared;
+
 				class C
 				{
 					void Test()
 					{
-						string item1 = string.Empty;
-						[|var tuple = new ValueTuple<string>();|]
+						var model = [|new Model()|];
 					}
 				}";
 
 			var expectedCode =
 				@"using System;
+				using F0.Tests.Shared;
+
 				class C
 				{
 					void Test()
 					{
-						string item1 = string.Empty;
-						var tuple = new ValueTuple<string>
+						var model = new Model()
 						{
-							Item1 = item1
+							Text = default,
+							Number = default,
+							Condition = default
 						};
 					}
 				}";
 
 			await TestAsync(initialCode, expectedCode);
 		}
-	}
-
-	public class PropertyBag
-	{
-		public string Text { get; set; }
 	}
 }
