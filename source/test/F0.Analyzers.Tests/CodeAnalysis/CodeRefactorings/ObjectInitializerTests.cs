@@ -163,6 +163,7 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 			await TestAsync(initialCode, expectedCode);
 		}
 
+
 		[Fact]
 		public async Task ComputeRefactoringsAsync_ClassWithMultipleProperties_CreatesObjectInitializerWithMultipleProperties()
 		{
@@ -199,6 +200,184 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 
 			await TestAsync(initialCode, expectedCode);
 		}
+
+
+		[Fact]
+		public async Task ComputeRefactoringsAsync_ClassWithConstructor_CreatesObjectInitializerAndKeepsParameter()
+		{
+			var initialCode =
+				@"using System;
+
+				class Model { public Model(int number){} public string Text { get; set; }}
+
+				class C
+				{
+					void Test()
+					{
+						var model = [|new Model(1)|];
+					}
+				}";
+
+			var expectedCode =
+				@"using System;
+
+				class Model { public Model(int number){} public string Text { get; set; }}
+
+				class C
+				{
+					void Test()
+					{
+						var model = new Model(1)
+						{
+							Text = default
+						};
+					}
+				}";
+
+			await TestAsync(initialCode, expectedCode);
+		}
+
+		[Fact]
+		public async Task ComputeRefactoringsAsync_CursorBeforeNewStatement_CreatesObjectInitializer()
+		{
+			var initialCode =
+				@"using System;
+
+				class Model { public string Text { get; set; } }
+
+				class C
+				{
+					void Test()
+					{
+						var model = [||]new Model();
+					}
+				}";
+
+			var expectedCode =
+				@"using System;
+
+				class Model { public string Text { get; set; } }
+
+				class C
+				{
+					void Test()
+					{
+						var model = new Model()
+						{
+							Text = default
+						};
+					}
+				}";
+
+			await TestAsync(initialCode, expectedCode);
+		}
+
+		[Fact]
+		public async Task ComputeRefactoringsAsync_CursorBeforeTypeName_CreatesObjectInitializer()
+		{
+			var initialCode =
+				@"using System;
+
+				class Model { public string Text { get; set; } }
+
+				class C
+				{
+					void Test()
+					{
+						var model = new [||]Model();
+					}
+				}";
+
+			var expectedCode =
+				@"using System;
+
+				class Model { public string Text { get; set; } }
+
+				class C
+				{
+					void Test()
+					{
+						var model = new Model()
+						{
+							Text = default
+						};
+					}
+				}";
+
+			await TestAsync(initialCode, expectedCode);
+		}
+
+		[Fact]
+		public async Task ComputeRefactoringsAsync_ArgumentListIsSelected_CreatesObjectInitializer()
+		{
+			var initialCode =
+				@"using System;
+
+				class Model { public string Text { get; set; } }
+
+				class C
+				{
+					void Test()
+					{
+						var model = new Model[|()|];
+					}
+				}";
+
+			var expectedCode =
+				@"using System;
+
+				class Model { public string Text { get; set; } }
+
+				class C
+				{
+					void Test()
+					{
+						var model = new Model()
+						{
+							Text = default
+						};
+					}
+				}";
+
+			await TestAsync(initialCode, expectedCode);
+		}
+
+		[Fact]
+		public async Task ComputeRefactoringsAsync_CursorInEmptyArgumentList_CreatesObjectInitializer()
+		{
+			var initialCode =
+				@"using System;
+
+				class Model { public string Text { get; set; } }
+
+				class C
+				{
+					void Test()
+					{
+						var model = new Model([||]);
+					}
+				}";
+
+			var expectedCode =
+				@"using System;
+
+				class Model { public string Text { get; set; } }
+
+				class C
+				{
+					void Test()
+					{
+						var model = new Model()
+						{
+							Text = default
+						};
+					}
+				}";
+
+			await TestAsync(initialCode, expectedCode);
+		}
+
+
 
 		[Fact]
 		public async Task ComputeRefactoringsAsync_ExternalClassWithMultipleProperties_CreatesObjectInitializerWithMultipleProperties()

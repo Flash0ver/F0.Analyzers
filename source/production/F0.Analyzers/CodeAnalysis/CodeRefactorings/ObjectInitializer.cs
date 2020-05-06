@@ -21,23 +21,38 @@ namespace F0.CodeAnalysis.CodeRefactorings
 		public sealed override async Task ComputeRefactoringsAsync(CodeRefactoringContext context)
 		{
 			var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
-
 			var node = root.FindNode(context.Span);
 
-			if (!(node is ObjectCreationExpressionSyntax objCreationExpr))
+			if (TryGetObjectCreationExpression(node, out var objectCreationExpression))
 			{
-				return;
+				var action = CodeAction.Create("Create Object Initializer", c => CreateObjectInitializer(context.Document, objectCreationExpression, c));
+				context.RegisterRefactoring(action);
 			}
-
-			var action = CodeAction.Create("Create Object Initializer", c => CreateObjectInitializer(context.Document, objCreationExpr, c));
-
-			context.RegisterRefactoring(action);
 		}
 
-		private async Task<Document> CreateObjectInitializer(Document document, ObjectCreationExpressionSyntax objCreationExpr, CancellationToken cancellationToken)
+		private static bool TryGetObjectCreationExpression(SyntaxNode node, out ObjectCreationExpressionSyntax objectCreationExpression)
+		{
+			if (node is ObjectCreationExpressionSyntax nodeExpression)
+			{
+				objectCreationExpression = nodeExpression;
+				return true;
+			}
+
+			if (node.Parent is ObjectCreationExpressionSyntax parentExpression)
+			{
+				objectCreationExpression = parentExpression;
+				return true;
+			}
+
+			objectCreationExpression = null;
+			return false;
+		}
+
+		private static async Task<Document> CreateObjectInitializer(Document document, ObjectCreationExpressionSyntax objCreationExpr, CancellationToken cancellationToken)
 		{
 			var compilation = CSharpCompilation.Create("TestCompilation")
-				.AddReferences(MetadataReference.CreateFromFile(typeof(string).Assembly.Location))
+				.AddReferences(MetadataReference.CreateFromFile(typeof(object).Assembly.Location))
+				//.AddReferences(MetadataReference.CreateFromFile(document.Project.OutputFilePath))
 				.AddSyntaxTrees(objCreationExpr.SyntaxTree);
 
 			var syntaxTree = await document.GetSyntaxTreeAsync().ConfigureAwait(false);

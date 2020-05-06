@@ -13,9 +13,14 @@ namespace F0.Analyzers.Example.CodeAnalysis.CodeRefactorings
 			return tuple;
 		}
 
-		public Nested GetNestedType()
+		public NestedStruct GetNestedStruct()
 		{
-			return new Nested();
+			return new NestedStruct();
+		}
+
+		public NestedClass GetNestedClassWithConstructorArguments()
+		{
+			return new NestedClass(1);
 		}
 
 		public Model GetTypeFromSameAssembly()
@@ -42,7 +47,7 @@ namespace F0.Analyzers.Example.CodeAnalysis.CodeRefactorings
 			return options;
 		}
 
-		internal struct Nested
+		internal struct NestedStruct
 		{
 			public int Field;
 
@@ -53,6 +58,18 @@ namespace F0.Analyzers.Example.CodeAnalysis.CodeRefactorings
 				Field = 0;
 				Property = 0;
 			}
+		}
+
+		internal class NestedClass
+		{
+			public NestedClass(int number)
+			{
+				Number = number;
+			}
+
+			public string Text { get; set; }
+
+			public int Number { get; }
 		}
 	}
 }
