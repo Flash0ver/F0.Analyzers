@@ -48,23 +48,18 @@ namespace F0.CodeAnalysis.CodeRefactorings
 			return false;
 		}
 
-		private static async Task<Document> CreateObjectInitializer(Document document, ObjectCreationExpressionSyntax objCreationExpr, CancellationToken cancellationToken)
+		private static async Task<Document> CreateObjectInitializer(Document document, ObjectCreationExpressionSyntax objectCreationExpression, CancellationToken cancellationToken)
 		{
-			var compilation = CSharpCompilation.Create("TestCompilation")
-				.AddReferences(MetadataReference.CreateFromFile(typeof(object).Assembly.Location))
-				//.AddReferences(MetadataReference.CreateFromFile(document.Project.OutputFilePath))
-				.AddSyntaxTrees(objCreationExpr.SyntaxTree);
+			var compilation = await document.Project.GetCompilationAsync(cancellationToken).ConfigureAwait(false);
+			var semanticModel = compilation.GetSemanticModel(objectCreationExpression.SyntaxTree);
 
-			var syntaxTree = await document.GetSyntaxTreeAsync().ConfigureAwait(false);
-			var semanticModel = compilation.GetSemanticModel(syntaxTree);
-
-			var typeInfo = semanticModel.GetTypeInfo(objCreationExpr);
+			var typeInfo = semanticModel.GetTypeInfo(objectCreationExpression);
 
 			var options = await document.GetOptionsAsync(cancellationToken).ConfigureAwait(false);
-
 			var endOfLineTrivia = SyntaxFactory.EndOfLine(options.GetOption(FormattingOptions.NewLine));
 
-			IEnumerable<ISymbol> mutableFields = typeInfo.Type.GetMembers().OfType<IFieldSymbol>().Where(f => f.DeclaredAccessibility is Accessibility.Public);
+			IEnumerable<ISymbol> mutableFields = typeInfo.Type.GetMembers().OfType<IFieldSymbol>()
+				.Where(f => f.DeclaredAccessibility is Accessibility.Public);
 			IEnumerable<ISymbol> mutableProperties = typeInfo.Type.GetMembers().OfType<IPropertySymbol>()
 				.Where(p => p.SetMethod is IMethodSymbol setMethod && setMethod.DeclaredAccessibility is Accessibility.Public);
 
@@ -95,12 +90,10 @@ namespace F0.CodeAnalysis.CodeRefactorings
 			}
 
 			var initializer = SyntaxFactory.InitializerExpression(SyntaxKind.ObjectInitializerExpression, expressionList);
-
-			SyntaxNode newNode = objCreationExpr.WithInitializer(initializer);
+			SyntaxNode newNode = objectCreationExpression.WithInitializer(initializer);
 
 			var documentEditor = await DocumentEditor.CreateAsync(document, cancellationToken).ConfigureAwait(false);
-
-			documentEditor.ReplaceNode(objCreationExpr, newNode);
+			documentEditor.ReplaceNode(objectCreationExpression, newNode);
 
 			return documentEditor.GetChangedDocument();
 		}

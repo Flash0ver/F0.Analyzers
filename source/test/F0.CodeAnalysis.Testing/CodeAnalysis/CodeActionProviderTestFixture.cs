@@ -14,7 +14,7 @@ namespace F0.Testing.CodeAnalysis
 {
 	public abstract class CodeActionProviderTestFixture
 	{
-		protected Document CreateDocument(string code)
+		protected Document CreateDocument(string code, params Type[] types)
 		{
 			var fileExtension = LanguageName == LanguageNames.CSharp ? ".cs" : throw new NotSupportedException($"{LanguageName} not supported.");
 
@@ -28,9 +28,12 @@ namespace F0.Testing.CodeAnalysis
 				.Where(a => simpleNames.Contains(a.GetName().Name, StringComparer.OrdinalIgnoreCase))
 				.Select(a => MetadataReference.CreateFromFile(a.Location));
 
+			var additionalReferences = types.Select(t => MetadataReference.CreateFromFile(t.Assembly.Location));
+
 			return new AdhocWorkspace().CurrentSolution
 				.AddProject(projectId, "TestProject", "TestProject", LanguageName)
 				.AddMetadataReferences(projectId, references)
+				.AddMetadataReferences(projectId, additionalReferences)
 				.AddDocument(documentId, "Test" + fileExtension, SourceText.From(code))
 				.GetDocument(documentId);
 		}

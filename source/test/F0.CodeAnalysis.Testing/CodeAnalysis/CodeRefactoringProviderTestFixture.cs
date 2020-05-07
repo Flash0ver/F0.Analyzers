@@ -15,14 +15,7 @@ namespace F0.Testing.CodeAnalysis
 {
 	public abstract class CodeRefactoringProviderTestFixture : CodeActionProviderTestFixture
 	{
-		private async Task<IEnumerable<CodeAction>> GetRefactoringAsync(Document document, TextSpan span)
-		{
-			var provider = CreateCodeRefactoringProvider;
-			var actions = new List<CodeAction>();
-			var context = new CodeRefactoringContext(document, span, (a) => actions.Add(a), CancellationToken.None);
-			await provider.ComputeRefactoringsAsync(context).ConfigureAwait(false);
-			return actions;
-		}
+		protected abstract CodeRefactoringProvider CreateCodeRefactoringProvider { get; }
 
 		protected async Task TestNoActionsAsync(string markup)
 		{
@@ -39,12 +32,18 @@ namespace F0.Testing.CodeAnalysis
 			actions.Should().BeNullOrEmpty();
 		}
 
+		protected Task TestAsync(string markup, string expected, params Type[] types)
+		{
+			return TestAsync(markup, expected, 0, false, types);
+		}
+
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0049:Simplify Names", Justification = "We prefer the CLR type over the language alias for Constructors.")]
 		protected async Task TestAsync(
 			string markup,
 			string expected,
 			int actionIndex = 0,
-			bool compareTokens = false)
+			bool compareTokens = false,
+			params Type[] types)
 		{
 			if (!markup.Contains('\r'))
 			{
@@ -68,7 +67,7 @@ namespace F0.Testing.CodeAnalysis
 
 			MarkupTestFile.GetSpan(markup, out var code, out var span);
 
-			var document = CreateDocument(code);
+			var document = CreateDocument(code, types);
 			var actions = await GetRefactoringAsync(document, span).ConfigureAwait(false);
 
 			actions.Should().NotBeNull().And.NotBeEmpty();
@@ -80,6 +79,13 @@ namespace F0.Testing.CodeAnalysis
 			await VerifyDocumentAsync(expected, compareTokens, edit.ChangedSolution.GetDocument(document.Id));
 		}
 
-		protected abstract CodeRefactoringProvider CreateCodeRefactoringProvider { get; }
+		private async Task<IEnumerable<CodeAction>> GetRefactoringAsync(Document document, TextSpan span)
+		{
+			var provider = CreateCodeRefactoringProvider;
+			var actions = new List<CodeAction>();
+			var context = new CodeRefactoringContext(document, span, (a) => actions.Add(a), CancellationToken.None);
+			await provider.ComputeRefactoringsAsync(context).ConfigureAwait(false);
+			return actions;
+		}
 	}
 }

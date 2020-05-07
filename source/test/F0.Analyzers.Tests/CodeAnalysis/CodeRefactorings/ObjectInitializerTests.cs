@@ -1,6 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using F0.CodeAnalysis.CodeRefactorings;
 using F0.Testing.CodeAnalysis;
+using F0.Tests.Shared;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeRefactorings;
 using Xunit;
@@ -16,7 +18,7 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 		[Fact]
 		public async Task ComputeRefactoringsAsync_NotSupportedSelection_NoOp()
 		{
-			var initialCode =
+			var code =
 				@"using System;
 
 				class Empty { }
@@ -29,7 +31,7 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await TestNoActionsAsync(initialCode);
+			await TestNoActionsAsync(code);
 		}
 
 		[Fact]
@@ -92,7 +94,7 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await TestAsync(initialCode, expectedCode);
+			await TestAsync(initialCode, expectedCode, typeof(ValueTuple));
 		}
 
 		[Fact]
@@ -125,7 +127,7 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await TestAsync(initialCode, expectedCode);
+			await TestAsync(initialCode, expectedCode, typeof(ValueTuple));
 		}
 
 		[Fact]
@@ -308,6 +310,25 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 		}
 
 		[Fact]
+		public async Task ComputeRefactoringsAsync_CursorAfterArgumentList_NoAction()
+		{
+			var code =
+				@"using System;
+
+				class Model { public string Text { get; set; } }
+
+				class C
+				{
+					void Test()
+					{
+						var model = new Model()[||];
+					}
+				}";
+
+			await TestNoActionsAsync(code);
+		}
+
+		[Fact]
 		public async Task ComputeRefactoringsAsync_ArgumentListIsSelected_CreatesObjectInitializer()
 		{
 			var initialCode =
@@ -377,8 +398,6 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 			await TestAsync(initialCode, expectedCode);
 		}
 
-
-
 		[Fact]
 		public async Task ComputeRefactoringsAsync_ExternalClassWithMultipleProperties_CreatesObjectInitializerWithMultipleProperties()
 		{
@@ -411,7 +430,7 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await TestAsync(initialCode, expectedCode);
+			await TestAsync(initialCode, expectedCode, typeof(Model));
 		}
 	}
 }
