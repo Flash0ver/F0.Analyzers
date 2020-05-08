@@ -35,6 +35,29 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 		}
 
 		[Fact]
+		public async Task ComputeRefactoringsAsync_ObjectInitializerAlreadyExists_NoOp()
+		{
+			var code =
+				@"using System;
+
+				class Model { public string Text { get; set; } }
+
+				class C
+				{
+					void Test()
+					{
+						var model = [|new Model()|]
+						{
+							Text = default
+						};
+					}
+				}";
+
+
+			await TestNoActionsAsync(code);
+		}
+
+		[Fact]
 		public async Task ComputeRefactoringsAsync_EmptyClass_EmptyInitializer()
 		{
 			var initialCode =

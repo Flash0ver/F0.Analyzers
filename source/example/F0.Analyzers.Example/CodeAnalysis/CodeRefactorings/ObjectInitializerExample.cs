@@ -47,6 +47,15 @@ namespace F0.Analyzers.Example.CodeAnalysis.CodeRefactorings
 			return options;
 		}
 
+		public NestedStruct GetInitialized()
+		{
+			return new NestedStruct()
+			{
+				Field = 1,
+				Property = 2
+			};
+		}
+
 		internal struct NestedStruct
 		{
 			public int Field;

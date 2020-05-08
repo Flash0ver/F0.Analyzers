@@ -25,8 +25,15 @@ namespace F0.CodeAnalysis.CodeRefactorings
 
 			if (TryGetObjectCreationExpression(node, out var objectCreationExpression))
 			{
-				var action = CodeAction.Create("Create Object Initializer", c => CreateObjectInitializer(context.Document, objectCreationExpression, c));
-				context.RegisterRefactoring(action);
+				if (HasObjectInitializer(objectCreationExpression))
+				{
+					return;
+				}
+				else
+				{
+					var action = CodeAction.Create("Create Object Initializer", c => CreateObjectInitializer(context.Document, objectCreationExpression, c));
+					context.RegisterRefactoring(action);
+				}
 			}
 		}
 
@@ -46,6 +53,12 @@ namespace F0.CodeAnalysis.CodeRefactorings
 
 			objectCreationExpression = null;
 			return false;
+		}
+
+		private static bool HasObjectInitializer(ObjectCreationExpressionSyntax objectCreationExpression)
+		{
+			var childNodes = objectCreationExpression.ChildNodes();
+			return childNodes.Any(n => n is InitializerExpressionSyntax);
 		}
 
 		private static async Task<Document> CreateObjectInitializer(Document document, ObjectCreationExpressionSyntax objectCreationExpression, CancellationToken cancellationToken)
