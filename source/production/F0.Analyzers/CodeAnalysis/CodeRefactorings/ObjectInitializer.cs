@@ -67,13 +67,11 @@ namespace F0.CodeAnalysis.CodeRefactorings
 			var semanticModel = compilation.GetSemanticModel(objectCreationExpression.SyntaxTree);
 
 			var typeInfo = semanticModel.GetTypeInfo(objectCreationExpression);
+			var members = typeInfo.Type.GetMembers();
 
-			var options = await document.GetOptionsAsync(cancellationToken).ConfigureAwait(false);
-			var endOfLineTrivia = SyntaxFactory.EndOfLine(options.GetOption(FormattingOptions.NewLine));
-
-			IEnumerable<ISymbol> mutableFields = typeInfo.Type.GetMembers().OfType<IFieldSymbol>()
-				.Where(f => f.DeclaredAccessibility is Accessibility.Public);
-			IEnumerable<ISymbol> mutableProperties = typeInfo.Type.GetMembers().OfType<IPropertySymbol>()
+			IEnumerable<ISymbol> mutableFields = members.OfType<IFieldSymbol>()
+				.Where(f => f.DeclaredAccessibility is Accessibility.Public && !f.IsReadOnly);
+			IEnumerable<ISymbol> mutableProperties = members.OfType<IPropertySymbol>()
 				.Where(p => p.SetMethod is IMethodSymbol setMethod && setMethod.DeclaredAccessibility is Accessibility.Public);
 
 			var mutableMembers = mutableFields.Concat(mutableProperties);
@@ -88,6 +86,9 @@ namespace F0.CodeAnalysis.CodeRefactorings
 
 				expressionList = expressionList.Add(expression);
 			}
+
+			var options = await document.GetOptionsAsync(cancellationToken).ConfigureAwait(false);
+			var endOfLineTrivia = SyntaxFactory.EndOfLine(options.GetOption(FormattingOptions.NewLine));
 
 			if (expressionList.Count is 1)
 			{

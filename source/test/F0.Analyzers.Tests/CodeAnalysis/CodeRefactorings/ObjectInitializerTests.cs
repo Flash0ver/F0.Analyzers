@@ -263,6 +263,41 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 		}
 
 		[Fact]
+		public async Task ComputeRefactoringsAsync_ClassWithImmutableMembers_CreatesObjectInitializerWithoutImmuntableMembers()
+		{
+			var initialCode =
+				@"using System;
+
+				class Model { public string Text { get; set; } public int Number { get; } public readonly bool Condition; }
+
+				class C
+				{
+					void Test()
+					{
+						var model = [|new Model()|];
+					}
+				}";
+
+			var expectedCode =
+				@"using System;
+
+				class Model { public string Text { get; set; } public int Number { get; } public readonly bool Condition; }
+
+				class C
+				{
+					void Test()
+					{
+						var model = new Model()
+						{
+							Text = default
+						};
+					}
+				}";
+
+			await TestAsync(initialCode, expectedCode);
+		}
+
+		[Fact]
 		public async Task ComputeRefactoringsAsync_CursorBeforeNewStatement_CreatesObjectInitializer()
 		{
 			var initialCode =
