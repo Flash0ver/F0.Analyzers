@@ -4,14 +4,18 @@
     <TargetFramework>netstandard1.3</TargetFramework>
     <AssemblyName>F0.Analyzers</AssemblyName>
     <RootNamespace>F0</RootNamespace>
+  </PropertyGroup>
+
+  <PropertyGroup>
     <IncludeBuildOutput>false</IncludeBuildOutput>
+    <NoPackageAnalysis>true</NoPackageAnalysis>
   </PropertyGroup>
 
   <PropertyGroup>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageId>F0.Analyzers</PackageId>
-    <Version>0.0.0</Version>
+    <Version>0.1.0</Version>
     <Authors>dani.rabl; Flash0ver</Authors>
     <Company>f[0]</Company>
     <Product>F0.Analyzers</Product>
@@ -20,10 +24,11 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/Flash0ver/F0.Analyzers</PackageProjectUrl>
     <PackageIconUrl>https://raw.githubusercontent.com/Flash0ver/F0/master/Branding/NuGet/F0.Analyzers.png</PackageIconUrl>
+    <PackageIcon>Icon.png</PackageIcon>
     <RepositoryUrl>https://github.com/Flash0ver/F0.Analyzers.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>f[0], f0, analyzers, roslyn, csharp</PackageTags>
-    <PackageReleaseNotes>Summary of changes made in this release of the package.</PackageReleaseNotes>
+    <PackageReleaseNotes>Initial upload providing a code refactoring to create an object initializer, assigning the default literal to public fields and properties with an accessible setter.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
@@ -40,6 +45,14 @@
   <ItemGroup>
     <None Update="tools\*.ps1" CopyToOutputDirectory="Always" Pack="true" PackagePath="" />
     <None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(Configuration)' == 'Debug'">
+    <None Include="..\..\..\resources\F0.Analyzers-Preview.png" Pack="true" PackagePath="Icon.png" Visible="false" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(Configuration)' == 'Release'">
+    <None Include="..\..\..\resources\F0.Analyzers.png" Pack="true" PackagePath="Icon.png" Visible="false" />
   </ItemGroup>
 
 </Project>

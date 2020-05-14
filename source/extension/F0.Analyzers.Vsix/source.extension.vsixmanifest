@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Id="F0.Analyzers.fb6920a6-d6b4-4b73-8b87-734b6dff298c" Version="1.0" Language="en-US" Publisher="Flash0Ware"/>
+    <Identity Id="F0.Analyzers.Vsix" Version="0.1.0" Language="en-US" Publisher="Flash0Ware" />
     <DisplayName>F0.Analyzers</DisplayName>
     <Description xml:space="preserve">C# code refactorings and diagnostic analyzers with code fixes, based on the .NET Compiler Platform (Roslyn).</Description>
+    <License>Resources\License.txt</License>
+    <ReleaseNotes>https://github.com/Flash0ver/F0.Analyzers/blob/master/CHANGELOG.md</ReleaseNotes>
+    <Icon>Resources\Icon.png</Icon>
+    <PreviewImage>Resources\Icon.png</PreviewImage>
+    <Tags>f[0]; f0; analyzers; roslyn; csharp</Tags>
   </Metadata>
   <Installation>
     <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[15.0,17.0)" />

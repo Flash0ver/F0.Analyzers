@@ -20,7 +20,7 @@ namespace F0.Analyzers.Example.CodeAnalysis.CodeRefactorings
 
 		public NestedClass GetNestedClassWithConstructorArguments()
 		{
-			return new NestedClass(1);
+			return new NestedClass(true, 1);
 		}
 
 		public Model GetTypeFromSameAssembly()
@@ -71,8 +71,9 @@ namespace F0.Analyzers.Example.CodeAnalysis.CodeRefactorings
 
 		internal class NestedClass
 		{
-			public NestedClass(int number)
+			public NestedClass(bool condition, int number)
 			{
+				Condition = condition;
 				Number = number;
 			}
 
