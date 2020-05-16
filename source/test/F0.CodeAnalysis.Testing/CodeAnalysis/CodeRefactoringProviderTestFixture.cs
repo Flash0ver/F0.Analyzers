@@ -9,6 +9,7 @@ using FluentAssertions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeRefactorings;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Formatting;
 using Microsoft.CodeAnalysis.Text;
 
@@ -27,7 +28,7 @@ namespace F0.Testing.CodeAnalysis
 
 			MarkupTestFile.GetSpan(markup, out var code, out var span);
 
-			var document = CreateDocument(code);
+			var document = CreateDocument(code, LanguageVersion.Latest);
 			var actions = await GetRefactoringAsync(document, span).ConfigureAwait(false);
 
 			actions.Should().BeNullOrEmpty();
@@ -35,7 +36,12 @@ namespace F0.Testing.CodeAnalysis
 
 		protected Task TestAsync(string markup, string expected, params Type[] types)
 		{
-			return TestAsync(markup, expected, 0, false, types);
+			return TestAsync(markup, expected, 0, false, LanguageVersion.Latest, types);
+		}
+
+		protected Task TestAsync(string markup, string expected, LanguageVersion languageVersion, params Type[] types)
+		{
+			return TestAsync(markup, expected, 0, false, languageVersion, types);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0049:Simplify Names", Justification = "We prefer the CLR type over the language alias for Constructors.")]
@@ -44,6 +50,7 @@ namespace F0.Testing.CodeAnalysis
 			string expected,
 			int actionIndex = 0,
 			bool compareTokens = false,
+			LanguageVersion languageVersion = LanguageVersion.Latest,
 			params Type[] types)
 		{
 			if (!markup.Contains('\r'))
@@ -68,7 +75,7 @@ namespace F0.Testing.CodeAnalysis
 
 			MarkupTestFile.GetSpan(markup, out var code, out var span);
 
-			var document = CreateDocument(code, types);
+			var document = CreateDocument(code, languageVersion, types);
 			var actions = await GetRefactoringAsync(document, span).ConfigureAwait(false);
 
 			actions.Should().NotBeNull().And.NotBeEmpty();

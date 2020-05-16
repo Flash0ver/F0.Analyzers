@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
 using System.Reflection;
@@ -76,14 +77,27 @@ namespace F0.CodeAnalysis.CodeRefactorings
 
 			var mutableMembers = mutableFields.Concat(mutableProperties);
 
+			var needsDefaultOperator = (document.Project.ParseOptions as CSharpParseOptions).LanguageVersion <= LanguageVersion.CSharp7;
+
 			var expressionList = SyntaxFactory.SeparatedList<ExpressionSyntax>();
 
 			foreach (var member in mutableMembers)
 			{
 				var left = SyntaxFactory.IdentifierName(member.Name);
-				var right = SyntaxFactory.LiteralExpression(SyntaxKind.DefaultLiteralExpression, SyntaxFactory.Token(SyntaxKind.DefaultKeyword));
-				var expression = SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, left, right);
 
+				ExpressionSyntax right;
+
+				if (needsDefaultOperator)
+				{
+					var type = GetMemberType(member);
+					right = SyntaxFactory.DefaultExpression(SyntaxFactory.QualifiedName(SyntaxFactory.IdentifierName(type.ContainingNamespace.Name), SyntaxFactory.IdentifierName(type.Name)));
+				}
+				else
+				{
+					right = SyntaxFactory.LiteralExpression(SyntaxKind.DefaultLiteralExpression, SyntaxFactory.Token(SyntaxKind.DefaultKeyword));
+				}
+
+				var expression = SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, left, right);
 				expressionList = expressionList.Add(expression);
 			}
 
@@ -110,6 +124,21 @@ namespace F0.CodeAnalysis.CodeRefactorings
 			documentEditor.ReplaceNode(objectCreationExpression, newNode);
 
 			return documentEditor.GetChangedDocument();
+		}
+
+		private static INamedTypeSymbol GetMemberType(ISymbol member)
+		{
+			if (member is IPropertySymbol property)
+			{
+				return property.Type as INamedTypeSymbol;
+			}
+
+			if (member is IFieldSymbol field)
+			{
+				return field.Type as INamedTypeSymbol;
+			}
+
+			throw new NotSupportedException();
 		}
 	}
 }

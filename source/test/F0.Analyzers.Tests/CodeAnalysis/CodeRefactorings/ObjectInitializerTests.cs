@@ -5,6 +5,7 @@ using F0.Testing.CodeAnalysis;
 using F0.Tests.Shared;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeRefactorings;
+using Microsoft.CodeAnalysis.CSharp;
 using Xunit;
 
 namespace F0.Tests.CodeAnalysis.CodeRefactorings
@@ -295,6 +296,80 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 				}";
 
 			await TestAsync(initialCode, expectedCode);
+		}
+
+		[Fact]
+		public async Task ComputeRefactoringsAsync_CSharp7_DefaultOperator()
+		{
+			var initialCode =
+				@"using System;
+
+				class Model { public string Text { get; set; } public int Number { get; set; } public bool Condition { get; set; } }
+
+				class C
+				{
+					void Test()
+					{
+						var model = [|new Model()|];
+					}
+				}";
+
+			var expectedCode =
+				@"using System;
+
+				class Model { public string Text { get; set; } public int Number { get; set; } public bool Condition { get; set; } }
+
+				class C
+				{
+					void Test()
+					{
+						var model = new Model()
+						{
+							Text = default(System.String),
+							Number = default(System.Int32),
+							Condition = default(System.Boolean)
+						};
+					}
+				}";
+
+			await TestAsync(initialCode, expectedCode, LanguageVersion.CSharp7, typeof(string));
+		}
+
+		[Fact]
+		public async Task ComputeRefactoringsAsync_CSharp7_1_DefaultLiteral()
+		{
+			var initialCode =
+				@"using System;
+
+				class Model { public string Text { get; set; } public int Number { get; set; } public bool Condition { get; set; } }
+
+				class C
+				{
+					void Test()
+					{
+						var model = [|new Model()|];
+					}
+				}";
+
+			var expectedCode =
+				@"using System;
+
+				class Model { public string Text { get; set; } public int Number { get; set; } public bool Condition { get; set; } }
+
+				class C
+				{
+					void Test()
+					{
+						var model = new Model()
+						{
+							Text = default,
+							Number = default,
+							Condition = default
+						};
+					}
+				}";
+
+			await TestAsync(initialCode, expectedCode, LanguageVersion.CSharp7_1);
 		}
 
 		[Fact]
