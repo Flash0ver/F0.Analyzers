@@ -8,7 +8,7 @@
 
   <PropertyGroup>
     <IncludeBuildOutput>false</IncludeBuildOutput>
-    <NoPackageAnalysis>true</NoPackageAnalysis>
+    <DevelopmentDependency>true</DevelopmentDependency>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -29,6 +29,14 @@
     <RepositoryType>git</RepositoryType>
     <PackageTags>f[0], f0, analyzers, roslyn, csharp</PackageTags>
     <PackageReleaseNotes>Initial upload providing a code refactoring to create an object initializer, assigning the default literal to public fields and properties with an accessible setter.</PackageReleaseNotes>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <NoPackageAnalysis>false</NoPackageAnalysis>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <NoPackageAnalysis>true</NoPackageAnalysis>
   </PropertyGroup>
 
   <ItemGroup>
