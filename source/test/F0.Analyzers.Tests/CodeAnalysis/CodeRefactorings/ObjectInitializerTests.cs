@@ -304,31 +304,51 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 			var initialCode =
 				@"using System;
 
-				class Model { public string Text { get; set; } public int Number { get; set; } public bool Condition { get; set; } }
+				class GlobalType { }
 
-				class C
+				namespace Namespace.Types
 				{
-					void Test()
+					class NamespacedType { }
+				}
+
+				class Model { public GlobalType Global; public Namespace.Types.NamespacedType Namespaced { get; set; } public Tuple<string, Type, System.Data.DbType> Constructed { get; set; } }
+
+				namespace Namespace
+				{
+					class C
 					{
-						var model = [|new Model()|];
+						void Test()
+						{
+							var model = [|new Model()|];
+						}
 					}
 				}";
 
 			var expectedCode =
 				@"using System;
 
-				class Model { public string Text { get; set; } public int Number { get; set; } public bool Condition { get; set; } }
+				class GlobalType { }
 
-				class C
+				namespace Namespace.Types
 				{
-					void Test()
+					class NamespacedType { }
+				}
+
+				class Model { public GlobalType Global; public Namespace.Types.NamespacedType Namespaced { get; set; } public Tuple<string, Type, System.Data.DbType> Constructed { get; set; } }
+
+				namespace Namespace
+				{
+					class C
 					{
-						var model = new Model()
+						void Test()
 						{
-							Text = default(System.String),
-							Number = default(System.Int32),
-							Condition = default(System.Boolean)
-						};
+							var model = new Model()
+							{
+								Global = default(GlobalType),
+								Namespaced = default(Types.NamespacedType),
+								Constructed = default(Tuple<string, Type, System.Data.DbType>)
+							};
+						}
 					}
 				}";
 
@@ -341,31 +361,51 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 			var initialCode =
 				@"using System;
 
-				class Model { public string Text { get; set; } public int Number { get; set; } public bool Condition { get; set; } }
+				class GlobalType { }
 
-				class C
+				namespace Namespace.Types
 				{
-					void Test()
+					class NamespacedType { }
+				}
+
+				class Model { public GlobalType Global; public Namespace.Types.NamespacedType Namespaced { get; set; } public Tuple<string, Type, System.Data.DbType> Constructed { get; set; } }
+
+				namespace Namespace
+				{
+					class C
 					{
-						var model = [|new Model()|];
+						void Test()
+						{
+							var model = [|new Model()|];
+						}
 					}
 				}";
 
 			var expectedCode =
 				@"using System;
 
-				class Model { public string Text { get; set; } public int Number { get; set; } public bool Condition { get; set; } }
+				class GlobalType { }
 
-				class C
+				namespace Namespace.Types
 				{
-					void Test()
+					class NamespacedType { }
+				}
+
+				class Model { public GlobalType Global; public Namespace.Types.NamespacedType Namespaced { get; set; } public Tuple<string, Type, System.Data.DbType> Constructed { get; set; } }
+
+				namespace Namespace
+				{
+					class C
 					{
-						var model = new Model()
+						void Test()
 						{
-							Text = default,
-							Number = default,
-							Condition = default
-						};
+							var model = new Model()
+							{
+								Global = default,
+								Namespaced = default,
+								Constructed = default
+							};
+						}
 					}
 				}";
 

@@ -78,6 +78,7 @@ namespace F0.CodeAnalysis.CodeRefactorings
 			var mutableMembers = mutableFields.Concat(mutableProperties);
 
 			var needsDefaultOperator = (document.Project.ParseOptions as CSharpParseOptions).LanguageVersion <= LanguageVersion.CSharp7;
+			var generator = SyntaxGenerator.GetGenerator(document);
 
 			var expressionList = SyntaxFactory.SeparatedList<ExpressionSyntax>();
 
@@ -90,7 +91,9 @@ namespace F0.CodeAnalysis.CodeRefactorings
 				if (needsDefaultOperator)
 				{
 					var type = GetMemberType(member);
-					right = SyntaxFactory.DefaultExpression(SyntaxFactory.QualifiedName(SyntaxFactory.IdentifierName(type.ContainingNamespace.Name), SyntaxFactory.IdentifierName(type.Name)));
+					var typeExpression = generator.TypeExpression(type);
+
+					right = generator.DefaultExpression(typeExpression) as DefaultExpressionSyntax;
 				}
 				else
 				{
