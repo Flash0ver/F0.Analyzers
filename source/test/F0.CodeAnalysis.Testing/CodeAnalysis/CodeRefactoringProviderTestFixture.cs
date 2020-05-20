@@ -19,7 +19,7 @@ namespace F0.Testing.CodeAnalysis
 	{
 		protected abstract CodeRefactoringProvider CreateCodeRefactoringProvider { get; }
 
-		protected async Task TestNoActionsAsync(string markup)
+		protected async Task TestNoActionsAsync(string markup, LanguageVersion languageVersion = LanguageVersion.Latest)
 		{
 			if (!markup.Contains('\r'))
 			{
@@ -28,7 +28,7 @@ namespace F0.Testing.CodeAnalysis
 
 			MarkupTestFile.GetSpan(markup, out var code, out var span);
 
-			var document = CreateDocument(code, LanguageVersion.Latest);
+			var document = CreateDocument(code, languageVersion);
 			var actions = await GetRefactoringAsync(document, span).ConfigureAwait(false);
 
 			actions.Should().BeNullOrEmpty();

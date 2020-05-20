@@ -299,6 +299,61 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 		}
 
 		[Fact]
+		public async Task ComputeRefactoringsAsync_CSharp2_ObjectInitializerIsNotAvailable()
+		{
+			var code =
+				@"using System;
+
+				class Model { public int Field; private int backingField; public int Property { get { return backingField; } set { backingField = value; } } }
+
+				class C
+				{
+					void Test()
+					{
+						var model = [|new Model()|];
+					}
+				}";
+
+			await TestNoActionsAsync(code, LanguageVersion.CSharp2);
+		}
+
+		[Fact]
+		public async Task ComputeRefactoringsAsync_CSharp3_ObjectInitializerIsAvailable()
+		{
+			var initialCode =
+				@"using System;
+
+				class Model { public int Field; private int backingField; public int Property { get { return backingField; } set { backingField = value; } } }
+
+				class C
+				{
+					void Test()
+					{
+						var model = [|new Model()|];
+					}
+				}";
+
+			var expectedCode =
+				@"using System;
+
+				class Model { public int Field; private int backingField; public int Property { get { return backingField; } set { backingField = value; } } }
+
+				class C
+				{
+					void Test()
+					{
+						var model = new Model()
+						{
+							Field = default(int),
+							Property = default(int)
+						};
+					}
+				}";
+
+			await TestAsync(initialCode, expectedCode, LanguageVersion.CSharp3, typeof(int));
+		}
+
+		[Fact]
 		public async Task ComputeRefactoringsAsync_CSharp7_DefaultOperator()
 		{
 			var initialCode =

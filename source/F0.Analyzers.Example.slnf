@@ -2,6 +2,7 @@
   "solution": {
     "path": "F0.Analyzers.sln",
     "projects": [
+      "example\\F0.Analyzers.Example.CSharp2\\F0.Analyzers.Example.CSharp2.csproj",
       "example\\F0.Analyzers.Example.CSharp7\\F0.Analyzers.Example.CSharp7.csproj",
       "example\\F0.Analyzers.Example.Dependencies\\F0.Analyzers.Example.Dependencies.csproj",
       "example\\F0.Analyzers.Example\\F0.Analyzers.Example.csproj"

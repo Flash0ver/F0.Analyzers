@@ -21,6 +21,11 @@ namespace F0.CodeAnalysis.CodeRefactorings
 	{
 		public sealed override async Task ComputeRefactoringsAsync(CodeRefactoringContext context)
 		{
+			if ((context.Document.Project.ParseOptions as CSharpParseOptions).LanguageVersion <= LanguageVersion.CSharp2)
+			{
+				return;
+			}
+
 			var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
 			var node = root.FindNode(context.Span);
 
