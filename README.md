@@ -24,4 +24,8 @@ Consuming _code refactorings_ via `PackageReference` requires at least _Visual S
 
 ### Object Initializer
 
-This code refactoring adds an object initializer, assigning `default` to all publicly settable fields and properties.
+_C# 3.0 or greater_
+
+This code refactoring adds an object initializer, assigning the `default value expression` to all publicly settable fields and properties.
+- C# 7.0 or lower: `default operator`
+- C# 7.1 or greater: `default literal`
