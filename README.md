@@ -15,6 +15,11 @@ Code refactorings and diagnostic analyzers with code fixes for C# projects, base
 [NuGet Must Haves](https://nugetmusthaves.com/Package/F0.Analyzers)\
 [NuGet Trends](https://nugettrends.com/packages?months=12&ids=F0.Analyzers)
 
+## Remarks
+Consuming _code refactorings_ via `PackageReference` requires at least _Visual Studio 2019 version 16.5.0_.
+
+> Analyzer authors can now distribute custom code refactorings as a NuGet package when previously it could only be distributed as a VSIX.
+
 ## Code Refactorings
 
 ### Object Initializer
