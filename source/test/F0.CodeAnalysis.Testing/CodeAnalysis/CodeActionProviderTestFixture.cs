@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Formatting;
 using Microsoft.CodeAnalysis.Simplification;
 using Microsoft.CodeAnalysis.Text;
@@ -15,7 +16,7 @@ namespace F0.Testing.CodeAnalysis
 {
 	public abstract class CodeActionProviderTestFixture
 	{
-		protected Document CreateDocument(string code, params Type[] types)
+		protected Document CreateDocument(string code, LanguageVersion languageVersion, params Type[] types)
 		{
 			var fileExtension = LanguageName == LanguageNames.CSharp ? ".cs" : throw new NotSupportedException($"{LanguageName} not supported.");
 
@@ -31,8 +32,11 @@ namespace F0.Testing.CodeAnalysis
 
 			var additionalReferences = types.Select(t => MetadataReference.CreateFromFile(t.Assembly.Location));
 
+			var parseOptions = new CSharpParseOptions(languageVersion);
+
 			return new AdhocWorkspace().CurrentSolution
 				.AddProject(projectId, "TestProject", "TestProject", LanguageName)
+				.WithProjectParseOptions(projectId, parseOptions)
 				.AddMetadataReferences(projectId, references)
 				.AddMetadataReferences(projectId, additionalReferences)
 				.AddDocument(documentId, "Test" + fileExtension, SourceText.From(code))

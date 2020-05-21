@@ -15,7 +15,7 @@
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageId>F0.Analyzers</PackageId>
-    <Version>0.1.0</Version>
+    <Version>0.2.0</Version>
     <Authors>dani.rabl; Flash0ver</Authors>
     <Company>f[0]</Company>
     <Product>F0.Analyzers</Product>
@@ -28,7 +28,7 @@
     <RepositoryUrl>https://github.com/Flash0ver/F0.Analyzers.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>f[0], f0, analyzers, roslyn, csharp</PackageTags>
-    <PackageReleaseNotes>Initial upload providing a code refactoring to create an object initializer, assigning the default literal to public fields and properties with an accessible setter.</PackageReleaseNotes>
+    <PackageReleaseNotes>Changed the object initializer code refactoring to assign the default operator if language version is between C# 3.0 and C# 7.0. Additionally, marked the package as a development-only dependency.</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">

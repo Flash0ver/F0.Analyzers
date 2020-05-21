@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
-using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
@@ -11,6 +11,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Editing;
 using Microsoft.CodeAnalysis.Formatting;
+using Microsoft.CodeAnalysis.Options;
 
 namespace F0.CodeAnalysis.CodeRefactorings
 {
@@ -20,6 +21,11 @@ namespace F0.CodeAnalysis.CodeRefactorings
 	{
 		public sealed override async Task ComputeRefactoringsAsync(CodeRefactoringContext context)
 		{
+			if (!HasObjectInitializerFeature(ref context))
+			{
+				return;
+			}
+
 			var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
 			var node = root.FindNode(context.Span);
 
@@ -35,6 +41,11 @@ namespace F0.CodeAnalysis.CodeRefactorings
 					context.RegisterRefactoring(action);
 				}
 			}
+		}
+
+		private static bool HasObjectInitializerFeature(ref CodeRefactoringContext context)
+		{
+			return (context.Document.Project.ParseOptions as CSharpParseOptions).LanguageVersion >= LanguageVersion.CSharp3;
 		}
 
 		private static bool TryGetObjectCreationExpression(SyntaxNode node, out ObjectCreationExpressionSyntax objectCreationExpression)
@@ -67,6 +78,24 @@ namespace F0.CodeAnalysis.CodeRefactorings
 			var semanticModel = compilation.GetSemanticModel(objectCreationExpression.SyntaxTree);
 
 			var typeInfo = semanticModel.GetTypeInfo(objectCreationExpression);
+			var mutableMembers = GetMutableMembers(ref typeInfo);
+
+			var options = await document.GetOptionsAsync(cancellationToken).ConfigureAwait(false);
+
+			var expressionList = CreateAssignmentExpressions(document, mutableMembers);
+			expressionList = FormatExpressionList(expressionList, options);
+
+			var initializer = SyntaxFactory.InitializerExpression(SyntaxKind.ObjectInitializerExpression, expressionList);
+			SyntaxNode newNode = objectCreationExpression.WithInitializer(initializer);
+
+			var documentEditor = await DocumentEditor.CreateAsync(document, cancellationToken).ConfigureAwait(false);
+			documentEditor.ReplaceNode(objectCreationExpression, newNode);
+
+			return documentEditor.GetChangedDocument();
+		}
+
+		private static IEnumerable<ISymbol> GetMutableMembers(ref TypeInfo typeInfo)
+		{
 			var members = typeInfo.Type.GetMembers();
 
 			IEnumerable<ISymbol> mutableFields = members.OfType<IFieldSymbol>()
@@ -75,19 +104,63 @@ namespace F0.CodeAnalysis.CodeRefactorings
 				.Where(p => p.SetMethod is IMethodSymbol setMethod && setMethod.DeclaredAccessibility is Accessibility.Public);
 
 			var mutableMembers = mutableFields.Concat(mutableProperties);
+			return mutableMembers;
+		}
+
+		private static SeparatedSyntaxList<ExpressionSyntax> CreateAssignmentExpressions(Document document, IEnumerable<ISymbol> mutableMembers)
+		{
+			var hasDefaultLiteral = HasDefaultLiteralFeature(document);
+			var generator = hasDefaultLiteral ? null : SyntaxGenerator.GetGenerator(document);
 
 			var expressionList = SyntaxFactory.SeparatedList<ExpressionSyntax>();
 
 			foreach (var member in mutableMembers)
 			{
 				var left = SyntaxFactory.IdentifierName(member.Name);
-				var right = SyntaxFactory.LiteralExpression(SyntaxKind.DefaultLiteralExpression, SyntaxFactory.Token(SyntaxKind.DefaultKeyword));
-				var expression = SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, left, right);
 
+				ExpressionSyntax right;
+
+				if (hasDefaultLiteral)
+				{
+					right = SyntaxFactory.LiteralExpression(SyntaxKind.DefaultLiteralExpression, SyntaxFactory.Token(SyntaxKind.DefaultKeyword));
+				}
+				else
+				{
+					var type = GetMemberType(member);
+					var typeExpression = generator.TypeExpression(type);
+
+					right = generator.DefaultExpression(typeExpression) as DefaultExpressionSyntax;
+				}
+
+				var expression = SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, left, right);
 				expressionList = expressionList.Add(expression);
 			}
 
-			var options = await document.GetOptionsAsync(cancellationToken).ConfigureAwait(false);
+			return expressionList;
+		}
+
+		private static bool HasDefaultLiteralFeature(Document document)
+		{
+			return (document.Project.ParseOptions as CSharpParseOptions).LanguageVersion >= LanguageVersion.CSharp7_1;
+		}
+
+		private static INamedTypeSymbol GetMemberType(ISymbol member)
+		{
+			if (member is IPropertySymbol property)
+			{
+				return property.Type as INamedTypeSymbol;
+			}
+
+			if (member is IFieldSymbol field)
+			{
+				return field.Type as INamedTypeSymbol;
+			}
+
+			throw new NotSupportedException();
+		}
+
+		private static SeparatedSyntaxList<ExpressionSyntax> FormatExpressionList(SeparatedSyntaxList<ExpressionSyntax> expressionList, DocumentOptionSet options)
+		{
 			var endOfLineTrivia = SyntaxFactory.EndOfLine(options.GetOption(FormattingOptions.NewLine));
 
 			if (expressionList.Count is 1)
@@ -103,13 +176,7 @@ namespace F0.CodeAnalysis.CodeRefactorings
 				}
 			}
 
-			var initializer = SyntaxFactory.InitializerExpression(SyntaxKind.ObjectInitializerExpression, expressionList);
-			SyntaxNode newNode = objectCreationExpression.WithInitializer(initializer);
-
-			var documentEditor = await DocumentEditor.CreateAsync(document, cancellationToken).ConfigureAwait(false);
-			documentEditor.ReplaceNode(objectCreationExpression, newNode);
-
-			return documentEditor.GetChangedDocument();
+			return expressionList;
 		}
 	}
 }
