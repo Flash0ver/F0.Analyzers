@@ -2,6 +2,8 @@
 CHANGELOG
 
 ## vNext
+
+## v0.2.0 (2020-05-21)
 ### Analyzers
 - Changed `ObjectInitializer` code refactoring, assigning `default operator` if language version is C# 7.0 or lower.
 - Changed `ObjectInitializer` code refactoring, registering code action only if language version is C# 3.0 or greater.
