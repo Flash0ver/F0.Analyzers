@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
-using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
@@ -12,6 +11,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Editing;
 using Microsoft.CodeAnalysis.Formatting;
+using Microsoft.CodeAnalysis.Options;
 
 namespace F0.CodeAnalysis.CodeRefactorings
 {
@@ -21,7 +21,7 @@ namespace F0.CodeAnalysis.CodeRefactorings
 	{
 		public sealed override async Task ComputeRefactoringsAsync(CodeRefactoringContext context)
 		{
-			if ((context.Document.Project.ParseOptions as CSharpParseOptions).LanguageVersion <= LanguageVersion.CSharp2)
+			if (!HasObjectInitializerFeature(ref context))
 			{
 				return;
 			}
@@ -41,6 +41,11 @@ namespace F0.CodeAnalysis.CodeRefactorings
 					context.RegisterRefactoring(action);
 				}
 			}
+		}
+
+		private static bool HasObjectInitializerFeature(ref CodeRefactoringContext context)
+		{
+			return (context.Document.Project.ParseOptions as CSharpParseOptions).LanguageVersion >= LanguageVersion.CSharp3;
 		}
 
 		private static bool TryGetObjectCreationExpression(SyntaxNode node, out ObjectCreationExpressionSyntax objectCreationExpression)
@@ -73,6 +78,24 @@ namespace F0.CodeAnalysis.CodeRefactorings
 			var semanticModel = compilation.GetSemanticModel(objectCreationExpression.SyntaxTree);
 
 			var typeInfo = semanticModel.GetTypeInfo(objectCreationExpression);
+			var mutableMembers = GetMutableMembers(ref typeInfo);
+
+			var options = await document.GetOptionsAsync(cancellationToken).ConfigureAwait(false);
+
+			var expressionList = CreateAssignmentExpressions(document, mutableMembers);
+			expressionList = FormatExpressionList(expressionList, options);
+
+			var initializer = SyntaxFactory.InitializerExpression(SyntaxKind.ObjectInitializerExpression, expressionList);
+			SyntaxNode newNode = objectCreationExpression.WithInitializer(initializer);
+
+			var documentEditor = await DocumentEditor.CreateAsync(document, cancellationToken).ConfigureAwait(false);
+			documentEditor.ReplaceNode(objectCreationExpression, newNode);
+
+			return documentEditor.GetChangedDocument();
+		}
+
+		private static IEnumerable<ISymbol> GetMutableMembers(ref TypeInfo typeInfo)
+		{
 			var members = typeInfo.Type.GetMembers();
 
 			IEnumerable<ISymbol> mutableFields = members.OfType<IFieldSymbol>()
@@ -81,9 +104,13 @@ namespace F0.CodeAnalysis.CodeRefactorings
 				.Where(p => p.SetMethod is IMethodSymbol setMethod && setMethod.DeclaredAccessibility is Accessibility.Public);
 
 			var mutableMembers = mutableFields.Concat(mutableProperties);
+			return mutableMembers;
+		}
 
-			var needsDefaultOperator = (document.Project.ParseOptions as CSharpParseOptions).LanguageVersion <= LanguageVersion.CSharp7;
-			var generator = SyntaxGenerator.GetGenerator(document);
+		private static SeparatedSyntaxList<ExpressionSyntax> CreateAssignmentExpressions(Document document, IEnumerable<ISymbol> mutableMembers)
+		{
+			var hasDefaultLiteral = HasDefaultLiteralFeature(document);
+			var generator = hasDefaultLiteral ? null : SyntaxGenerator.GetGenerator(document);
 
 			var expressionList = SyntaxFactory.SeparatedList<ExpressionSyntax>();
 
@@ -93,45 +120,28 @@ namespace F0.CodeAnalysis.CodeRefactorings
 
 				ExpressionSyntax right;
 
-				if (needsDefaultOperator)
+				if (hasDefaultLiteral)
+				{
+					right = SyntaxFactory.LiteralExpression(SyntaxKind.DefaultLiteralExpression, SyntaxFactory.Token(SyntaxKind.DefaultKeyword));
+				}
+				else
 				{
 					var type = GetMemberType(member);
 					var typeExpression = generator.TypeExpression(type);
 
 					right = generator.DefaultExpression(typeExpression) as DefaultExpressionSyntax;
 				}
-				else
-				{
-					right = SyntaxFactory.LiteralExpression(SyntaxKind.DefaultLiteralExpression, SyntaxFactory.Token(SyntaxKind.DefaultKeyword));
-				}
 
 				var expression = SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, left, right);
 				expressionList = expressionList.Add(expression);
 			}
 
-			var options = await document.GetOptionsAsync(cancellationToken).ConfigureAwait(false);
-			var endOfLineTrivia = SyntaxFactory.EndOfLine(options.GetOption(FormattingOptions.NewLine));
+			return expressionList;
+		}
 
-			if (expressionList.Count is 1)
-			{
-				var expression = expressionList.Single();
-				expressionList = expressionList.Replace(expression, expression.WithTrailingTrivia(endOfLineTrivia));
-			}
-			else
-			{
-				foreach (var seperator in expressionList.GetSeparators())
-				{
-					expressionList = expressionList.ReplaceSeparator(seperator, seperator.WithTrailingTrivia(endOfLineTrivia));
-				}
-			}
-
-			var initializer = SyntaxFactory.InitializerExpression(SyntaxKind.ObjectInitializerExpression, expressionList);
-			SyntaxNode newNode = objectCreationExpression.WithInitializer(initializer);
-
-			var documentEditor = await DocumentEditor.CreateAsync(document, cancellationToken).ConfigureAwait(false);
-			documentEditor.ReplaceNode(objectCreationExpression, newNode);
-
-			return documentEditor.GetChangedDocument();
+		private static bool HasDefaultLiteralFeature(Document document)
+		{
+			return (document.Project.ParseOptions as CSharpParseOptions).LanguageVersion >= LanguageVersion.CSharp7_1;
 		}
 
 		private static INamedTypeSymbol GetMemberType(ISymbol member)
@@ -147,6 +157,26 @@ namespace F0.CodeAnalysis.CodeRefactorings
 			}
 
 			throw new NotSupportedException();
+		}
+
+		private static SeparatedSyntaxList<ExpressionSyntax> FormatExpressionList(SeparatedSyntaxList<ExpressionSyntax> expressionList, DocumentOptionSet options)
+		{
+			var endOfLineTrivia = SyntaxFactory.EndOfLine(options.GetOption(FormattingOptions.NewLine));
+
+			if (expressionList.Count is 1)
+			{
+				var expression = expressionList.Single();
+				expressionList = expressionList.Replace(expression, expression.WithTrailingTrivia(endOfLineTrivia));
+			}
+			else
+			{
+				foreach (var seperator in expressionList.GetSeparators())
+				{
+					expressionList = expressionList.ReplaceSeparator(seperator, seperator.WithTrailingTrivia(endOfLineTrivia));
+				}
+			}
+
+			return expressionList;
 		}
 	}
 }
