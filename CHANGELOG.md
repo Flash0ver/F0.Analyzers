@@ -3,6 +3,10 @@ CHANGELOG
 
 ## vNext
 
+## v0.3.0 (2020-05-27)
+### Analyzers
+- Added `GoToStatementConsideredHarmful` diagnostic analyzer, reporting _Warning_ if a `goto` statement is used.
+
 ## v0.2.0 (2020-05-21)
 ### Analyzers
 - Changed `ObjectInitializer` code refactoring, assigning `default operator` if language version is C# 7.0 or lower.
