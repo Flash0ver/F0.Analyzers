@@ -10,12 +10,8 @@ using Xunit;
 
 namespace F0.Tests.CodeAnalysis.CodeRefactorings
 {
-	public class ObjectInitializerTests : CodeRefactoringProviderTestFixture
+	public class ObjectInitializerTests
 	{
-		protected override CodeRefactoringProvider CreateCodeRefactoringProvider => new ObjectInitializer();
-
-		protected override string LanguageName => LanguageNames.CSharp;
-
 		[Fact]
 		public async Task ComputeRefactoringsAsync_NotSupportedSelection_NoOp()
 		{
@@ -32,7 +28,7 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await TestNoActionsAsync(code);
+			await Verify.CodeRefactoring<ObjectInitializer>().NoOpAsync(code);
 		}
 
 		[Fact]
@@ -55,7 +51,7 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 				}";
 
 
-			await TestNoActionsAsync(code);
+			await Verify.CodeRefactoring<ObjectInitializer>().NoOpAsync(code);
 		}
 
 		[Fact]
@@ -87,7 +83,7 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await TestAsync(initialCode, expectedCode);
+			await Verify.CodeRefactoring<ObjectInitializer>().CodeActionAsync(initialCode, expectedCode);
 		}
 
 		[Fact]
@@ -118,7 +114,7 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await TestAsync(initialCode, expectedCode, typeof(ValueTuple));
+			await Verify.CodeRefactoring<ObjectInitializer>().CodeActionAsync(initialCode, expectedCode);
 		}
 
 		[Fact]
@@ -151,7 +147,7 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await TestAsync(initialCode, expectedCode, typeof(ValueTuple));
+			await Verify.CodeRefactoring<ObjectInitializer>().CodeActionAsync(initialCode, expectedCode);
 		}
 
 		[Fact]
@@ -186,7 +182,7 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await TestAsync(initialCode, expectedCode);
+			await Verify.CodeRefactoring<ObjectInitializer>().CodeActionAsync(initialCode, expectedCode);
 		}
 
 
@@ -224,7 +220,7 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await TestAsync(initialCode, expectedCode);
+			await Verify.CodeRefactoring<ObjectInitializer>().CodeActionAsync(initialCode, expectedCode);
 		}
 
 
@@ -260,7 +256,7 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await TestAsync(initialCode, expectedCode);
+			await Verify.CodeRefactoring<ObjectInitializer>().CodeActionAsync(initialCode, expectedCode);
 		}
 
 		[Fact]
@@ -295,7 +291,7 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await TestAsync(initialCode, expectedCode);
+			await Verify.CodeRefactoring<ObjectInitializer>().CodeActionAsync(initialCode, expectedCode);
 		}
 
 		[Fact]
@@ -314,7 +310,8 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await TestNoActionsAsync(code, LanguageVersion.CSharp2);
+			await Verify.CodeRefactoring<ObjectInitializer>().NoOpAsync(code);
+			//await TestNoActionsAsync(code, LanguageVersion.CSharp2);
 		}
 
 		[Fact]
@@ -350,7 +347,8 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await TestAsync(initialCode, expectedCode, LanguageVersion.CSharp3, typeof(int));
+			await Verify.CodeRefactoring<ObjectInitializer>().CodeActionAsync(initialCode, expectedCode);
+			//await TestAsync(initialCode, expectedCode, LanguageVersion.CSharp3, typeof(int));
 		}
 
 		[Fact]
@@ -407,7 +405,8 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await TestAsync(initialCode, expectedCode, LanguageVersion.CSharp7, typeof(string));
+			await Verify.CodeRefactoring<ObjectInitializer>().CodeActionAsync(initialCode, expectedCode);
+			//await TestAsync(initialCode, expectedCode, LanguageVersion.CSharp7, typeof(string));
 		}
 
 		[Fact]
@@ -464,7 +463,8 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await TestAsync(initialCode, expectedCode, LanguageVersion.CSharp7_1);
+			await Verify.CodeRefactoring<ObjectInitializer>().CodeActionAsync(initialCode, expectedCode);
+			//await TestAsync(initialCode, expectedCode, LanguageVersion.CSharp7_1);
 		}
 
 		[Fact]
@@ -499,7 +499,7 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await TestAsync(initialCode, expectedCode);
+			await Verify.CodeRefactoring<ObjectInitializer>().CodeActionAsync(initialCode, expectedCode);
 		}
 
 		[Fact]
@@ -534,7 +534,7 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await TestAsync(initialCode, expectedCode);
+			await Verify.CodeRefactoring<ObjectInitializer>().CodeActionAsync(initialCode, expectedCode);
 		}
 
 		[Fact]
@@ -553,7 +553,7 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await TestNoActionsAsync(code);
+			await Verify.CodeRefactoring<ObjectInitializer>().NoOpAsync(code);
 		}
 
 		[Fact]
@@ -588,7 +588,7 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await TestAsync(initialCode, expectedCode);
+			await Verify.CodeRefactoring<ObjectInitializer>().CodeActionAsync(initialCode, expectedCode);
 		}
 
 		[Fact]
@@ -623,7 +623,7 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await TestAsync(initialCode, expectedCode);
+			await Verify.CodeRefactoring<ObjectInitializer>().CodeActionAsync(initialCode, expectedCode);
 		}
 
 		[Fact]
@@ -658,7 +658,8 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await TestAsync(initialCode, expectedCode, typeof(Model));
+			await Verify.CodeRefactoring<ObjectInitializer>().CodeActionAsync(initialCode, expectedCode);
+			//await TestAsync(initialCode, expectedCode, typeof(Model));
 		}
 	}
 }
