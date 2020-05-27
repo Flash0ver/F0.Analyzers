@@ -13,7 +13,7 @@ namespace F0.CodeAnalysis.Diagnostics
 		private const string MessageFormat = "Don't use goto statements: '{0}'";
 		private const string Category = "CodeSmell";
 		private const string Description = "GOTO Statement Considered Harmful";
-		private const string HelpLinkUri = "https://github.com/Flash0ver/F0.Analyzers";
+		private const string HelpLinkUri = "https://github.com/Flash0ver/F0.Analyzers/blob/master/documentation/diagnostics/F00001.md";
 
 		private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId, Title, MessageFormat, Category,
 			DiagnosticSeverity.Warning, true, Description, HelpLinkUri);

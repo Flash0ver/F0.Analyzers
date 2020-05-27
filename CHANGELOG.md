@@ -2,6 +2,8 @@
 CHANGELOG
 
 ## vNext
+### Analyzers
+- Added `GoToStatementConsideredHarmful` diagnostic analyzer, reporting _Warning_ if a `goto` statement is used.
 
 ## v0.2.0 (2020-05-21)
 ### Analyzers

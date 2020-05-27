@@ -15,17 +15,15 @@ Code refactorings and diagnostic analyzers with code fixes for C# projects, base
 [NuGet Must Haves](https://nugetmusthaves.com/Package/F0.Analyzers)\
 [NuGet Trends](https://nugettrends.com/packages?months=12&ids=F0.Analyzers)
 
-## Remarks
+## Documentation
+
+See [F0.Analyzers.md](./documentation/F0.Analyzers.md).
+
+## Changelog
+
+See [CHANGELOG.md](./CHANGELOG.md).
+
+## Visual Studio Compatibility
 Consuming _code refactorings_ via `PackageReference` requires at least _Visual Studio 2019 version 16.5.0_.
 
 > Analyzer authors can now distribute custom code refactorings as a NuGet package when previously it could only be distributed as a VSIX.
-
-## Code Refactorings
-
-### Object Initializer
-
-_C# 3.0 or greater_
-
-This code refactoring adds an object initializer, assigning the `default value expression` to all publicly settable fields and properties.
-- C# 7.0 or lower: `default operator`
-- C# 7.1 or greater: `default literal`
