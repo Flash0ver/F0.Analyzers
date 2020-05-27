@@ -6,7 +6,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace F0.CodeAnalysis.Diagnostics
 {
 	[DiagnosticAnalyzer(LanguageNames.CSharp)]
-	public class GoToStatementConsideredHarmful : DiagnosticAnalyzer
+	public class F00001GoToStatementConsideredHarmful : DiagnosticAnalyzer
 	{
 		private const string DiagnosticId = "F00001";
 		private const string Title = "GotoConsideredHarmful";

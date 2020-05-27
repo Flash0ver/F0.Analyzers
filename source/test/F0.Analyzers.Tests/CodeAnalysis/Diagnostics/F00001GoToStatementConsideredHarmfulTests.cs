@@ -7,9 +7,9 @@ using Xunit;
 
 namespace F0.Tests.CodeAnalysis.Diagnostics
 {
-	public class GoToStatementConsideredHarmfulTests : DiagnosticVerifier
+	public class F00001GoToStatementConsideredHarmfulTests : DiagnosticVerifier
 	{
-		protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer() => new GoToStatementConsideredHarmful();
+		protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer() => new F00001GoToStatementConsideredHarmful();
 
 		[Fact]
 		public void Initialize_NoGotoStatement_ReportsNoDiagnostic()

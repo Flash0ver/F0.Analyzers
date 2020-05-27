@@ -2,7 +2,7 @@
 
 namespace F0.Analyzers.Example.CodeAnalysis.Diagnostics
 {
-	internal sealed class GoToStatementConsideredHarmfulExample
+	internal sealed class F00001GoToStatementConsideredHarmfulExample
 	{
 		public void GotoStatement()
 		{
