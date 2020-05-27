@@ -47,7 +47,7 @@ class Class
 			var expected = new DiagnosticResult
 			{
 				Id = "F00001",
-				Message = String.Format("'{0}'", "goto Label;"),
+				Message = String.Format("Don't use goto statements: '{0}'", "goto Label;"),
 				Severity = DiagnosticSeverity.Warning,
 				Locations = new[] { new DiagnosticResultLocation("Test0.cs", 9, 3) }
 			};
@@ -85,14 +85,14 @@ class Class
 				new DiagnosticResult
 				{
 					Id = "F00001",
-					Message = String.Format("'{0}'", "goto case 2;"),
+					Message = String.Format("Don't use goto statements: '{0}'", "goto case 2;"),
 					Severity = DiagnosticSeverity.Warning,
 					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 11, 5) }
 				},
 				new DiagnosticResult
 				{
 					Id = "F00001",
-					Message = String.Format("'{0}'", "goto case 1;"),
+					Message = String.Format("Don't use goto statements: '{0}'", "goto case 1;"),
 					Severity = DiagnosticSeverity.Warning,
 					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 14, 5) }
 				}
@@ -126,7 +126,7 @@ class Class
 			var expected = new DiagnosticResult
 			{
 				Id = "F00001",
-				Message = String.Format("'{0}'", "goto default;"),
+				Message = String.Format("Don't use goto statements: '{0}'", "goto default;"),
 				Severity = DiagnosticSeverity.Warning,
 				Locations = new[] { new DiagnosticResultLocation("Test0.cs", 11, 5) }
 			};

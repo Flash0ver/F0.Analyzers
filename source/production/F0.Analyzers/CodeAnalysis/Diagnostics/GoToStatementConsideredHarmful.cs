@@ -10,7 +10,7 @@ namespace F0.CodeAnalysis.Diagnostics
 	{
 		private const string DiagnosticId = "F00001";
 		private const string Title = "GotoConsideredHarmful";
-		private const string MessageFormat = "'{0}'";
+		private const string MessageFormat = "Don't use goto statements: '{0}'";
 		private const string Category = "CodeSmell";
 		private const string Description = "GOTO Statement Considered Harmful";
 		private const string HelpLinkUri = "https://github.com/Flash0ver/F0.Analyzers";
