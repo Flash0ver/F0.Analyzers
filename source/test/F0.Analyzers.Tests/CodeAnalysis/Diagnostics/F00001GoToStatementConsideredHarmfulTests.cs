@@ -1,18 +1,16 @@
 ﻿using System;
+using System.Threading.Tasks;
 using F0.CodeAnalysis.Diagnostics;
 using F0.Testing.CodeAnalysis;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.Diagnostics;
 using Xunit;
 
 namespace F0.Tests.CodeAnalysis.Diagnostics
 {
-	public class F00001GoToStatementConsideredHarmfulTests 
+	public class F00001GoToStatementConsideredHarmfulTests
 	{
-		//protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer() => new F00001GoToStatementConsideredHarmful();
-
 		[Fact]
-		public void Initialize_NoGotoStatement_ReportsNoDiagnostic()
+		public async Task Initialize_NoGotoStatement_ReportsNoDiagnostic()
 		{
 			var code =
 @"using System;
@@ -25,11 +23,11 @@ class Class
 	}
 }";
 
-			//VerifyCSharpDiagnostic(code);
+			await Verify.DiagnosticAnalyzer<F00001GoToStatementConsideredHarmful>().NoOpAsync(code);
 		}
 
 		[Fact]
-		public void Initialize_GotoStatement_ReportsWarning()
+		public async Task Initialize_GotoStatement_ReportsWarning()
 		{
 			var code =
 @"using System;
@@ -43,20 +41,16 @@ class Class
 		goto Label;
 	}
 }";
+			var expected = Verify.Diagnostic<F00001GoToStatementConsideredHarmful>("F00001")
+				.WithMessage(String.Format("Don't use goto statements: '{0}'", "goto Label;"))
+				.WithSeverity(DiagnosticSeverity.Warning)
+				.WithLocation(9, 3);
 
-		//	//var expected = new DiagnosticResult
-		//	{
-		//		Id = "F00001",
-		//		Message = String.Format("Don't use goto statements: '{0}'", "goto Label;"),
-		//		Severity = DiagnosticSeverity.Warning,
-		//		Locations = new[] { new DiagnosticResultLocation("Test0.cs", 9, 3) }
-		//	};
-
-		//	VerifyCSharpDiagnostic(code, expected);
+			await Verify.DiagnosticAnalyzer<F00001GoToStatementConsideredHarmful>().DiagnosticAsync(code, expected);
 		}
 
 		[Fact]
-		public void Initialize_GotoCaseStatement_ReportsWarning()
+		public async Task Initialize_GotoCaseStatement_ReportsWarning()
 		{
 			var code =
 @"using System;
@@ -80,29 +74,23 @@ class Class
 	}
 }";
 
-			//var expected = new[]
-			//{
-			//	new DiagnosticResult
-			//	{
-			//		Id = "F00001",
-			//		Message = String.Format("Don't use goto statements: '{0}'", "goto case 2;"),
-			//		Severity = DiagnosticSeverity.Warning,
-			//		Locations = new[] { new DiagnosticResultLocation("Test0.cs", 11, 5) }
-			//	},
-			//	new DiagnosticResult
-			//	{
-			//		Id = "F00001",
-			//		Message = String.Format("Don't use goto statements: '{0}'", "goto case 1;"),
-			//		Severity = DiagnosticSeverity.Warning,
-			//		Locations = new[] { new DiagnosticResultLocation("Test0.cs", 14, 5) }
-			//	}
-			//};
+			var expected = new[]
+			{
+				Verify.Diagnostic<F00001GoToStatementConsideredHarmful>("F00001")
+					.WithMessage(String.Format("Don't use goto statements: '{0}'", "goto case 2;"))
+					.WithSeverity(DiagnosticSeverity.Warning)
+					.WithLocation(11, 5),
+				Verify.Diagnostic<F00001GoToStatementConsideredHarmful>("F00001")
+					.WithMessage(String.Format("Don't use goto statements: '{0}'", "goto case 1;"))
+					.WithSeverity(DiagnosticSeverity.Warning)
+					.WithLocation(14, 5)
+			};
 
-			//VerifyCSharpDiagnostic(code, expected);
+			await Verify.DiagnosticAnalyzer<F00001GoToStatementConsideredHarmful>().DiagnosticAsync(code, expected);
 		}
 
 		[Fact]
-		public void Initialize_GotoDefaultStatement_ReportsWarning()
+		public async Task Initialize_GotoDefaultStatement_ReportsWarning()
 		{
 			var code =
 @"using System;
@@ -123,15 +111,12 @@ class Class
 	}
 }";
 
-			//var expected = new DiagnosticResult
-			//{
-			//	Id = "F00001",
-			//	Message = String.Format("Don't use goto statements: '{0}'", "goto default;"),
-			//	Severity = DiagnosticSeverity.Warning,
-			//	Locations = new[] { new DiagnosticResultLocation("Test0.cs", 11, 5) }
-			//};
+			var expected = Verify.Diagnostic<F00001GoToStatementConsideredHarmful>("F00001")
+				.WithMessage(String.Format("Don't use goto statements: '{0}'", "goto default;"))
+				.WithSeverity(DiagnosticSeverity.Warning)
+				.WithLocation(11, 5);
 
-			//VerifyCSharpDiagnostic(code, expected);
+			await Verify.DiagnosticAnalyzer<F00001GoToStatementConsideredHarmful>().DiagnosticAsync(code, expected);
 		}
 	}
 }
