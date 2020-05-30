@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using F0.CodeAnalysis.Diagnostics;
 using F0.Testing.CodeAnalysis;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.Testing;
 using Xunit;
 
 namespace F0.Tests.CodeAnalysis.Diagnostics
@@ -23,7 +24,7 @@ class Class
 	}
 }";
 
-			await Verify.DiagnosticAnalyzer<F00001GoToStatementConsideredHarmful>().NoOpAsync(code);
+			await VerifyNoOpAsync(code);
 		}
 
 		[Fact]
@@ -41,12 +42,12 @@ class Class
 		goto Label;
 	}
 }";
-			var expected = Verify.Diagnostic<F00001GoToStatementConsideredHarmful>("F00001")
+			var expected = CreateDiagnostic("F00001")
 				.WithMessage(String.Format("Don't use goto statements: '{0}'", "goto Label;"))
 				.WithSeverity(DiagnosticSeverity.Warning)
-				.WithLocation(9, 3);
+				.WithSpan(9, 9, 9, 20);
 
-			await Verify.DiagnosticAnalyzer<F00001GoToStatementConsideredHarmful>().DiagnosticAsync(code, expected);
+			await VerifyAsync(code, expected);
 		}
 
 		[Fact]
@@ -76,17 +77,17 @@ class Class
 
 			var expected = new[]
 			{
-				Verify.Diagnostic<F00001GoToStatementConsideredHarmful>("F00001")
+				CreateDiagnostic("F00001")
 					.WithMessage(String.Format("Don't use goto statements: '{0}'", "goto case 2;"))
 					.WithSeverity(DiagnosticSeverity.Warning)
-					.WithLocation(11, 5),
-				Verify.Diagnostic<F00001GoToStatementConsideredHarmful>("F00001")
+					.WithSpan(11, 17, 11, 29),
+				CreateDiagnostic("F00001")
 					.WithMessage(String.Format("Don't use goto statements: '{0}'", "goto case 1;"))
 					.WithSeverity(DiagnosticSeverity.Warning)
-					.WithLocation(14, 5)
+					.WithSpan(14, 17, 14, 29)
 			};
 
-			await Verify.DiagnosticAnalyzer<F00001GoToStatementConsideredHarmful>().DiagnosticAsync(code, expected);
+			await VerifyAsync(code, expected);
 		}
 
 		[Fact]
@@ -111,12 +112,24 @@ class Class
 	}
 }";
 
-			var expected = Verify.Diagnostic<F00001GoToStatementConsideredHarmful>("F00001")
+			var expected = CreateDiagnostic("F00001")
 				.WithMessage(String.Format("Don't use goto statements: '{0}'", "goto default;"))
 				.WithSeverity(DiagnosticSeverity.Warning)
-				.WithLocation(11, 5);
+				.WithSpan(11, 17, 11, 30);
 
-			await Verify.DiagnosticAnalyzer<F00001GoToStatementConsideredHarmful>().DiagnosticAsync(code, expected);
+			await VerifyAsync(code, expected);
 		}
+
+		private static DiagnosticResult CreateDiagnostic(string diagnosticId)
+			=> Verify.Diagnostic<F00001GoToStatementConsideredHarmful>(diagnosticId);
+
+		private static Task VerifyAsync(string code, DiagnosticResult diagnostic)
+			=> Verify.DiagnosticAnalyzer<F00001GoToStatementConsideredHarmful>().DiagnosticAsync(code, diagnostic);
+
+		private static Task VerifyAsync(string code, params DiagnosticResult[] diagnostics)
+			=> Verify.DiagnosticAnalyzer<F00001GoToStatementConsideredHarmful>().DiagnosticAsync(code, diagnostics);
+
+		private static Task VerifyNoOpAsync(string code)
+			=> Verify.DiagnosticAnalyzer<F00001GoToStatementConsideredHarmful>().NoOpAsync(code);
 	}
 }
