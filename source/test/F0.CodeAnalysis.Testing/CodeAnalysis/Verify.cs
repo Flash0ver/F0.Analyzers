@@ -1,5 +1,7 @@
-﻿using F0.Testing.CodeAnalysis.CodeRefactorings;
+﻿using F0.Testing.CodeAnalysis.CodeFixes;
+using F0.Testing.CodeAnalysis.CodeRefactorings;
 using F0.Testing.CodeAnalysis.Diagnostics;
+using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CodeRefactorings;
 using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -14,9 +16,14 @@ namespace F0.Testing.CodeAnalysis
 			where TDiagnosticAnalyzer : DiagnosticAnalyzer, new()
 			=> new DiagnosticAnalyzerVerifier<TDiagnosticAnalyzer>();
 
-		public static CodeRefactoringVerifier<TRefactoringProvider> CodeRefactoring<TRefactoringProvider>()
-			where TRefactoringProvider : CodeRefactoringProvider, new()
-			=> new CodeRefactoringVerifier<TRefactoringProvider>();
+		public static CodeFixVerifier<TDiagnosticAnalyzer, TCodeFix> CodeFix<TDiagnosticAnalyzer, TCodeFix>()
+			where TDiagnosticAnalyzer : DiagnosticAnalyzer, new()
+			where TCodeFix : CodeFixProvider, new()
+			=> new CodeFixVerifier<TDiagnosticAnalyzer, TCodeFix>();
+
+		public static CodeRefactoringVerifier<TCodeRefactoring> CodeRefactoring<TCodeRefactoring>()
+			where TCodeRefactoring : CodeRefactoringProvider, new()
+			=> new CodeRefactoringVerifier<TCodeRefactoring>();
 
 		public static DiagnosticResult Diagnostic<TDiagnosticAnalyzer>(string diagnosticId)
 			where TDiagnosticAnalyzer : DiagnosticAnalyzer, new()

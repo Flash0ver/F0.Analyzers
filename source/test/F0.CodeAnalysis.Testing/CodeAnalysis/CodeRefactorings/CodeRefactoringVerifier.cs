@@ -1,42 +1,42 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
+using F0.Testing.Extensions;
 using Microsoft.CodeAnalysis.CodeRefactorings;
 using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.Formatting;
 
 namespace F0.Testing.CodeAnalysis.CodeRefactorings
 {
-	public class CodeRefactoringVerifier<TRefactoringProvider>
-		where TRefactoringProvider : CodeRefactoringProvider, new()
+	public class CodeRefactoringVerifier<TCodeRefactoring>
+		where TCodeRefactoring : CodeRefactoringProvider, new()
 	{
 		public Task NoOpAsync(string code)
 		{
 			var tester = CreateTester(code);
 
-			return tester.RunAsync();
+			return tester.RunAsync(CancellationToken.None);
 		}
 
 		public Task NoOpAsync(string code, LanguageVersion languageVersion)
 		{
 			var tester = CreateTester(code, null, languageVersion);
 
-			return tester.RunAsync();
+			return tester.RunAsync(CancellationToken.None);
 		}
 
 		public Task CodeActionAsync(string initialCode, string expectedCode)
 		{
 			var tester = CreateTester(initialCode, expectedCode);
 
-			return tester.RunAsync();
+			return tester.RunAsync(CancellationToken.None);
 		}
 
 		public Task CodeActionAsync(string initialCode, string expectedCode, LanguageVersion languageVersion)
 		{
 			var tester = CreateTester(initialCode, expectedCode, languageVersion);
 
-			return tester.RunAsync();
+			return tester.RunAsync(CancellationToken.None);
 		}
 
 		public Task CodeActionAsync(string initialCode, string expectedCode, LanguageVersion languageVersion, IEnumerable<Assembly> assemblies)
@@ -48,17 +48,17 @@ namespace F0.Testing.CodeAnalysis.CodeRefactorings
 				tester.TestState.AdditionalReferences.Add(assembly);
 			}
 
-			return tester.RunAsync();
+			return tester.RunAsync(CancellationToken.None);
 		}
 
-		private static CodeRefactoringTester<TRefactoringProvider> CreateTester(string initialCode, string expectedCode = null, LanguageVersion? languageVersion = null)
+		private static CodeRefactoringTester<TCodeRefactoring> CreateTester(string initialCode, string expectedCode = null, LanguageVersion? languageVersion = null)
 		{
-			var formattedInitialCode = Untabify(initialCode);
+			var normalizedInitialCode = initialCode.Untabify();
 
-			var tester = new CodeRefactoringTester<TRefactoringProvider>
+			var tester = new CodeRefactoringTester<TCodeRefactoring>
 			{
-				TestCode = formattedInitialCode,
-				FixedCode = expectedCode is null ? formattedInitialCode : Untabify(expectedCode)
+				TestCode = normalizedInitialCode,
+				FixedCode = expectedCode is null ? normalizedInitialCode : expectedCode.Untabify()
 			};
 
 			if (languageVersion.HasValue)
@@ -67,17 +67,6 @@ namespace F0.Testing.CodeAnalysis.CodeRefactorings
 			}
 
 			return tester;
-		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0049:Simplify Names", Justification = "We prefer the CLR type over the language alias for Constructors.")]
-		private static string Untabify(string code)
-		{
-			if (code.Contains('\t'))
-			{
-				code = code.Replace("\t", new string(' ', FormattingOptions.IndentationSize.DefaultValue));
-			}
-
-			return code;
 		}
 	}
 }
