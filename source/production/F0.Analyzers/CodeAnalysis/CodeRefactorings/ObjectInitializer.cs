@@ -21,7 +21,7 @@ namespace F0.CodeAnalysis.CodeRefactorings
 	{
 		public sealed override async Task ComputeRefactoringsAsync(CodeRefactoringContext context)
 		{
-			if (!HasObjectInitializerFeature(ref context))
+			if (!HasObjectInitializerFeature(context.Document.Project))
 			{
 				return;
 			}
@@ -43,10 +43,8 @@ namespace F0.CodeAnalysis.CodeRefactorings
 			}
 		}
 
-		private static bool HasObjectInitializerFeature(ref CodeRefactoringContext context)
-		{
-			return (context.Document.Project.ParseOptions as CSharpParseOptions).LanguageVersion >= LanguageVersion.CSharp3;
-		}
+		private static bool HasObjectInitializerFeature(Project project)
+			=> (project.ParseOptions as CSharpParseOptions).LanguageVersion >= LanguageVersion.CSharp3;
 
 		private static bool TryGetObjectCreationExpression(SyntaxNode node, out ObjectCreationExpressionSyntax objectCreationExpression)
 		{
@@ -109,7 +107,7 @@ namespace F0.CodeAnalysis.CodeRefactorings
 
 		private static SeparatedSyntaxList<ExpressionSyntax> CreateAssignmentExpressions(Document document, IEnumerable<ISymbol> mutableMembers)
 		{
-			var hasDefaultLiteral = HasDefaultLiteralFeature(document);
+			var hasDefaultLiteral = HasDefaultLiteralFeature(document.Project);
 			var generator = hasDefaultLiteral ? null : SyntaxGenerator.GetGenerator(document);
 
 			var expressionList = SyntaxFactory.SeparatedList<ExpressionSyntax>();
@@ -139,10 +137,8 @@ namespace F0.CodeAnalysis.CodeRefactorings
 			return expressionList;
 		}
 
-		private static bool HasDefaultLiteralFeature(Document document)
-		{
-			return (document.Project.ParseOptions as CSharpParseOptions).LanguageVersion >= LanguageVersion.CSharp7_1;
-		}
+		private static bool HasDefaultLiteralFeature(Project project)
+			=> (project.ParseOptions as CSharpParseOptions).LanguageVersion >= LanguageVersion.CSharp7_1;
 
 		private static INamedTypeSymbol GetMemberType(ISymbol member)
 		{

@@ -1,0 +1,9 @@
+{
+  "solution": {
+    "path": "F0.Analyzers.sln",
+    "projects": [
+      "extension\\F0.Analyzers.Vsix\\F0.Analyzers.Vsix.csproj",
+      "production\\F0.Analyzers\\F0.Analyzers.csproj"
+    ]
+  }
+}
