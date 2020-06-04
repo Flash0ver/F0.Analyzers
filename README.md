@@ -15,6 +15,10 @@ Code refactorings and diagnostic analyzers with code fixes for C# projects, base
 [NuGet Must Haves](https://nugetmusthaves.com/Package/F0.Analyzers)\
 [NuGet Trends](https://nugettrends.com/packages?months=12&ids=F0.Analyzers)
 
+## Other external links
+[Libraries.io Packages](https://libraries.io/nuget/F0.Analyzers)\
+[Libraries.io Repositories](https://libraries.io/github/Flash0ver/F0.Analyzers)
+
 ## Documentation
 
 See [F0.Analyzers.md](./documentation/F0.Analyzers.md).
