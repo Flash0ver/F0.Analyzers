@@ -32,11 +32,7 @@ namespace F0.CodeAnalysis.CodeRefactorings
 
 			if (TryGetObjectCreationExpression(node, out var objectCreationExpression))
 			{
-				if (HasObjectInitializer(objectCreationExpression))
-				{
-					return;
-				}
-				else
+				if (!HasObjectInitializer(objectCreationExpression))
 				{
 					var action = CodeAction.Create("Create Object Initializer", c => CreateObjectInitializer(context.Document, objectCreationExpression, c));
 					context.RegisterRefactoring(action);

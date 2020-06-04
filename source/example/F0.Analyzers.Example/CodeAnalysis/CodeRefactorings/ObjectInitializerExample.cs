@@ -5,6 +5,7 @@ using Microsoft.Extensions.Hosting;
 
 namespace F0.Analyzers.Example.CodeAnalysis.CodeRefactorings
 {
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0022:Use expression body for methods", Justification = "Examples")]
 	internal sealed class ObjectInitializerExample
 	{
 		public ValueTuple<bool, int, string> GetBclType()
@@ -13,6 +14,7 @@ namespace F0.Analyzers.Example.CodeAnalysis.CodeRefactorings
 			return tuple;
 		}
 
+		
 		public NestedStruct GetNestedStruct()
 		{
 			return new NestedStruct();
