@@ -20,12 +20,13 @@ Code refactorings and diagnostic analyzers with code fixes for C# projects, base
 [Libraries.io Repositories](https://libraries.io/github/Flash0ver/F0.Analyzers)
 
 ## Documentation
-
 See [F0.Analyzers.md](./documentation/F0.Analyzers.md).
 
 ## Changelog
-
 See [CHANGELOG.md](./CHANGELOG.md).
+
+## Contributing Guidelines
+See [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 ## Visual Studio Compatibility
 Consuming _code refactorings_ via `PackageReference` requires at least _Visual Studio 2019 version 16.5.0_.
