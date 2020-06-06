@@ -1,6 +1,8 @@
 # F0.Analyzers
 Code refactorings and diagnostic analyzers with code fixes for C# projects, based on the .NET Compiler Platform ("Roslyn") Code Analysis.
 
+![F0.Analyzers](https://raw.githubusercontent.com/Flash0ver/F0/master/Branding/GitHub/F0.Analyzers.png)
+
 [![F0.Analyzers on fuget.org](https://www.fuget.org/packages/F0.Analyzers/badge.svg)](https://www.fuget.org/packages/F0.Analyzers)
 
 ## NuGet
