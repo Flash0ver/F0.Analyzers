@@ -14,7 +14,6 @@ namespace F0.Analyzers.Example.CodeAnalysis.CodeRefactorings
 			return tuple;
 		}
 
-		
 		public NestedStruct GetNestedStruct()
 		{
 			return new NestedStruct();
