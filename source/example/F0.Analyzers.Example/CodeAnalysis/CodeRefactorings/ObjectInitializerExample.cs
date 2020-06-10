@@ -6,6 +6,7 @@ using Microsoft.Extensions.Hosting;
 namespace F0.Analyzers.Example.CodeAnalysis.CodeRefactorings
 {
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0022:Use expression body for methods", Justification = "Examples")]
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0059:Unnecessary assignment of a value", Justification = "Examples")]
 	internal sealed class ObjectInitializerExample
 	{
 		public ValueTuple<bool, int, string> GetBclType()
@@ -55,6 +56,12 @@ namespace F0.Analyzers.Example.CodeAnalysis.CodeRefactorings
 				Field = 1,
 				Property = 2
 			};
+		}
+
+		public ValueTuple<string> GetModelWithVariables()
+		{
+			var item1 = "bowl of petunias";
+			return new ValueTuple<string>();
 		}
 
 		internal struct NestedStruct
