@@ -11,6 +11,10 @@ namespace F0.Tests.CodeAnalysis.Diagnostics
 	public class F00001GoToStatementConsideredHarmfulTests
 	{
 		[Fact]
+		public void F00001GoToStatementConsideredHarmful_CheckType()
+			=> Verify.DiagnosticAnalyzer<F00001GoToStatementConsideredHarmful>().Type();
+
+		[Fact]
 		public async Task Initialize_NoGotoStatement_ReportsNoDiagnostic()
 		{
 			var code =

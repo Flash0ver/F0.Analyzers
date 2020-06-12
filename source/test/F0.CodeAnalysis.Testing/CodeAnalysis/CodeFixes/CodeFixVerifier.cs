@@ -2,12 +2,27 @@
 using System.Threading;
 using System.Threading.Tasks;
 using F0.Testing.Extensions;
+using F0.Testing.Shared;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Testing;
 
 namespace F0.Testing.CodeAnalysis.CodeFixes
 {
+	public class CodeFixVerifier<TCodeFix>
+		where TCodeFix : CodeFixProvider, new()
+	{
+		public void Type()
+		{
+			var type = typeof(TCodeFix);
+
+			Check.Accessibility(type);
+			Check.NonInheritable(type);
+			Check.ExportCodeFixProviderAttribute(type);
+			Check.SharedAttribute(type);
+		}
+	}
+
 	public class CodeFixVerifier<TDiagnosticAnalyzer, TCodeFix>
 		where TDiagnosticAnalyzer : DiagnosticAnalyzer, new()
 		where TCodeFix : CodeFixProvider, new()

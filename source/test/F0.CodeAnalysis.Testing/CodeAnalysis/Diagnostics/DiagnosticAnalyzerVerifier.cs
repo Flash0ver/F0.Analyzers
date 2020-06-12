@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using F0.Testing.Extensions;
+using F0.Testing.Shared;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Testing;
 
@@ -10,6 +11,15 @@ namespace F0.Testing.CodeAnalysis.Diagnostics
 	public class DiagnosticAnalyzerVerifier<TDiagnosticAnalyzer>
 		where TDiagnosticAnalyzer : DiagnosticAnalyzer, new()
 	{
+		public void Type()
+		{
+			var type = typeof(TDiagnosticAnalyzer);
+
+			Check.Accessibility(type);
+			Check.NonInheritable(type);
+			Check.DiagnosticAnalyzerAttribute(type);
+		}
+
 		public Task NoOpAsync(string code)
 		{
 			var tester = CreateTester(code);

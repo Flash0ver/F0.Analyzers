@@ -3,6 +3,7 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using F0.Testing.Extensions;
+using F0.Testing.Shared;
 using Microsoft.CodeAnalysis.CodeRefactorings;
 using Microsoft.CodeAnalysis.CSharp;
 
@@ -11,6 +12,16 @@ namespace F0.Testing.CodeAnalysis.CodeRefactorings
 	public class CodeRefactoringVerifier<TCodeRefactoring>
 		where TCodeRefactoring : CodeRefactoringProvider, new()
 	{
+		public void Type()
+		{
+			var type = typeof(TCodeRefactoring);
+
+			Check.Accessibility(type);
+			Check.NonInheritable(type);
+			Check.ExportCodeRefactoringProviderAttribute(type);
+			Check.SharedAttribute(type);
+		}
+
 		public Task NoOpAsync(string code)
 		{
 			var tester = CreateTester(code);

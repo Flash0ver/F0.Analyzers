@@ -12,6 +12,10 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 	public class ObjectInitializerTests
 	{
 		[Fact]
+		public void ObjectInitializer_CheckType()
+			=> Verify.CodeRefactoring<ObjectInitializer>().Type();
+
+		[Fact]
 		public async Task ComputeRefactoringsAsync_NotSupportedSelection_NoOp()
 		{
 			var code =
