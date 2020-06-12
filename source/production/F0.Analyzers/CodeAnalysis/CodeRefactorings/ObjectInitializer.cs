@@ -17,7 +17,7 @@ namespace F0.CodeAnalysis.CodeRefactorings
 {
 	[ExportCodeRefactoringProvider(LanguageNames.CSharp, Name = nameof(ObjectInitializer))]
 	[Shared]
-	public class ObjectInitializer : CodeRefactoringProvider
+	internal sealed class ObjectInitializer : CodeRefactoringProvider
 	{
 		public sealed override async Task ComputeRefactoringsAsync(CodeRefactoringContext context)
 		{
