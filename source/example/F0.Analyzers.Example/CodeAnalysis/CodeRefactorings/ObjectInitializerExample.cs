@@ -60,7 +60,7 @@ namespace F0.Analyzers.Example.CodeAnalysis.CodeRefactorings
 
 		public ValueTuple<string> GetModelWithVariables()
 		{
-			var item1 = "bowl of petunias";
+			var item1 = String.Empty;
 			return new ValueTuple<string>();
 		}
 
