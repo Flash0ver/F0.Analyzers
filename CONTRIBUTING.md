@@ -22,7 +22,8 @@ Although .NET analyzers do not declare a public API, `MAJOR`, `MINOR` and `PATCH
 See [GitHub Guides: Issues](https://guides.github.com/features/issues/).
 
 Each _issue_ should be submitted with an intention-revealing _title_ and a descriptive _comment_.
-Before work is started, the _issue_ should have _assignees_ added and meaningful _labels_ applied.
+Define the scope of an _issue_ by applying meaningful _labels_ rather than prefixing the _title_.
+Before work is started, the _issue_ should have contributing _assignees_ added or updated.
 
 _Issues_ that result in changes to the repository are closed via [pull requests](#pull-requests).
 
@@ -85,6 +86,8 @@ Co-authored-by: name <name@example.com>
 
 ## Pull Requests
 See [GitHub Help: Creating a pull request](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request).
+
+The _title_ of a _pull request_ should be the [commit message](#commit-messages)'s _commit title_ of the closing *squash and merge*.
 
 _Pull requests_ that resolve one or many [issues](#issues) should reference these by [linking a pull request to an issue using a supported keyword in the pull request's description](https://help.github.com/en/github/managing-your-work-on-github/linking-a-pull-request-to-an-issue#linking-a-pull-request-to-an-issue-using-a-keyword),
 such as `Closes #123`.
