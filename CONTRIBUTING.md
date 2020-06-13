@@ -18,6 +18,14 @@ See [Semantic Versioning](https://semver.org/).
 
 Although .NET analyzers do not declare a public API, `MAJOR`, `MINOR` and `PATCH` changes for each release are observed from the user's point of view, consumed by tools like _Microsoft Visual Studio_, _JetBrains Rider_ or _MSBuild_.
 
+## Issues
+See [GitHub Guides: Issues](https://guides.github.com/features/issues/).
+
+Each _issue_ should be submitted with an intention-revealing _title_ and a descriptive _comment_.
+Before work is started, the _issue_ should have _assignees_ added and meaningful _labels_ applied.
+
+_Issues_ that result in changes to the repository are closed via [pull requests](#pull-requests).
+
 ## Branching Workflow
 Based on the [GitHub flow](https://guides.github.com/introduction/flow/).
 
@@ -53,6 +61,33 @@ and may optionally include a `BREAKING CHANGE:` footer with additional informati
 Another common footer is `Co-authored-by: name <name@example.com>` to [attribute a commit to more than one author](https://help.github.com/en/github/committing-changes-to-your-project/creating-a-commit-with-multiple-authors). Such _trailers_ should be provided after the `BREAKING CHANGE:` footer.
 
 Write both the _description_ and the optional _body_ of commit messages in _present tense imperative_.
+
+For [pull requests](#pull-requests)' squashed merge commit messages, append the _Pull-Requests-Number_ to the end of the _commit title_ surrounded by parentheses.
+
+Format:
+```
+<type>[optional scope][!]: <description> [optional pull request number]
+
+[optional body]
+
+[optional footer(s)]
+```
+Example:
+```
+feat(object-initializer)!: add support for C# 9.0 (#123)
+
+include init-only properties in Object Initializer refactoring
+add tests for Records to Object Initializer
+
+BREAKING CHANGE: drop support for Visual Studio 2017
+Co-authored-by: name <name@example.com>
+```
+
+## Pull Requests
+See [GitHub Help: Creating a pull request](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request).
+
+_Pull requests_ that resolve one or many [issues](#issues) should reference these by [linking a pull request to an issue using a supported keyword in the pull request's description](https://help.github.com/en/github/managing-your-work-on-github/linking-a-pull-request-to-an-issue#linking-a-pull-request-to-an-issue-using-a-keyword),
+such as `Closes #123`.
 
 ## Changelog
 Based on [Keep a Changelog](https://keepachangelog.com/),
