@@ -4,6 +4,12 @@
     <LangVersion>8.0</LangVersion>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <NoWarn />
+    <WarningsAsErrors />
+    <WarningsNotAsErrors />
+  </PropertyGroup>
+
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
   </PropertyGroup>
