@@ -7,19 +7,19 @@ using Microsoft.CodeAnalysis.CodeRefactorings;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Xunit;
 
-namespace F0.Testing.Shared
+namespace F0.Testing.Extensions
 {
-	internal static class Check
+	internal static class TypeExtensions
 	{
 		private static readonly string[] cSharp = new string[] { LanguageNames.CSharp };
 
-		internal static void Accessibility(Type type)
+		internal static void VerifyAccessibility(this Type type)
 			=> Assert.True(type.IsNotPublic, "Analyzer should not be part of the public API");
 
-		internal static void NonInheritable(Type type)
+		internal static void VerifyNonInheritable(this Type type)
 			=> Assert.True(type.IsSealed, "Analyzer should not be inheritable.");
 
-		internal static void SharedAttribute(Type type)
+		internal static void VerifySharedAttribute(this Type type)
 		{
 			var attribute = type.GetCustomAttribute<SharedAttribute>();
 
@@ -27,7 +27,7 @@ namespace F0.Testing.Shared
 			Assert.Null(attribute.SharingBoundary);
 		}
 
-		internal static void DiagnosticAnalyzerAttribute(Type type)
+		internal static void VerifyDiagnosticAnalyzerAttribute(this Type type)
 		{
 			var attribute = type.GetCustomAttribute<DiagnosticAnalyzerAttribute>();
 
@@ -35,7 +35,7 @@ namespace F0.Testing.Shared
 			Assert.Equal(cSharp, attribute.Languages);
 		}
 
-		internal static void ExportCodeFixProviderAttribute(Type type)
+		internal static void VerifyExportCodeFixProviderAttribute(this Type type)
 		{
 			var attribute = type.GetCustomAttribute<ExportCodeFixProviderAttribute>();
 
@@ -44,7 +44,7 @@ namespace F0.Testing.Shared
 			Assert.Equal(cSharp, attribute.Languages);
 		}
 
-		internal static void ExportCodeRefactoringProviderAttribute(Type type)
+		internal static void VerifyExportCodeRefactoringProviderAttribute(this Type type)
 		{
 			var attribute = type.GetCustomAttribute<ExportCodeRefactoringProviderAttribute>();
 

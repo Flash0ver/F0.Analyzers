@@ -2,7 +2,6 @@
 using System.Threading;
 using System.Threading.Tasks;
 using F0.Testing.Extensions;
-using F0.Testing.Shared;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Testing;
 
@@ -15,9 +14,9 @@ namespace F0.Testing.CodeAnalysis.Diagnostics
 		{
 			var type = typeof(TDiagnosticAnalyzer);
 
-			Check.Accessibility(type);
-			Check.NonInheritable(type);
-			Check.DiagnosticAnalyzerAttribute(type);
+			type.VerifyAccessibility();
+			type.VerifyNonInheritable();
+			type.VerifyDiagnosticAnalyzerAttribute();
 		}
 
 		public Task NoOpAsync(string code)
