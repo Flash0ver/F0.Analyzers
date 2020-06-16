@@ -13,7 +13,7 @@ namespace F0.Testing.CodeAnalysis.CodeRefactorings
 
 		protected override ParseOptions CreateParseOptions()
 		{
-			var options = base.CreateParseOptions() as CSharpParseOptions;
+			var options = (base.CreateParseOptions() as CSharpParseOptions)!;
 
 			return LanguageVersion.HasValue
 				? options.WithLanguageVersion(LanguageVersion.Value)

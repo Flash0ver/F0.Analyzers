@@ -48,7 +48,7 @@ namespace F0.Testing.CodeAnalysis.CodeFixes
 			return tester.RunAsync(CancellationToken.None);
 		}
 
-		private static CodeFixTester<TDiagnosticAnalyzer, TCodeFix> CreateTester(string initialCode, string expectedCode = null)
+		private static CodeFixTester<TDiagnosticAnalyzer, TCodeFix> CreateTester(string initialCode, string? expectedCode = null)
 		{
 			var normalizedInitialCode = initialCode.Untabify();
 

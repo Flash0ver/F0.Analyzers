@@ -63,18 +63,14 @@ namespace F0.Analyzers.Example.CodeAnalysis.CodeRefactorings
 			public int Property { get; set; }
 
 			public void Reset()
-			{
-				Field = 0;
-				Property = 0;
-			}
+				=> (Field, Property) = (0, 0);
 		}
 
 		internal class NestedClass
 		{
 			public NestedClass(bool condition, int number)
 			{
-				Condition = condition;
-				Number = number;
+				(Condition, Number) = (condition, number);
 			}
 
 			public readonly bool Condition;
