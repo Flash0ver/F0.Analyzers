@@ -45,7 +45,10 @@ namespace F0.CodeAnalysis.CodeRefactorings
 		}
 
 		private static bool HasObjectInitializerFeature(Project project)
-			=> (project.ParseOptions as CSharpParseOptions)!.LanguageVersion >= LanguageVersion.CSharp3;
+		{
+			var parseOptions = (CSharpParseOptions)project.ParseOptions;
+			return parseOptions.LanguageVersion >= LanguageVersion.CSharp3;
+		}
 
 		private static bool TryGetObjectCreationExpression(SyntaxNode node, [NotNullWhen(true)] out ObjectCreationExpressionSyntax? objectCreationExpression)
 		{
@@ -128,7 +131,7 @@ namespace F0.CodeAnalysis.CodeRefactorings
 					var type = GetMemberType(member);
 					var typeExpression = generator!.TypeExpression(type);
 
-					right = (generator.DefaultExpression(typeExpression) as DefaultExpressionSyntax)!;
+					right = (DefaultExpressionSyntax)generator.DefaultExpression(typeExpression);
 				}
 
 				var expression = SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, left, right);
@@ -139,18 +142,21 @@ namespace F0.CodeAnalysis.CodeRefactorings
 		}
 
 		private static bool HasDefaultLiteralFeature(Project project)
-			=> (project.ParseOptions as CSharpParseOptions)!.LanguageVersion >= LanguageVersion.CSharp7_1;
+		{
+			var parseOptions = (CSharpParseOptions)project.ParseOptions;
+			return parseOptions.LanguageVersion >= LanguageVersion.CSharp7_1;
+		}
 
 		private static INamedTypeSymbol GetMemberType(ISymbol member)
 		{
 			if (member is IPropertySymbol property)
 			{
-				return (property.Type as INamedTypeSymbol)!;
+				return (INamedTypeSymbol)property.Type;
 			}
 
 			if (member is IFieldSymbol field)
 			{
-				return (field.Type as INamedTypeSymbol)!;
+				return (INamedTypeSymbol)field.Type;
 			}
 
 			throw new NotSupportedException();
