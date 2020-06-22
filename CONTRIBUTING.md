@@ -101,6 +101,9 @@ and where changes within a group begin with a _type_.
 ## Release Checklist
 The ultimate requisite for each release is that all tests pass and the production codebase is both fully covered and asserted.
 
+- ensure that _Microsoft.CodeAnalysis.PublicApiAnalyzers_' files are empty
+  - [PublicAPI.Shipped.txt](./source/production/F0.Analyzers/PublicApi/PublicAPI.Shipped.txt)
+  - [PublicAPI.Unshipped.txt](./source/production/F0.Analyzers/PublicApi/PublicAPI.Unshipped.txt)
 - bump _SemVer_ version
   - [NuGet package](./source/production/F0.Analyzers/F0.Analyzers.csproj): `/Project/PropertyGroup/Version`
   - [Visual Studio Extension](./source/extension/F0.Analyzers.Vsix/source.extension.vsixmanifest): `/PackageManifest/Metadata/Identity[@Version]`

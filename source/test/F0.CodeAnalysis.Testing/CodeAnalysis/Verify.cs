@@ -16,6 +16,10 @@ namespace F0.Testing.CodeAnalysis
 			where TDiagnosticAnalyzer : DiagnosticAnalyzer, new()
 			=> new DiagnosticAnalyzerVerifier<TDiagnosticAnalyzer>();
 
+		public static CodeFixVerifier<TCodeFix> CodeFix<TCodeFix>()
+			where TCodeFix : CodeFixProvider, new()
+			=> new CodeFixVerifier<TCodeFix>();
+
 		public static CodeFixVerifier<TDiagnosticAnalyzer, TCodeFix> CodeFix<TDiagnosticAnalyzer, TCodeFix>()
 			where TDiagnosticAnalyzer : DiagnosticAnalyzer, new()
 			where TCodeFix : CodeFixProvider, new()
