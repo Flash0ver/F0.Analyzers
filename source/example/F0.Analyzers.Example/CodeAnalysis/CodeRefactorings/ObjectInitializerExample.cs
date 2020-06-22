@@ -7,6 +7,7 @@ namespace F0.Analyzers.Example.CodeAnalysis.CodeRefactorings
 {
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0022:Use expression body for methods", Justification = "Examples")]
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0059:Unnecessary assignment of a value", Justification = "Examples")]
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "Examples")]
 	internal sealed class ObjectInitializerExample
 	{
 		public ValueTuple<bool, int, string> GetBclType()
@@ -61,6 +62,11 @@ namespace F0.Analyzers.Example.CodeAnalysis.CodeRefactorings
 		public ValueTuple<string> GetModelWithVariables()
 		{
 			var item1 = String.Empty;
+			return new ValueTuple<string>();
+		}
+		
+		public ValueTuple<string> GetModelWithParameters(string item1)
+		{
 			return new ValueTuple<string>();
 		}
 

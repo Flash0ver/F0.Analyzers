@@ -76,10 +76,10 @@ namespace F0.CodeAnalysis.CodeRefactorings
 			var compilation = await document.Project.GetCompilationAsync(cancellationToken).ConfigureAwait(false);
 			var semanticModel = compilation.GetSemanticModel(objectCreationExpression.SyntaxTree);
 
-			var availableSymbols = semanticModel.LookupSymbols(objectCreationExpression.SpanStart);
-
 			var typeInfo = semanticModel.GetTypeInfo(objectCreationExpression);
 			var mutableMembers = GetMutableMembers(ref typeInfo);
+
+			var availableSymbols = semanticModel.LookupSymbols(objectCreationExpression.SpanStart);
 
 			var options = await document.GetOptionsAsync(cancellationToken).ConfigureAwait(false);
 
@@ -111,6 +111,7 @@ namespace F0.CodeAnalysis.CodeRefactorings
 		private static SeparatedSyntaxList<ExpressionSyntax> CreateAssignmentExpressions(Document document, IEnumerable<ISymbol> mutableMembers, IEnumerable<ISymbol> symbols)
 		{
 			var localSymbols = symbols.Where(s => s.Kind is SymbolKind.Local).Cast<ILocalSymbol>().ToImmutableArray();
+			var parameterSymbols = symbols.Where(s => s.Kind is SymbolKind.Parameter).Cast<IParameterSymbol>().ToImmutableArray();
 
 			var hasDefaultLiteral = HasDefaultLiteralFeature(document.Project);
 			var generator = hasDefaultLiteral ? null : SyntaxGenerator.GetGenerator(document);
@@ -123,7 +124,7 @@ namespace F0.CodeAnalysis.CodeRefactorings
 
 				ExpressionSyntax right;
 
-				var matchingSymbol = localSymbols.SingleOrDefault(s => s.Name.Equals(member.Name, StringComparison.OrdinalIgnoreCase) && s.Type == GetMemberType(member));
+				var matchingSymbol = GetMatchingSymbol(member, localSymbols, parameterSymbols);
 
 				if (matchingSymbol is { })
 				{
@@ -152,6 +153,18 @@ namespace F0.CodeAnalysis.CodeRefactorings
 		{
 			var parseOptions = (CSharpParseOptions)project.ParseOptions;
 			return parseOptions.LanguageVersion >= LanguageVersion.CSharp7_1;
+		}
+
+		private static ISymbol? GetMatchingSymbol(ISymbol member, IEnumerable<ILocalSymbol> localSymbols, IEnumerable<IParameterSymbol> parameterSymbols)
+		{
+			ISymbol? matchingSymbol = localSymbols.SingleOrDefault(s => s.Name.Equals(member.Name, StringComparison.OrdinalIgnoreCase) && s.Type == GetMemberType(member));
+
+			if (matchingSymbol is null)
+			{
+				matchingSymbol = parameterSymbols.SingleOrDefault(s => s.Name.Equals(member.Name, StringComparison.OrdinalIgnoreCase) && s.Type == GetMemberType(member));
+			}
+
+			return matchingSymbol;
 		}
 
 		private static INamedTypeSymbol GetMemberType(ISymbol member)
