@@ -15,25 +15,6 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 			=> Verify.CodeRefactoring<ObjectInitializer>().Type();
 
 		[Fact]
-		public async Task ComputeRefactoringsAsync_NotSupportedSelection_NoOp()
-		{
-			var code =
-				@"using System;
-
-				class Empty { }
-
-				class C
-				{
-					void Test()[||]
-					{
-						var empty = new Empty();
-					}
-				}";
-
-			await VerifyNoOpAsync(code);
-		}
-
-		[Fact]
 		public async Task ComputeRefactoringsAsync_ObjectInitializerAlreadyExists_NoOp()
 		{
 			var code =
