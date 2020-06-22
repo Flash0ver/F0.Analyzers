@@ -29,6 +29,7 @@
     <RepositoryType>git</RepositoryType>
     <PackageTags>f[0], f0, analyzers, roslyn, csharp</PackageTags>
     <PackageReleaseNotes>Added goto analyzer (F00001) which reports diagnostics for goto statements in user code.</PackageReleaseNotes>
+    <NeutralLanguage>en</NeutralLanguage>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
