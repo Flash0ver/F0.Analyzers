@@ -117,6 +117,47 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 		}
 
 		[Fact]
+		public async Task ComputeRefactoringsAsync_MultipleMatchingVariables_AssignsDefaultToProperty()
+		{
+			var initialCode =
+				@"using System;
+
+				class Model { public string Text { get; set; } }
+
+				class C
+				{
+					void Test()
+					{
+						var text = ""bowl of petunias"";
+						var Text = ""bowl of petunias"";
+
+						var model = [|new Model()|];
+					}
+				}";
+
+			var expectedCode =
+				@"using System;
+
+				class Model { public string Text { get; set; } }
+
+				class C
+				{
+					void Test()
+					{
+						var text = ""bowl of petunias"";
+						var Text = ""bowl of petunias"";
+
+						var model = new Model()
+						{
+							Text = default
+						};
+					}
+				}";
+
+			await VerifyAsync(initialCode, expectedCode);
+		}
+
+		[Fact]
 		public async Task ComputeRefactoringsAsync_MatchingParameter_AssignsParameterToProperty()
 		{
 			var initialCode =
@@ -210,6 +251,41 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 				class C
 				{
 					void Test(string mismatch)
+					{
+						var model = new Model()
+						{
+							Text = default
+						};
+					}
+				}";
+
+			await VerifyAsync(initialCode, expectedCode);
+		}
+
+		[Fact]
+		public async Task ComputeRefactoringsAsync_MultipleMatchingParameters_AssignsDefaultToProperty()
+		{
+			var initialCode =
+				@"using System;
+
+				class Model { public string Text { get; set; } }
+
+				class C
+				{
+					void Test(string text, string Text)
+					{
+						var model = [|new Model()|];
+					}
+				}";
+
+			var expectedCode =
+				@"using System;
+
+				class Model { public string Text { get; set; } }
+
+				class C
+				{
+					void Test(string text, string Text)
 					{
 						var model = new Model()
 						{

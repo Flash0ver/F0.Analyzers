@@ -6,6 +6,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using F0.Extensions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeRefactorings;
@@ -157,11 +158,15 @@ namespace F0.CodeAnalysis.CodeRefactorings
 
 		private static ISymbol? GetMatchingSymbol(ISymbol member, IEnumerable<ILocalSymbol> localSymbols, IEnumerable<IParameterSymbol> parameterSymbols)
 		{
-			ISymbol? matchingSymbol = localSymbols.SingleOrDefault(s => s.Name.Equals(member.Name, StringComparison.OrdinalIgnoreCase) && s.Type == GetMemberType(member));
+			ISymbol? matchingSymbol = localSymbols
+				.Where(s => s.Name.Equals(member.Name, StringComparison.OrdinalIgnoreCase) && s.Type == GetMemberType(member))
+				.SoleOrDefault();
 
 			if (matchingSymbol is null)
 			{
-				matchingSymbol = parameterSymbols.SingleOrDefault(s => s.Name.Equals(member.Name, StringComparison.OrdinalIgnoreCase) && s.Type == GetMemberType(member));
+				matchingSymbol = parameterSymbols
+					.Where(s => s.Name.Equals(member.Name, StringComparison.OrdinalIgnoreCase) && s.Type == GetMemberType(member))
+					.SoleOrDefault();
 			}
 
 			return matchingSymbol;
