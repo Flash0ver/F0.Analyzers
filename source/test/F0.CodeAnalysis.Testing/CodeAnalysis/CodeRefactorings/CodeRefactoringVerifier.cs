@@ -30,7 +30,7 @@ namespace F0.Testing.CodeAnalysis.CodeRefactorings
 
 		public Task NoOpAsync(string code, LanguageVersion languageVersion)
 		{
-			var tester = CreateTester(code, null, languageVersion);
+			var tester = CreateTester(code, default, languageVersion);
 
 			return tester.RunAsync(CancellationToken.None);
 		}
@@ -61,7 +61,7 @@ namespace F0.Testing.CodeAnalysis.CodeRefactorings
 			return tester.RunAsync(CancellationToken.None);
 		}
 
-		private static CodeRefactoringTester<TCodeRefactoring> CreateTester(string initialCode, string expectedCode = null, LanguageVersion? languageVersion = null)
+		private static CodeRefactoringTester<TCodeRefactoring> CreateTester(string initialCode, string? expectedCode = null, LanguageVersion? languageVersion = null)
 		{
 			var normalizedInitialCode = initialCode.Untabify();
 
