@@ -64,7 +64,7 @@ namespace F0.Analyzers.Example.CodeAnalysis.CodeRefactorings
 			var item1 = String.Empty;
 			return new ValueTuple<string>();
 		}
-		
+
 		public ValueTuple<string> GetModelWithParameters(string item1)
 		{
 			return new ValueTuple<string>();
