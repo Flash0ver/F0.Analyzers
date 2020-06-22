@@ -11,6 +11,16 @@ namespace F0.Testing.CodeAnalysis.CodeRefactorings
 	public class CodeRefactoringVerifier<TCodeRefactoring>
 		where TCodeRefactoring : CodeRefactoringProvider, new()
 	{
+		public void Type()
+		{
+			var type = typeof(TCodeRefactoring);
+
+			type.VerifyAccessibility();
+			type.VerifyNonInheritable();
+			type.VerifyExportCodeRefactoringProviderAttribute();
+			type.VerifySharedAttribute();
+		}
+
 		public Task NoOpAsync(string code)
 		{
 			var tester = CreateTester(code);

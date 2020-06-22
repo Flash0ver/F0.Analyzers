@@ -8,6 +8,20 @@ using Microsoft.CodeAnalysis.Testing;
 
 namespace F0.Testing.CodeAnalysis.CodeFixes
 {
+	public class CodeFixVerifier<TCodeFix>
+		where TCodeFix : CodeFixProvider, new()
+	{
+		public void Type()
+		{
+			var type = typeof(TCodeFix);
+
+			type.VerifyAccessibility();
+			type.VerifyNonInheritable();
+			type.VerifyExportCodeFixProviderAttribute();
+			type.VerifySharedAttribute();
+		}
+	}
+
 	public class CodeFixVerifier<TDiagnosticAnalyzer, TCodeFix>
 		where TDiagnosticAnalyzer : DiagnosticAnalyzer, new()
 		where TCodeFix : CodeFixProvider, new()

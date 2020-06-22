@@ -10,6 +10,15 @@ namespace F0.Testing.CodeAnalysis.Diagnostics
 	public class DiagnosticAnalyzerVerifier<TDiagnosticAnalyzer>
 		where TDiagnosticAnalyzer : DiagnosticAnalyzer, new()
 	{
+		public void Type()
+		{
+			var type = typeof(TDiagnosticAnalyzer);
+
+			type.VerifyAccessibility();
+			type.VerifyNonInheritable();
+			type.VerifyDiagnosticAnalyzerAttribute();
+		}
+
 		public Task NoOpAsync(string code)
 		{
 			var tester = CreateTester(code);
