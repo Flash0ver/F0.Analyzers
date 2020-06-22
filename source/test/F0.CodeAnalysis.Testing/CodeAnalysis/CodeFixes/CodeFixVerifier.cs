@@ -8,6 +8,20 @@ using Microsoft.CodeAnalysis.Testing;
 
 namespace F0.Testing.CodeAnalysis.CodeFixes
 {
+	public class CodeFixVerifier<TCodeFix>
+		where TCodeFix : CodeFixProvider, new()
+	{
+		public void Type()
+		{
+			var type = typeof(TCodeFix);
+
+			type.VerifyAccessibility();
+			type.VerifyNonInheritable();
+			type.VerifyExportCodeFixProviderAttribute();
+			type.VerifySharedAttribute();
+		}
+	}
+
 	public class CodeFixVerifier<TDiagnosticAnalyzer, TCodeFix>
 		where TDiagnosticAnalyzer : DiagnosticAnalyzer, new()
 		where TCodeFix : CodeFixProvider, new()
@@ -48,7 +62,7 @@ namespace F0.Testing.CodeAnalysis.CodeFixes
 			return tester.RunAsync(CancellationToken.None);
 		}
 
-		private static CodeFixTester<TDiagnosticAnalyzer, TCodeFix> CreateTester(string initialCode, string expectedCode = null)
+		private static CodeFixTester<TDiagnosticAnalyzer, TCodeFix> CreateTester(string initialCode, string? expectedCode = null)
 		{
 			var normalizedInitialCode = initialCode.Untabify();
 
