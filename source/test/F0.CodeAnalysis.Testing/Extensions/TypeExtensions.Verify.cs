@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable disable
+using System;
 using System.Composition;
 using System.Reflection;
 using Microsoft.CodeAnalysis;
