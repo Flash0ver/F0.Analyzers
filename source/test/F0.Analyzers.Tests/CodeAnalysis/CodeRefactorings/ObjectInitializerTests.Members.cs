@@ -1,4 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace F0.Tests.CodeAnalysis.CodeRefactorings
@@ -6,7 +9,7 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 	public partial class ObjectInitializerTests
 	{
 		[Fact]
-		public async Task ComputeRefactoringsAsync_MatchingLocalVariableExists_AssignsVariableToProperty()
+		public async Task ComputeRefactoringsAsync_MatchingInstanceFieldExists_AssignsFieldToProperty()
 		{
 			var initialCode =
 				@"using System;
@@ -15,311 +18,9 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 
 				class C
 				{
+					string text = ""bowl of petunias"";
+
 					void Test()
-					{
-						var text = ""bowl of petunias"";
-						var model = [|new Model()|];
-					}
-				}";
-
-			var expectedCode =
-				@"using System;
-
-				class Model { public string Text { get; set; } }
-
-				class C
-				{
-					void Test()
-					{
-						var text = ""bowl of petunias"";
-						var model = new Model()
-						{
-							Text = text
-						};
-					}
-				}";
-
-			await VerifyAsync(initialCode, expectedCode);
-		}
-
-		[Fact]
-		public async Task ComputeRefactoringsAsync_MatchingVariableNameButWrongType_AssignsDefaultToProperty()
-		{
-			var initialCode =
-				@"using System;
-
-				class Model { public string Text { get; set; } }
-
-				class C
-				{
-					void Test()
-					{
-						var text = 42;
-						var model = [|new Model()|];
-					}
-				}";
-
-			var expectedCode =
-				@"using System;
-
-				class Model { public string Text { get; set; } }
-
-				class C
-				{
-					void Test()
-					{
-						var text = 42;
-						var model = new Model()
-						{
-							Text = default
-						};
-					}
-				}";
-
-			await VerifyAsync(initialCode, expectedCode);
-		}
-
-		[Fact]
-		public async Task ComputeRefactoringsAsync_MatchingVariableTypeButWrongName_AssignsDefaultToProperty()
-		{
-			var initialCode =
-				@"using System;
-
-				class Model { public string Text { get; set; } }
-
-				class C
-				{
-					void Test()
-					{
-						var mismatch = ""bowl of petunias"";
-						var model = [|new Model()|];
-					}
-				}";
-
-			var expectedCode =
-				@"using System;
-
-				class Model { public string Text { get; set; } }
-
-				class C
-				{
-					void Test()
-					{
-						var mismatch = ""bowl of petunias"";
-						var model = new Model()
-						{
-							Text = default
-						};
-					}
-				}";
-
-			await VerifyAsync(initialCode, expectedCode);
-		}
-
-		[Fact]
-		public async Task ComputeRefactoringsAsync_MultipleMatchingVariables_AssignsDefaultToProperty()
-		{
-			var initialCode =
-				@"using System;
-
-				class Model { public string Text { get; set; } }
-
-				class C
-				{
-					void Test()
-					{
-						var text = ""bowl of petunias"";
-						var Text = ""bowl of petunias"";
-
-						var model = [|new Model()|];
-					}
-				}";
-
-			var expectedCode =
-				@"using System;
-
-				class Model { public string Text { get; set; } }
-
-				class C
-				{
-					void Test()
-					{
-						var text = ""bowl of petunias"";
-						var Text = ""bowl of petunias"";
-
-						var model = new Model()
-						{
-							Text = default
-						};
-					}
-				}";
-
-			await VerifyAsync(initialCode, expectedCode);
-		}
-
-		[Fact]
-		public async Task ComputeRefactoringsAsync_MatchingLocalConstantExists_AssignsConstantToProperty()
-		{
-			var initialCode =
-				@"using System;
-
-				class Model { public string Text { get; set; } }
-
-				class C
-				{
-					void Test()
-					{
-						const string text = ""bowl of petunias"";
-						var model = [|new Model()|];
-					}
-				}";
-
-			var expectedCode =
-				@"using System;
-
-				class Model { public string Text { get; set; } }
-
-				class C
-				{
-					void Test()
-					{
-						const string text = ""bowl of petunias"";
-						var model = new Model()
-						{
-							Text = text
-						};
-					}
-				}";
-
-			await VerifyAsync(initialCode, expectedCode);
-		}
-
-		[Fact]
-		public async Task ComputeRefactoringsAsync_MatchingConstantNameButWrongType_AssignsDefaultToProperty()
-		{
-			var initialCode =
-				@"using System;
-
-				class Model { public string Text { get; set; } }
-
-				class C
-				{
-					void Test()
-					{
-						const int text = 42;
-						var model = [|new Model()|];
-					}
-				}";
-
-			var expectedCode =
-				@"using System;
-
-				class Model { public string Text { get; set; } }
-
-				class C
-				{
-					void Test()
-					{
-						const int text = 42;
-						var model = new Model()
-						{
-							Text = default
-						};
-					}
-				}";
-
-			await VerifyAsync(initialCode, expectedCode);
-		}
-
-		[Fact]
-		public async Task ComputeRefactoringsAsync_MatchingConstantTypeButWrongName_AssignsDefaultToProperty()
-		{
-			var initialCode =
-				@"using System;
-
-				class Model { public string Text { get; set; } }
-
-				class C
-				{
-					void Test()
-					{
-						const string mismatch = ""bowl of petunias"";
-						var model = [|new Model()|];
-					}
-				}";
-
-			var expectedCode =
-				@"using System;
-
-				class Model { public string Text { get; set; } }
-
-				class C
-				{
-					void Test()
-					{
-						const string mismatch = ""bowl of petunias"";
-						var model = new Model()
-						{
-							Text = default
-						};
-					}
-				}";
-
-			await VerifyAsync(initialCode, expectedCode);
-		}
-
-		[Fact]
-		public async Task ComputeRefactoringsAsync_MultipleMatchingConstants_AssignsDefaultToProperty()
-		{
-			var initialCode =
-				@"using System;
-
-				class Model { public string Text { get; set; } }
-
-				class C
-				{
-					void Test()
-					{
-						const string text = ""bowl of petunias"";
-						const string Text = ""bowl of petunias"";
-
-						var model = [|new Model()|];
-					}
-				}";
-
-			var expectedCode =
-				@"using System;
-
-				class Model { public string Text { get; set; } }
-
-				class C
-				{
-					void Test()
-					{
-						const string text = ""bowl of petunias"";
-						const string Text = ""bowl of petunias"";
-
-						var model = new Model()
-						{
-							Text = default
-						};
-					}
-				}";
-
-			await VerifyAsync(initialCode, expectedCode);
-		}
-
-		[Fact]
-		public async Task ComputeRefactoringsAsync_MatchingParameter_AssignsParameterToProperty()
-		{
-			var initialCode =
-				@"using System;
-
-				class Model { public string Text { get; set; } }
-
-				class C
-				{
-					void Test(string text)
 					{
 						var model = [|new Model()|];
 					}
@@ -332,7 +33,9 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 
 				class C
 				{
-					void Test(string text)
+					string text = ""bowl of petunias"";
+
+					void Test()
 					{
 						var model = new Model()
 						{
@@ -345,7 +48,7 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 		}
 
 		[Fact]
-		public async Task ComputeRefactoringsAsync_MatchingParameterNameButWrongType_AssignsDefaultToProperty()
+		public async Task ComputeRefactoringsAsync_MatchingInstanceFieldNameButWrongType_AssignsDefaultToProperty()
 		{
 			var initialCode =
 				@"using System;
@@ -354,7 +57,9 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 
 				class C
 				{
-					void Test(char text)
+					int text = 42;
+
+					void Test()
 					{
 						var model = [|new Model()|];
 					}
@@ -367,7 +72,9 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 
 				class C
 				{
-					void Test(char text)
+					int text = 42;
+
+					void Test()
 					{
 						var model = new Model()
 						{
@@ -380,7 +87,7 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 		}
 
 		[Fact]
-		public async Task ComputeRefactoringsAsync_MatchingParameterTypeButWrongName_AssignsDefaultToProperty()
+		public async Task ComputeRefactoringsAsync_MatchingInstanceFieldTypeButWrongName_AssignsDefaultToProperty()
 		{
 			var initialCode =
 				@"using System;
@@ -389,7 +96,9 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 
 				class C
 				{
-					void Test(string mismatch)
+					string mismatch = ""bowl of petunias"";
+
+					void Test()
 					{
 						var model = [|new Model()|];
 					}
@@ -402,7 +111,9 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 
 				class C
 				{
-					void Test(string mismatch)
+					string mismatch = ""bowl of petunias"";
+
+					void Test()
 					{
 						var model = new Model()
 						{
@@ -415,7 +126,7 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 		}
 
 		[Fact]
-		public async Task ComputeRefactoringsAsync_MultipleMatchingParameters_AssignsDefaultToProperty()
+		public async Task ComputeRefactoringsAsync_MultipleMatchingInstanceFields_AssignsDefaultToProperty()
 		{
 			var initialCode =
 				@"using System;
@@ -424,7 +135,10 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 
 				class C
 				{
-					void Test(string text, string Text)
+					string text = ""bowl of petunias"";
+					string Text = ""bowl of petunias"";
+
+					void Test()
 					{
 						var model = [|new Model()|];
 					}
@@ -437,11 +151,447 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 
 				class C
 				{
-					void Test(string text, string Text)
+					string text = ""bowl of petunias"";
+					string Text = ""bowl of petunias"";
+
+					void Test()
 					{
 						var model = new Model()
 						{
 							Text = default
+						};
+					}
+				}";
+
+			await VerifyAsync(initialCode, expectedCode);
+		}
+
+		[Fact]
+		public async Task ComputeRefactoringsAsync_MatchingReadonlyFieldExists_AssignsFieldToProperty()
+		{
+			var initialCode =
+				@"using System;
+
+				class Model { public string Text { get; set; } }
+
+				class C
+				{
+					readonly string text = ""bowl of petunias"";
+
+					void Test()
+					{
+						var model = [|new Model()|];
+					}
+				}";
+
+			var expectedCode =
+				@"using System;
+
+				class Model { public string Text { get; set; } }
+
+				class C
+				{
+					readonly string text = ""bowl of petunias"";
+
+					void Test()
+					{
+						var model = new Model()
+						{
+							Text = text
+						};
+					}
+				}";
+
+			await VerifyAsync(initialCode, expectedCode);
+		}
+
+		[Fact]
+		public async Task ComputeRefactoringsAsync_MatchingConstantFieldExists_AssignsFieldToProperty()
+		{
+			var initialCode =
+				@"using System;
+
+				class Model { public string Text { get; set; } }
+
+				class C
+				{
+					const string text = ""bowl of petunias"";
+
+					void Test()
+					{
+						var model = [|new Model()|];
+					}
+				}";
+
+			var expectedCode =
+				@"using System;
+
+				class Model { public string Text { get; set; } }
+
+				class C
+				{
+					const string text = ""bowl of petunias"";
+
+					void Test()
+					{
+						var model = new Model()
+						{
+							Text = text
+						};
+					}
+				}";
+
+			await VerifyAsync(initialCode, expectedCode);
+		}
+
+		[Fact]
+		public async Task ComputeRefactoringsAsync_MatchingStaticFieldExists_AssignsFieldToProperty()
+		{
+			var initialCode =
+				@"using System;
+
+				class Model { public string Text { get; set; } }
+
+				class C
+				{
+					static string text = ""bowl of petunias"";
+
+					void Test()
+					{
+						var model = [|new Model()|];
+					}
+				}";
+
+			var expectedCode =
+				@"using System;
+
+				class Model { public string Text { get; set; } }
+
+				class C
+				{
+					static string text = ""bowl of petunias"";
+
+					void Test()
+					{
+						var model = new Model()
+						{
+							Text = text
+						};
+					}
+				}";
+
+			await VerifyAsync(initialCode, expectedCode);
+		}
+
+		[Fact]
+		public async Task ComputeRefactoringsAsync_MatchingStaticReadonlyFieldExists_AssignsFieldToProperty()
+		{
+			var initialCode =
+				@"using System;
+
+				class Model { public string Text { get; set; } }
+
+				class C
+				{
+					static readonly string text = ""bowl of petunias"";
+
+					void Test()
+					{
+						var model = [|new Model()|];
+					}
+				}";
+
+			var expectedCode =
+				@"using System;
+
+				class Model { public string Text { get; set; } }
+
+				class C
+				{
+					static readonly string text = ""bowl of petunias"";
+
+					void Test()
+					{
+						var model = new Model()
+						{
+							Text = text
+						};
+					}
+				}";
+
+			await VerifyAsync(initialCode, expectedCode);
+		}
+
+		[Fact]
+		public async Task ComputeRefactoringsAsync_MatchingInstancePropertyExists_AssignsPropertyToProperty()
+		{
+			var initialCode =
+				@"using System;
+
+				class Model { public string Text { get; set; } }
+
+				class C
+				{
+					string Text { get; set; }
+
+					void Test()
+					{
+						var model = [|new Model()|];
+					}
+				}";
+
+			var expectedCode =
+				@"using System;
+
+				class Model { public string Text { get; set; } }
+
+				class C
+				{
+					string Text { get; set; }
+
+					void Test()
+					{
+						var model = new Model()
+						{
+							Text = Text
+						};
+					}
+				}";
+
+			await VerifyAsync(initialCode, expectedCode);
+		}
+
+		[Fact]
+		public async Task ComputeRefactoringsAsync_MatchingInstancePropertyNameButWrongType_AssignsDefaultToProperty()
+		{
+			var initialCode =
+				@"using System;
+
+				class Model { public string Text { get; set; } }
+
+				class C
+				{
+					int text { get; set; }
+
+					void Test()
+					{
+						var model = [|new Model()|];
+					}
+				}";
+
+			var expectedCode =
+				@"using System;
+
+				class Model { public string Text { get; set; } }
+
+				class C
+				{
+					int text { get; set; }
+
+					void Test()
+					{
+						var model = new Model()
+						{
+							Text = default
+						};
+					}
+				}";
+
+			await VerifyAsync(initialCode, expectedCode);
+		}
+
+		[Fact]
+		public async Task ComputeRefactoringsAsync_MatchingInstancePropertyTypeButWrongName_AssignsDefaultToProperty()
+		{
+			var initialCode =
+				@"using System;
+
+				class Model { public string Text { get; set; } }
+
+				class C
+				{
+					string mismatch { get; set; }
+
+					void Test()
+					{
+						var model = [|new Model()|];
+					}
+				}";
+
+			var expectedCode =
+				@"using System;
+
+				class Model { public string Text { get; set; } }
+
+				class C
+				{
+					string mismatch { get; set; }
+
+					void Test()
+					{
+						var model = new Model()
+						{
+							Text = default
+						};
+					}
+				}";
+
+			await VerifyAsync(initialCode, expectedCode);
+		}
+
+		[Fact]
+		public async Task ComputeRefactoringsAsync_MultipleMatchingInstanceProperties_AssignsDefaultToProperty()
+		{
+			var initialCode =
+				@"using System;
+
+				class Model { public string Text { get; set; } }
+
+				class C
+				{
+					string text { get; set; }
+					string Text { get; set; }
+
+					void Test()
+					{
+						var model = [|new Model()|];
+					}
+				}";
+
+			var expectedCode =
+				@"using System;
+
+				class Model { public string Text { get; set; } }
+
+				class C
+				{
+					string text { get; set; }
+					string Text { get; set; }
+
+					void Test()
+					{
+						var model = new Model()
+						{
+							Text = default
+						};
+					}
+				}";
+
+			await VerifyAsync(initialCode, expectedCode);
+		}
+
+		[Fact]
+		public async Task ComputeRefactoringsAsync_MatchingStaticPropertyExists_AssignsPropertyToProperty()
+		{
+			var initialCode =
+				@"using System;
+
+				class Model { public string Text { get; set; } }
+
+				class C
+				{
+					static string Text { get; set; }
+
+					void Test()
+					{
+						var model = [|new Model()|];
+					}
+				}";
+
+			var expectedCode =
+				@"using System;
+
+				class Model { public string Text { get; set; } }
+
+				class C
+				{
+					static string Text { get; set; }
+
+					void Test()
+					{
+						var model = new Model()
+						{
+							Text = Text
+						};
+					}
+				}";
+
+			await VerifyAsync(initialCode, expectedCode);
+		}
+
+		[Fact]
+		public async Task ComputeRefactoringsAsync_MatchingPropertyWithoutGetAccessor_AssignsDefaultToProperty()
+		{
+			var initialCode =
+				@"using System;
+
+				class Model { public string Text { get; set; } }
+
+				class C
+				{
+					string Text { set { } }
+
+					void Test()
+					{
+						var model = [|new Model()|];
+					}
+				}";
+
+			var expectedCode =
+				@"using System;
+
+				class Model { public string Text { get; set; } }
+
+				class C
+				{
+					string Text { set { } }
+
+					void Test()
+					{
+						var model = new Model()
+						{
+							Text = default
+						};
+					}
+				}";
+
+			await VerifyAsync(initialCode, expectedCode);
+		}
+
+		[Fact]
+		public async Task ComputeRefactoringsAsync_MatchingFieldAndMatchingProperty_AssignsFieldToProperty()
+		{
+			var initialCode =
+				@"using System;
+
+				class Model { public string Text { get; set; } }
+
+				class C
+				{
+					string text = ""bowl of petunias"";
+					string Text { get; set; }
+
+					void Test()
+					{
+						var model = [|new Model()|];
+					}
+				}";
+
+			var expectedCode =
+				@"using System;
+
+				class Model { public string Text { get; set; } }
+
+				class C
+				{
+					string text = ""bowl of petunias"";
+					string Text { get; set; }
+
+					void Test()
+					{
+						var model = new Model()
+						{
+							Text = text
 						};
 					}
 				}";

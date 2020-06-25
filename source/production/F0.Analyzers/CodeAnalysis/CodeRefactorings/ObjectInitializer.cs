@@ -113,6 +113,8 @@ namespace F0.CodeAnalysis.CodeRefactorings
 		{
 			var localSymbols = symbols.Where(s => s.Kind is SymbolKind.Local).Cast<ILocalSymbol>().ToImmutableArray();
 			var parameterSymbols = symbols.Where(s => s.Kind is SymbolKind.Parameter).Cast<IParameterSymbol>().ToImmutableArray();
+			var fieldSymbols = symbols.Where(s => s.Kind is SymbolKind.Field).Cast<IFieldSymbol>().ToImmutableArray();
+			var propertySymbols = symbols.Where(s => s.Kind is SymbolKind.Property).Cast<IPropertySymbol>().ToImmutableArray();
 
 			var hasDefaultLiteral = HasDefaultLiteralFeature(document.Project);
 			var generator = hasDefaultLiteral ? null : SyntaxGenerator.GetGenerator(document);
@@ -125,7 +127,7 @@ namespace F0.CodeAnalysis.CodeRefactorings
 
 				ExpressionSyntax right;
 
-				var matchingSymbol = GetMatchingSymbol(member, localSymbols, parameterSymbols);
+				var matchingSymbol = GetMatchingSymbol(member, localSymbols, parameterSymbols, fieldSymbols, propertySymbols);
 
 				if (matchingSymbol is { })
 				{
@@ -156,20 +158,40 @@ namespace F0.CodeAnalysis.CodeRefactorings
 			return parseOptions.LanguageVersion >= LanguageVersion.CSharp7_1;
 		}
 
-		private static ISymbol? GetMatchingSymbol(ISymbol member, IEnumerable<ILocalSymbol> localSymbols, IEnumerable<IParameterSymbol> parameterSymbols)
+		private static ISymbol? GetMatchingSymbol(ISymbol member, IEnumerable<ILocalSymbol> localSymbols, IEnumerable<IParameterSymbol> parameterSymbols, IEnumerable<IFieldSymbol> fieldSymbols, IEnumerable<IPropertySymbol> propertySymbols)
 		{
-			ISymbol? matchingSymbol = localSymbols
-				.Where(s => s.Name.Equals(member.Name, StringComparison.OrdinalIgnoreCase) && s.Type == GetMemberType(member))
-				.SoleOrDefault();
+			return GetLocalSymbol(member, localSymbols)
+				?? GetParameterSymbol(member, parameterSymbols)
+				?? GetFieldSymbol(member, fieldSymbols)
+				?? GetPropertySymbol(member, propertySymbols);
 
-			if (matchingSymbol is null)
+			static ISymbol? GetLocalSymbol(ISymbol member, IEnumerable<ILocalSymbol> localSymbols)
 			{
-				matchingSymbol = parameterSymbols
+				return localSymbols
 					.Where(s => s.Name.Equals(member.Name, StringComparison.OrdinalIgnoreCase) && s.Type == GetMemberType(member))
 					.SoleOrDefault();
 			}
 
-			return matchingSymbol;
+			static ISymbol? GetParameterSymbol(ISymbol member, IEnumerable<IParameterSymbol> parameterSymbols)
+			{
+				return parameterSymbols
+					.Where(s => s.Name.Equals(member.Name, StringComparison.OrdinalIgnoreCase) && s.Type == GetMemberType(member))
+					.SoleOrDefault();
+			}
+
+			static ISymbol? GetFieldSymbol(ISymbol member, IEnumerable<IFieldSymbol> fieldSymbols)
+			{
+				return fieldSymbols
+					.Where(s => s.Name.Equals(member.Name, StringComparison.OrdinalIgnoreCase) && s.Type == GetMemberType(member))
+					.SoleOrDefault();
+			}
+
+			static ISymbol? GetPropertySymbol(ISymbol member, IEnumerable<IPropertySymbol> propertySymbols)
+			{
+				return propertySymbols
+					.Where(s => s.Name.Equals(member.Name, StringComparison.OrdinalIgnoreCase) && s.Type == GetMemberType(member) && s.GetMethod is IMethodSymbol)
+					.SoleOrDefault();
+			}
 		}
 
 		private static INamedTypeSymbol GetMemberType(ISymbol member)

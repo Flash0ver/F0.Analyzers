@@ -8,8 +8,12 @@ namespace F0.Analyzers.Example.CodeAnalysis.CodeRefactorings
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0022:Use expression body for methods", Justification = "Examples")]
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0059:Unnecessary assignment of a value", Justification = "Examples")]
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "Examples")]
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "Examples")]
 	internal sealed class ObjectInitializerExample
 	{
+		private readonly string item1 = "bowl of petunias";
+		public int Item2 { get; set; }
+
 		public ValueTuple<bool, int, string> GetBclType()
 		{
 			var tuple = new ValueTuple<bool, int, string>();
@@ -59,22 +63,17 @@ namespace F0.Analyzers.Example.CodeAnalysis.CodeRefactorings
 			};
 		}
 
-		public ValueTuple<string> GetModelWithVariables()
+		public ValueTuple<bool, string, int> GetModelWithLocals(int item3)
 		{
-			var item1 = String.Empty;
-			return new ValueTuple<string>();
+			var item1 = false;
+			const string item2 = "bowl of petunias";
+			return new ValueTuple<bool, string, int>();
 		}
 
-		public ValueTuple<string> GetModelWithConstant()
+		public ValueTuple<string, int> GetModelWithMembers()
 		{
-			const string item1 = "bowl of petunias";
-			return new ValueTuple<string>();
+			return new ValueTuple<string, int>();
 		}
-
-		public ValueTuple<string> GetModelWithParameters(string item1)
-		{
-			return new ValueTuple<string>();
-		}		
 
 		internal struct NestedStruct
 		{
