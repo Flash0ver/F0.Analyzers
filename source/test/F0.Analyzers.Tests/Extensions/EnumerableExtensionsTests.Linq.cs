@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using F0.Extensions;
+using FluentAssertions;
 using Xunit;
 
 namespace F0.Tests.Extensions
@@ -9,32 +10,32 @@ namespace F0.Tests.Extensions
 		[Fact]
 		public void SoleOrDefault_SequenceContainsNoElements_ReturnsNull()
 		{
-			var sequence = Enumerable.Empty<string>();
+			var sequence = Enumerable.Empty<object>();
 
 			var result = sequence.SoleOrDefault();
 
-			Assert.Null(result);
+			result.Should().BeNull();
 		}
 
 		[Fact]
 		public void SoleOrDefault_SequenceContainsOneSingleElement_ReturnsTheOnlyElement()
 		{
-			var element = "one";
+			var element = new object();
 			var sequence = new[] { element };
 
 			var result = sequence.SoleOrDefault();
 
-			Assert.Same(element, result);
+			result.Should().BeSameAs(element);
 		}
 
 		[Fact]
 		public void SoleOrDefault_SequenceContainsMoreThanOneElement_ReturnsNull()
 		{
-			var sequence = new string[] { "one", "two" };
+			var sequence = new[] { new object(), new object() };
 
 			var result = sequence.SoleOrDefault();
 
-			Assert.Null(result);
+			result.Should().BeNull();
 		}
 	}
 }

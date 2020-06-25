@@ -3,6 +3,7 @@ using System;
 using System.Linq;
 using System.Reflection;
 using System.Resources;
+using FluentAssertions;
 using Xunit;
 
 namespace F0.Tests
@@ -17,9 +18,9 @@ namespace F0.Tests
 			var assembly = GetAnalyzerAssembly();
 			var attribute = assembly.GetCustomAttribute<NeutralResourcesLanguageAttribute>();
 
-			Assert.NotNull(attribute);
-			Assert.Equal("en", attribute.CultureName);
-			Assert.Equal(UltimateResourceFallbackLocation.MainAssembly, attribute.Location);
+			attribute.Should().NotBeNull();
+			attribute.CultureName.Should().Be("en");
+			attribute.Location.Should().Be(UltimateResourceFallbackLocation.MainAssembly);
 		}
 
 		[Fact]
@@ -28,8 +29,8 @@ namespace F0.Tests
 			var assembly = GetAnalyzerAssembly();
 			var attribute = assembly.GetCustomAttribute<CLSCompliantAttribute>();
 
-			Assert.NotNull(attribute);
-			Assert.False(attribute.IsCompliant);
+			attribute.Should().NotBeNull();
+			attribute.IsCompliant.Should().BeFalse();
 		}
 
 		private static Assembly GetAnalyzerAssembly()
