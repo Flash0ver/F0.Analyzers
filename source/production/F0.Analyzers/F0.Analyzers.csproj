@@ -8,6 +8,8 @@
 
   <PropertyGroup>
     <IncludeBuildOutput>false</IncludeBuildOutput>
+    <IsPackable>true</IsPackable>
+    <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
     <DevelopmentDependency>true</DevelopmentDependency>
   </PropertyGroup>
 
@@ -28,16 +30,8 @@
     <RepositoryUrl>https://github.com/Flash0ver/F0.Analyzers.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>f[0], f0, analyzers, roslyn, csharp</PackageTags>
-    <PackageReleaseNotes>Added goto analyzer (F00001) which reports diagnostics for goto statements in user code.</PackageReleaseNotes>
+    <PackageReleaseNotes>Skipped all the dependencies from generated nupkg file.</PackageReleaseNotes>
     <NeutralLanguage>en</NeutralLanguage>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
-    <NoPackageAnalysis>false</NoPackageAnalysis>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
-    <NoPackageAnalysis>true</NoPackageAnalysis>
   </PropertyGroup>
 
   <ItemGroup>

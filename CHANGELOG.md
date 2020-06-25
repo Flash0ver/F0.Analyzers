@@ -2,6 +2,8 @@
 CHANGELOG
 
 ## vNext
+### NuGet package
+- Suppressed package dependencies from generated NuGet package.
 
 ## v0.3.0 (2020-05-27)
 ### Analyzers
