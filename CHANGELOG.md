@@ -2,6 +2,9 @@
 CHANGELOG
 
 ## vNext
+### Analyzers
+- Changed `ObjectInitializer` code refactoring, assigning matching _locals_ and _members_ if existing in the current context.
+
 ### NuGet package
 - Suppressed package dependencies from generated NuGet package.
 
