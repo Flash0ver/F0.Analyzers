@@ -13,10 +13,11 @@ namespace F0.Analyzers.Example.CodeAnalysis.CodeRefactorings
 	{
 		private readonly string item1 = "bowl of petunias";
 		public int Item2 { get; set; }
+		public static bool Item3 { get; }
 
-		public ValueTuple<bool, int, string> GetBclType()
+		public ValueTuple<int, bool, string> GetBclType()
 		{
-			var tuple = new ValueTuple<bool, int, string>();
+			var tuple = new ValueTuple<int, bool, string>();
 			return tuple;
 		}
 
@@ -70,9 +71,9 @@ namespace F0.Analyzers.Example.CodeAnalysis.CodeRefactorings
 			return new ValueTuple<bool, string, int>();
 		}
 
-		public ValueTuple<string, int> GetModelWithMembers()
+		public ValueTuple<string, int, bool> GetModelWithMembers()
 		{
-			return new ValueTuple<string, int>();
+			return new ValueTuple<string, int, bool>();
 		}
 
 		internal struct NestedStruct
