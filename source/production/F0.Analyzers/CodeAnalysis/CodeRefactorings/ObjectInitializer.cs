@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Composition;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using F0.Extensions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeRefactorings;
@@ -32,11 +34,7 @@ namespace F0.CodeAnalysis.CodeRefactorings
 
 			if (TryGetObjectCreationExpression(node, out var objectCreationExpression))
 			{
-				if (HasObjectInitializer(objectCreationExpression))
-				{
-					return;
-				}
-				else
+				if (!HasObjectInitializer(objectCreationExpression))
 				{
 					var action = CodeAction.Create("Create Object Initializer", c => CreateObjectInitializer(context.Document, objectCreationExpression, c));
 					context.RegisterRefactoring(action);
@@ -82,9 +80,11 @@ namespace F0.CodeAnalysis.CodeRefactorings
 			var typeInfo = semanticModel.GetTypeInfo(objectCreationExpression);
 			var mutableMembers = GetMutableMembers(ref typeInfo);
 
+			var availableSymbols = semanticModel.LookupSymbols(objectCreationExpression.SpanStart);
+
 			var options = await document.GetOptionsAsync(cancellationToken).ConfigureAwait(false);
 
-			var expressionList = CreateAssignmentExpressions(document, mutableMembers);
+			var expressionList = CreateAssignmentExpressions(document, mutableMembers, availableSymbols);
 			expressionList = FormatExpressionList(expressionList, options);
 
 			var initializer = SyntaxFactory.InitializerExpression(SyntaxKind.ObjectInitializerExpression, expressionList);
@@ -109,8 +109,13 @@ namespace F0.CodeAnalysis.CodeRefactorings
 			return mutableMembers;
 		}
 
-		private static SeparatedSyntaxList<ExpressionSyntax> CreateAssignmentExpressions(Document document, IEnumerable<ISymbol> mutableMembers)
+		private static SeparatedSyntaxList<ExpressionSyntax> CreateAssignmentExpressions(Document document, IEnumerable<ISymbol> mutableMembers, IEnumerable<ISymbol> symbols)
 		{
+			var localSymbols = symbols.Where(s => s.Kind is SymbolKind.Local).Cast<ILocalSymbol>().ToImmutableArray();
+			var parameterSymbols = symbols.Where(s => s.Kind is SymbolKind.Parameter).Cast<IParameterSymbol>().ToImmutableArray();
+			var fieldSymbols = symbols.Where(s => s.Kind is SymbolKind.Field).Cast<IFieldSymbol>().ToImmutableArray();
+			var propertySymbols = symbols.Where(s => s.Kind is SymbolKind.Property).Cast<IPropertySymbol>().ToImmutableArray();
+
 			var hasDefaultLiteral = HasDefaultLiteralFeature(document.Project);
 			var generator = hasDefaultLiteral ? null : SyntaxGenerator.GetGenerator(document);
 
@@ -122,7 +127,13 @@ namespace F0.CodeAnalysis.CodeRefactorings
 
 				ExpressionSyntax right;
 
-				if (hasDefaultLiteral)
+				var matchingSymbol = GetMatchingSymbol(member, localSymbols, parameterSymbols, fieldSymbols, propertySymbols);
+
+				if (matchingSymbol is { })
+				{
+					right = SyntaxFactory.IdentifierName(matchingSymbol.Name);
+				}
+				else if (hasDefaultLiteral)
 				{
 					right = SyntaxFactory.LiteralExpression(SyntaxKind.DefaultLiteralExpression, SyntaxFactory.Token(SyntaxKind.DefaultKeyword));
 				}
@@ -147,6 +158,42 @@ namespace F0.CodeAnalysis.CodeRefactorings
 			return parseOptions.LanguageVersion >= LanguageVersion.CSharp7_1;
 		}
 
+		private static ISymbol? GetMatchingSymbol(ISymbol member, IEnumerable<ILocalSymbol> localSymbols, IEnumerable<IParameterSymbol> parameterSymbols, IEnumerable<IFieldSymbol> fieldSymbols, IEnumerable<IPropertySymbol> propertySymbols)
+		{
+			return GetLocalSymbol(member, localSymbols)
+				?? GetParameterSymbol(member, parameterSymbols)
+				?? GetFieldSymbol(member, fieldSymbols)
+				?? GetPropertySymbol(member, propertySymbols);
+
+			static ISymbol? GetLocalSymbol(ISymbol member, IEnumerable<ILocalSymbol> localSymbols)
+			{
+				return localSymbols
+					.Where(s => s.Name.Equals(member.Name, StringComparison.OrdinalIgnoreCase) && s.Type == GetMemberType(member))
+					.SoleOrDefault();
+			}
+
+			static ISymbol? GetParameterSymbol(ISymbol member, IEnumerable<IParameterSymbol> parameterSymbols)
+			{
+				return parameterSymbols
+					.Where(s => s.Name.Equals(member.Name, StringComparison.OrdinalIgnoreCase) && s.Type == GetMemberType(member))
+					.SoleOrDefault();
+			}
+
+			static ISymbol? GetFieldSymbol(ISymbol member, IEnumerable<IFieldSymbol> fieldSymbols)
+			{
+				return fieldSymbols
+					.Where(s => GetPlainName(s).Equals(member.Name, StringComparison.OrdinalIgnoreCase) && s.Type == GetMemberType(member))
+					.SoleOrDefault();
+			}
+
+			static ISymbol? GetPropertySymbol(ISymbol member, IEnumerable<IPropertySymbol> propertySymbols)
+			{
+				return propertySymbols
+					.Where(s => s.Name.Equals(member.Name, StringComparison.OrdinalIgnoreCase) && s.Type == GetMemberType(member) && s.GetMethod is IMethodSymbol)
+					.SoleOrDefault();
+			}
+		}
+
 		private static INamedTypeSymbol GetMemberType(ISymbol member)
 		{
 			if (member is IPropertySymbol property)
@@ -160,6 +207,22 @@ namespace F0.CodeAnalysis.CodeRefactorings
 			}
 
 			throw new NotSupportedException();
+		}
+
+		private static string GetPlainName(IFieldSymbol fieldSymbol)
+		{
+			var name = fieldSymbol.Name;
+
+			if (name.StartsWith("_"))
+			{
+				name = name.Substring(1);
+			}
+			else if (name.StartsWith("s_") || name.StartsWith("t_"))
+			{
+				name = name.Substring(2);
+			}
+
+			return name;
 		}
 
 		private static SeparatedSyntaxList<ExpressionSyntax> FormatExpressionList(SeparatedSyntaxList<ExpressionSyntax> expressionList, DocumentOptionSet options)

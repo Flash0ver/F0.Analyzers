@@ -2,8 +2,13 @@
 CHANGELOG
 
 ## vNext
+
+## v0.4.0 (2020-06-26)
+### Analyzers
+- Changed `ObjectInitializer` code refactoring, assigning matching _locals_ and _members_ if existing in the current context.
+
 ### NuGet package
-- Suppressed package dependencies from generated NuGet package.
+- Suppressed package dependencies.
 
 ## v0.3.0 (2020-05-27)
 ### Analyzers
