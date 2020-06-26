@@ -98,6 +98,6 @@ class MyClass
 
 ## History
 
-- [vNext](../../CHANGELOG.md#vNext)
+- [0.4.0](../../CHANGELOG.md#v040-2020-06-26)
 - [0.2.0](../../CHANGELOG.md#v020-2020-05-21)
 - [0.1.0](../../CHANGELOG.md#v010-2020-05-14)
