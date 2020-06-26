@@ -33,16 +33,17 @@ Additionally, the **.NET Runtime naming conventions** are observed, where fields
 - `s_`
 - `t_`
 
-Unambiguous matches get assigned in the object initializer syntax.
-When no match is found, or when more than one candidate is found, then the default value is assigned.
-If the csproj's `LangVersion` is C# 7.1 or greater, then the `default literal` is assigned, else the `default operator` is assigned.
-
 Value precedence
 1. local variable/constant
 2. parameter
 3. field
 4. property
 5. default value expression
+
+A match is unambiguous, when it is the only candidate in its precedence level.
+The unambiguous match with the highest precedence gets assigned in the object initializer syntax.
+When no unambiuous match exists, the default value is assigned.
+If the csproj's `LangVersion` is C# 7.1 or greater, then the `default literal` is assigned, else the `default operator` is assigned.
 
 For language versions lower than C# 3.0 no code refactoring is registered.
 
