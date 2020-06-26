@@ -195,7 +195,7 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 		}
 
 		[Fact]
-		public async Task ComputeRefactoringsAsync_MatchingParameter_AssignsParameterToProperty()
+		public async Task ComputeRefactoringsAsync_MatchingParameterExists_AssignsParameterToProperty()
 		{
 			var initialCode =
 				@"using System;
