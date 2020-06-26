@@ -45,6 +45,82 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 		}
 
 		[Fact]
+		public async Task ComputeRefactoringsAsync_MatchingFieldsWithValidPrefixedNamesExist_AssignsFieldsToFields()
+		{
+			var initialCode =
+				@"using System;
+
+				class C
+				{
+					string _item1 = ""bowl of petunias"";
+					string s_item2 = ""bowl of petunias"";
+					string t_item3 = ""bowl of petunias"";
+
+					void Test()
+					{
+						var model = [|new ValueTuple<string, string, string>()|];
+					}
+				}";
+
+			var expectedCode =
+				@"using System;
+
+				class C
+				{
+					string _item1 = ""bowl of petunias"";
+					string s_item2 = ""bowl of petunias"";
+					string t_item3 = ""bowl of petunias"";
+
+					void Test()
+					{
+						var model = new ValueTuple<string, string, string>()
+						{
+							Item1 = _item1,
+							Item2 = s_item2,
+							Item3 = t_item3
+						};
+					}
+				}";
+
+			await VerifyAsync(initialCode, expectedCode);
+		}
+
+		[Fact]
+		public async Task ComputeRefactoringsAsync_FieldWithInvalidPrefixedNameExists_AssignsDefaultToField()
+		{
+			var initialCode =
+				@"using System;
+
+				class C
+				{
+					string m_item1 = ""bowl of petunias"";
+
+					void Test()
+					{
+						var model = [|new ValueTuple<string>()|];
+					}
+				}";
+
+			var expectedCode =
+				@"using System;
+
+				class C
+				{
+					string m_item1 = ""bowl of petunias"";
+
+					void Test()
+					{
+						var model = new ValueTuple<string>()
+						{
+							Item1 = default
+						};
+					}
+				}";
+
+			await VerifyAsync(initialCode, expectedCode);
+		}
+
+		[Fact]
 		public async Task ComputeRefactoringsAsync_MatchingInstanceFieldNameButWrongType_AssignsDefaultToProperty()
 		{
 			var initialCode =

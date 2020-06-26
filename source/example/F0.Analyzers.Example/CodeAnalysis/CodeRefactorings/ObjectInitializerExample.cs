@@ -11,9 +11,9 @@ namespace F0.Analyzers.Example.CodeAnalysis.CodeRefactorings
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "Examples")]
 	internal sealed class ObjectInitializerExample
 	{
-		private readonly string item1 = "bowl of petunias";
-		public int Item2 { get; set; }
-		public static bool Item3 { get; }
+		private readonly string _item1 = "bowl of petunias";
+		private static readonly int s_item2 = 42;
+		public bool Item3 { get; set; }
 
 		public ValueTuple<int, bool, string> GetBclType()
 		{

@@ -182,7 +182,7 @@ namespace F0.CodeAnalysis.CodeRefactorings
 			static ISymbol? GetFieldSymbol(ISymbol member, IEnumerable<IFieldSymbol> fieldSymbols)
 			{
 				return fieldSymbols
-					.Where(s => s.Name.Equals(member.Name, StringComparison.OrdinalIgnoreCase) && s.Type == GetMemberType(member))
+					.Where(s => GetPlainName(s).Equals(member.Name, StringComparison.OrdinalIgnoreCase) && s.Type == GetMemberType(member))
 					.SoleOrDefault();
 			}
 
@@ -207,6 +207,22 @@ namespace F0.CodeAnalysis.CodeRefactorings
 			}
 
 			throw new NotSupportedException();
+		}
+
+		private static string GetPlainName(IFieldSymbol fieldSymbol)
+		{
+			var name = fieldSymbol.Name;
+
+			if (name.StartsWith("_"))
+			{
+				name = name.Substring(1);
+			}
+			else if (name.StartsWith("s_") || name.StartsWith("t_"))
+			{
+				name = name.Substring(2);
+			}
+
+			return name;
 		}
 
 		private static SeparatedSyntaxList<ExpressionSyntax> FormatExpressionList(SeparatedSyntaxList<ExpressionSyntax> expressionList, DocumentOptionSet options)
