@@ -6,4 +6,6 @@
     <PackageReference Include="Nullable" Version="1.2.1" PrivateAssets="all" />
   </ItemGroup>
 
+  <Import Project="$(MSBuildThisFileDirectory)Release.props" />
+
 </Project>
