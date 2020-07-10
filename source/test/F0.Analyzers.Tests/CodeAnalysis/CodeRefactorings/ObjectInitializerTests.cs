@@ -33,7 +33,6 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-
 			await VerifyNoOpAsync(code);
 		}
 
