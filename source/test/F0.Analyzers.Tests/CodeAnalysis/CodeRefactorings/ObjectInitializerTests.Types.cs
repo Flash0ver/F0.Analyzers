@@ -212,7 +212,7 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 		}
 
 		[Fact]
-		public async Task ComputeRefactoringsAsync_ClassWithImmutableMembers_CreatesObjectInitializerWithoutImmuntableMembers()
+		public async Task ComputeRefactoringsAsync_ClassWithImmutableMembers_CreatesObjectInitializerWithoutImmutableMembers()
 		{
 			var initialCode =
 				@"using System;
@@ -231,6 +231,41 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 				@"using System;
 
 				class Model { public string Text { get; set; } public int Number { get; } public readonly bool Condition; }
+
+				class C
+				{
+					void Test()
+					{
+						var model = new Model()
+						{
+							Text = default
+						};
+					}
+				}";
+
+			await VerifyAsync(initialCode, expectedCode);
+		}
+
+		[Fact]
+		public async Task ComputeRefactoringsAsync_ClassWithStaticMembers_CreatesObjectInitializerWithoutStaticMembers()
+		{
+			var initialCode =
+				@"using System;
+
+				class Model { public string Text { get; set; } public static int Number { get; set; } public static bool Condition; }
+
+				class C
+				{
+					void Test()
+					{
+						var model = [|new Model()|];
+					}
+				}";
+
+			var expectedCode =
+				@"using System;
+
+				class Model { public string Text { get; set; } public static int Number { get; set; } public static bool Condition; }
 
 				class C
 				{

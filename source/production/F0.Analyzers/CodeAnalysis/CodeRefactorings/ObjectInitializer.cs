@@ -98,11 +98,11 @@ namespace F0.CodeAnalysis.CodeRefactorings
 
 		private static IEnumerable<ISymbol> GetMutableMembers(ref TypeInfo typeInfo)
 		{
-			var members = typeInfo.Type.GetMembers();
+			var instanceMembers = typeInfo.Type.GetMembers().Where(s => !s.IsStatic);
 
-			IEnumerable<ISymbol> mutableFields = members.OfType<IFieldSymbol>()
+			IEnumerable<ISymbol> mutableFields = instanceMembers.OfType<IFieldSymbol>()
 				.Where(f => f.DeclaredAccessibility is Accessibility.Public && !f.IsReadOnly);
-			IEnumerable<ISymbol> mutableProperties = members.OfType<IPropertySymbol>()
+			IEnumerable<ISymbol> mutableProperties = instanceMembers.OfType<IPropertySymbol>()
 				.Where(p => p.SetMethod is IMethodSymbol setMethod && setMethod.DeclaredAccessibility is Accessibility.Public);
 
 			var mutableMembers = mutableFields.Concat(mutableProperties);

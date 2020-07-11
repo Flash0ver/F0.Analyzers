@@ -2,6 +2,8 @@
 CHANGELOG
 
 ## vNext
+### Analyzers
+- Fixed `ObjectInitializer` code refactoring, assigning values to static members, causing compiler error CS1914.
 
 ## v0.4.0 (2020-06-26)
 ### Analyzers
