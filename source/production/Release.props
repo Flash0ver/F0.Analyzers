@@ -1,8 +1,8 @@
 <Project>
 
   <PropertyGroup>
-    <F0Version>0.4.0</F0Version>
-    <F0ReleaseNotes>Changed the object initializer code refactoring to assign matching symbols. Additionally, skipped all the dependencies from generated nupkg file.</F0ReleaseNotes>
+    <F0Version>0.4.1</F0Version>
+    <F0ReleaseNotes>Fixed the object initializer code refactoring to no longer assign values to static members.</F0ReleaseNotes>
   </PropertyGroup>
 
 </Project>

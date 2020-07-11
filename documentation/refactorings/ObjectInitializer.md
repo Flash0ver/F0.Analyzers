@@ -10,7 +10,7 @@ CodeRefactoringProvider: [ObjectInitializer.cs](../../source/production/F0.Analy
 
 ## Summary
 
-This code refactoring adds an object initializer, assigning matching `locals`, matching `members`, or the `default value expression` to all publicly settable fields and properties.
+This code refactoring adds an object initializer, assigning matching `locals`, matching `members`, or the `default value expression` to all publicly settable instance fields and properties.
 - C# 7.0 or lower: `default operator`
 - C# 7.1 or greater: `default literal`
 
@@ -98,6 +98,7 @@ class MyClass
 
 ## History
 
+- [0.4.1](../../CHANGELOG.md#v041-2020-07-11)
 - [0.4.0](../../CHANGELOG.md#v040-2020-06-26)
 - [0.2.0](../../CHANGELOG.md#v020-2020-05-21)
 - [0.1.0](../../CHANGELOG.md#v010-2020-05-14)
