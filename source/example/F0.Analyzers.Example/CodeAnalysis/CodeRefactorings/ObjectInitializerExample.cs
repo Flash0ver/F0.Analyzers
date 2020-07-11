@@ -88,12 +88,16 @@ namespace F0.Analyzers.Example.CodeAnalysis.CodeRefactorings
 
 		internal class NestedClass
 		{
+			public static double Average;
+
+			public readonly bool Condition;
+
 			public NestedClass(bool condition, int number)
 			{
 				(Condition, Number) = (condition, number);
 			}
 
-			public readonly bool Condition;
+			public static char Character { get; set; }
 
 			public string Text { get; set; }
 

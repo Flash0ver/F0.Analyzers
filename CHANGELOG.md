@@ -3,6 +3,10 @@ CHANGELOG
 
 ## vNext
 
+## v0.4.1 (2020-07-11)
+### Analyzers
+- Fixed `ObjectInitializer` code refactoring, assigning values to static members, causing compiler error CS1914.
+
 ## v0.4.0 (2020-06-26)
 ### Analyzers
 - Changed `ObjectInitializer` code refactoring, assigning matching _locals_ and _members_ if existing in the current context.
