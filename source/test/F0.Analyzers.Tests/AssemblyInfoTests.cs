@@ -10,7 +10,7 @@ namespace F0.Tests
 {
 	public class AssemblyInfoTests
 	{
-		private static readonly Version version = new Version(0, 4, 0, 0);
+		private static readonly Version version = new Version(0, 4, 1, 0);
 
 #if DEBUG
 		private const string publicKeyToken = "null";
