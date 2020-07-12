@@ -8,9 +8,15 @@
     <PackageReference Include="Microsoft.Extensions.Logging" Version="3.1.0" />
   </ItemGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition="'$(Configuration)' == 'Debug'">
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
       <_Parameter1>F0.Analyzers.Example</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(Configuration)' == 'Release'">
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+      <_Parameter1>F0.Analyzers.Example, PublicKey=0024000004800000940000000602000000240000525341310004000001000100c9c6c88f2b1a6e8f73c185196a46596b50f0a733060b1a1aeb543a01b8df254d8bb1a9c20c7a27d74b6699f1a1f962cd75c14c6c602e43122476e97b4ef2a16a5a4df42acb64464992894c25acf4afdb7df94639909e86d73fcc70edfbdd0795610eb8da31756d5409e78dd252dc452c5f863f938150d5b1d0be00b0eaedd2c3</_Parameter1>
     </AssemblyAttribute>
   </ItemGroup>
 

@@ -12,6 +12,12 @@ namespace F0.Tests
 	{
 		private static readonly Version version = new Version(0, 4, 0, 0);
 
+#if DEBUG
+		private const string publicKeyToken = "null";
+#else
+		private const string publicKeyToken = "f0b859ae201ed60d";
+#endif
+
 		[Fact]
 		public void AssemblyInfo_DefaultCulture_English()
 		{
@@ -35,7 +41,7 @@ namespace F0.Tests
 
 		private static Assembly GetAnalyzerAssembly()
 		{
-			var displayName = $"F0.Analyzers, Version={version}, Culture=neutral, PublicKeyToken=null";
+			var displayName = $"F0.Analyzers, Version={version}, Culture=neutral, PublicKeyToken={publicKeyToken}";
 
 			var assemblies = AppDomain.CurrentDomain.GetAssemblies();
 			var assembly = assemblies.Single(a => a.FullName.Equals(displayName, StringComparison.InvariantCulture));

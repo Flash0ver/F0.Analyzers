@@ -2,6 +2,8 @@
 CHANGELOG
 
 ## vNext
+### Analyzers
+- Strong-named assembly.
 
 ## v0.4.1 (2020-07-11)
 ### Analyzers
