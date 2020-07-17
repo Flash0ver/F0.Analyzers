@@ -10,7 +10,7 @@ namespace F0.Tests
 {
 	public class AssemblyInfoTests
 	{
-		private static readonly Version version = new Version(0, 4, 0, 0);
+		private static readonly Version version = new Version(0, 4, 1, 0);
 
 		[Fact]
 		public void AssemblyInfo_DefaultCulture_English()
