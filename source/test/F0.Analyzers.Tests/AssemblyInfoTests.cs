@@ -12,6 +12,13 @@ namespace F0.Tests
 	{
 		private static readonly Version version = new Version(0, 4, 1, 0);
 
+#if NET472
+		static AssemblyInfoTests()
+		{
+			_ = new F0.CodeAnalysis.Diagnostics.F00001GoToStatementConsideredHarmful();
+		}
+#endif
+
 		[Fact]
 		public void AssemblyInfo_DefaultCulture_English()
 		{
