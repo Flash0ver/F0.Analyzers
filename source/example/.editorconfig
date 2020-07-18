@@ -5,3 +5,6 @@ dotnet_diagnostic.CS0219.severity = none
 
 # CS0414: The field is assigned but its value is never used
 dotnet_diagnostic.CS0414.severity = none
+
+# CS0649: Field is never assigned to, and will always have its default value
+dotnet_diagnostic.CS0649.severity = none
