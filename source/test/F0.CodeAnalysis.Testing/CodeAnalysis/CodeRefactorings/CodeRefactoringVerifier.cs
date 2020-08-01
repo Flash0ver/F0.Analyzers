@@ -11,6 +11,10 @@ namespace F0.Testing.CodeAnalysis.CodeRefactorings
 	public class CodeRefactoringVerifier<TCodeRefactoring>
 		where TCodeRefactoring : CodeRefactoringProvider, new()
 	{
+		internal CodeRefactoringVerifier()
+		{
+		}
+
 		public void Type()
 		{
 			var type = typeof(TCodeRefactoring);
