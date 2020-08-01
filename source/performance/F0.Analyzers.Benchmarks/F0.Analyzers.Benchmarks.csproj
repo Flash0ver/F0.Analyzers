@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFrameworks>net472;netcoreapp3.1</TargetFrameworks>
+    <AssemblyName>F0.Analyzers.Benchmarks</AssemblyName>
+    <RootNamespace>F0.Benchmarks</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BenchmarkDotNet" Version="0.12.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="2.10.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\production\F0.Analyzers\F0.Analyzers.csproj" />
+    <ProjectReference Include="..\F0.CodeAnalysis.Benchmarking\F0.CodeAnalysis.Benchmarking.csproj" />
+  </ItemGroup>
+
+</Project>
