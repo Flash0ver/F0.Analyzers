@@ -23,8 +23,7 @@ namespace F0.Benchmarks
 				=> DefaultConfig.Instance
 					.AddJob(Job.InProcess.WithRuntime(ClrRuntime.Net472))
 					.AddJob(Job.InProcess.WithRuntime(CoreRuntime.Core31))
-					.AddColumn(StatisticColumn.Min)
-					.AddColumn(StatisticColumn.Max)
+					.AddColumn(StatisticColumn.Min, StatisticColumn.Max, StatisticColumn.Median)
 					.AddDiagnoser(MemoryDiagnoser.Default)
 					.AddValidator(ExecutionValidator.FailOnError);
 
