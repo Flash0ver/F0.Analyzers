@@ -3,6 +3,7 @@ using BenchmarkDotNet.Columns;
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Diagnosers;
 using BenchmarkDotNet.Environments;
+using BenchmarkDotNet.Exporters;
 using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Running;
 using BenchmarkDotNet.Validators;
@@ -25,6 +26,7 @@ namespace F0.Benchmarks
 					.AddJob(Job.InProcess.WithRuntime(CoreRuntime.Core31))
 					.AddColumn(StatisticColumn.Min, StatisticColumn.Max, StatisticColumn.Median)
 					.AddDiagnoser(MemoryDiagnoser.Default)
+					.AddExporter(DefaultExporters.AsciiDoc)
 					.AddValidator(ExecutionValidator.FailOnError);
 
 			static IConfig CreateDebugConfiguration()
