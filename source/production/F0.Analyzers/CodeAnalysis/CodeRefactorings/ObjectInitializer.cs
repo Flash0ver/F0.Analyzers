@@ -168,29 +168,25 @@ namespace F0.CodeAnalysis.CodeRefactorings
 			static ISymbol? GetLocalSymbol(ISymbol member, IEnumerable<ILocalSymbol> localSymbols)
 			{
 				return localSymbols
-					.Where(s => s.Name.Equals(member.Name, StringComparison.OrdinalIgnoreCase) && s.Type == GetMemberType(member))
-					.SoleOrDefault();
+					.SoleOrDefault(s => s.Name.Equals(member.Name, StringComparison.OrdinalIgnoreCase) && s.Type == GetMemberType(member));
 			}
 
 			static ISymbol? GetParameterSymbol(ISymbol member, IEnumerable<IParameterSymbol> parameterSymbols)
 			{
 				return parameterSymbols
-					.Where(s => s.Name.Equals(member.Name, StringComparison.OrdinalIgnoreCase) && s.Type == GetMemberType(member))
-					.SoleOrDefault();
+					.SoleOrDefault(s => s.Name.Equals(member.Name, StringComparison.OrdinalIgnoreCase) && s.Type == GetMemberType(member));
 			}
 
 			static ISymbol? GetFieldSymbol(ISymbol member, IEnumerable<IFieldSymbol> fieldSymbols)
 			{
 				return fieldSymbols
-					.Where(s => GetPlainName(s).Equals(member.Name, StringComparison.OrdinalIgnoreCase) && s.Type == GetMemberType(member))
-					.SoleOrDefault();
+					.SoleOrDefault(s => GetPlainName(s).Equals(member.Name, StringComparison.OrdinalIgnoreCase) && s.Type == GetMemberType(member));
 			}
 
 			static ISymbol? GetPropertySymbol(ISymbol member, IEnumerable<IPropertySymbol> propertySymbols)
 			{
 				return propertySymbols
-					.Where(s => s.Name.Equals(member.Name, StringComparison.OrdinalIgnoreCase) && s.Type == GetMemberType(member) && s.GetMethod is IMethodSymbol)
-					.SoleOrDefault();
+					.SoleOrDefault(s => s.Name.Equals(member.Name, StringComparison.OrdinalIgnoreCase) && s.Type == GetMemberType(member) && s.GetMethod is IMethodSymbol);
 			}
 		}
 
