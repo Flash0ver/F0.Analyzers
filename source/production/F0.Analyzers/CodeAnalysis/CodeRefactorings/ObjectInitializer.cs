@@ -128,10 +128,10 @@ namespace F0.CodeAnalysis.CodeRefactorings
 
 		private static SeparatedSyntaxList<ExpressionSyntax> CreateAssignmentExpressions(Document document, IEnumerable<ISymbol> mutableMembers, IEnumerable<ISymbol> symbols)
 		{
-			var localSymbols = symbols.Where(s => s.Kind is SymbolKind.Local).Cast<ILocalSymbol>().ToImmutableArray();
-			var parameterSymbols = symbols.Where(s => s.Kind is SymbolKind.Parameter).Cast<IParameterSymbol>().ToImmutableArray();
-			var fieldSymbols = symbols.Where(s => s.Kind is SymbolKind.Field).Cast<IFieldSymbol>().ToImmutableArray();
-			var propertySymbols = symbols.Where(s => s.Kind is SymbolKind.Property).Cast<IPropertySymbol>().ToImmutableArray();
+			var localSymbols = symbols.Where(s => s.Kind is SymbolKind.Local).Cast<ILocalSymbol>().ToArray();
+			var parameterSymbols = symbols.Where(s => s.Kind is SymbolKind.Parameter).Cast<IParameterSymbol>().ToArray();
+			var fieldSymbols = symbols.Where(s => s.Kind is SymbolKind.Field).Cast<IFieldSymbol>().ToArray();
+			var propertySymbols = symbols.Where(s => s.Kind is SymbolKind.Property).Cast<IPropertySymbol>().ToArray();
 
 			var hasDefaultLiteral = HasDefaultLiteralFeature(document.Project);
 			var generator = hasDefaultLiteral ? null : SyntaxGenerator.GetGenerator(document);
