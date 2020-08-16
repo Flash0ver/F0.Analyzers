@@ -61,7 +61,7 @@ namespace F0.Tests.Extensions
 		}
 
 		[Fact]
-		public void SoleOrDefaultWithPredicate_SequenceContainsOneSingleMatch_ReturnsTheOnlyElement()
+		public void SoleOrDefaultWithPredicate_SequenceContainsOneSingleMatch_ReturnsTheOnlyMatch()
 		{
 			// Arrange
 			var element = "bowl";
