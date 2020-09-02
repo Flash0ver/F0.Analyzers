@@ -11,6 +11,10 @@ namespace F0.Testing.CodeAnalysis.CodeFixes
 	public class CodeFixVerifier<TCodeFix>
 		where TCodeFix : CodeFixProvider, new()
 	{
+		internal CodeFixVerifier()
+		{
+		}
+
 		public void Type()
 		{
 			var type = typeof(TCodeFix);
@@ -26,6 +30,10 @@ namespace F0.Testing.CodeAnalysis.CodeFixes
 		where TDiagnosticAnalyzer : DiagnosticAnalyzer, new()
 		where TCodeFix : CodeFixProvider, new()
 	{
+		internal CodeFixVerifier()
+		{
+		}
+
 		public Task NoOpAsync(string code, DiagnosticResult diagnostic)
 		{
 			var tester = CreateTester(code);

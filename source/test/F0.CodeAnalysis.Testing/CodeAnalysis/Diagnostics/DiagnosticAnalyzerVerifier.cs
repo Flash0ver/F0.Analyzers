@@ -10,6 +10,10 @@ namespace F0.Testing.CodeAnalysis.Diagnostics
 	public class DiagnosticAnalyzerVerifier<TDiagnosticAnalyzer>
 		where TDiagnosticAnalyzer : DiagnosticAnalyzer, new()
 	{
+		internal DiagnosticAnalyzerVerifier()
+		{
+		}
+
 		public void Type()
 		{
 			var type = typeof(TDiagnosticAnalyzer);
