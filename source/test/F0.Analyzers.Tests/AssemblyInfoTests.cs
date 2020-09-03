@@ -1,8 +1,10 @@
 ﻿#nullable disable
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Resources;
+using F0.CodeAnalysis.Diagnostics;
 using FluentAssertions;
 using Xunit;
 
@@ -12,12 +14,10 @@ namespace F0.Tests
 	{
 		private static readonly Version version = new Version(0, 4, 1, 0);
 
-#if NET472
 		static AssemblyInfoTests()
 		{
-			_ = new F0.CodeAnalysis.Diagnostics.F00001GoToStatementConsideredHarmful();
+			EnsureThatAssemblyUnderTestIsLoaded();
 		}
-#endif
 
 		[Fact]
 		public void AssemblyInfo_DefaultCulture_English()
@@ -49,5 +49,13 @@ namespace F0.Tests
 
 			return assembly;
 		}
+
+		/// <summary>
+		/// On <strong>.NET Core</strong>, <em>xUnit.net</em> loads the Assembly Under Test (<c>ProjectReference</c>) already automatically,
+		/// without using any Type in test code. However, not on <strong>.NET Framework</strong>.
+		/// </summary>
+		[Conditional("NET472")]
+		private static void EnsureThatAssemblyUnderTestIsLoaded()
+			=> _ = new F00001GoToStatementConsideredHarmful();
 	}
 }
