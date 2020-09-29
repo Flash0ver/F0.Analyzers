@@ -6,12 +6,12 @@ namespace F0.Analyzers.Example.Dependencies.Dependency
 {
 	internal sealed class InternalPoco
 	{
-		public DateTimeOffset Timestamp { get; set; }
+		internal DateTimeOffset Timestamp { get; set; }
 
-		public IList<int> Collection { get; set; }
+		internal IList<int> Collection { get; set; }
 
-		public Dictionary<string, string> Map { get; set; }
+		internal Dictionary<string, string> Map { get; set; }
 
-		public LoggerFilterOptions Options { get; set; }
+		internal LoggerFilterOptions Options { get; set; }
 	}
 }

@@ -2,6 +2,8 @@
 CHANGELOG
 
 ## vNext
+### Analyzers
+- Changed `ObjectInitializer` code refactoring, assigning `internal` fields and properties within files in the same assembly or _friend_ assemblies.
 
 ## v0.4.1 (2020-07-11)
 ### Analyzers

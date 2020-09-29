@@ -78,7 +78,7 @@ namespace F0.CodeAnalysis.CodeRefactorings
 			var semanticModel = compilation.GetSemanticModel(objectCreationExpression.SyntaxTree);
 
 			var typeInfo = semanticModel.GetTypeInfo(objectCreationExpression);
-			var mutableMembers = GetMutableMembers(ref typeInfo);
+			var mutableMembers = GetMutableMembers(ref typeInfo, compilation.Assembly);
 
 			var availableSymbols = semanticModel.LookupSymbols(objectCreationExpression.SpanStart);
 
@@ -96,17 +96,34 @@ namespace F0.CodeAnalysis.CodeRefactorings
 			return documentEditor.GetChangedDocument();
 		}
 
-		private static IEnumerable<ISymbol> GetMutableMembers(ref TypeInfo typeInfo)
+		private static IEnumerable<ISymbol> GetMutableMembers(ref TypeInfo typeInfo, IAssemblySymbol assembly)
 		{
 			var instanceMembers = typeInfo.Type.GetMembers().Where(s => !s.IsStatic);
+			var areInternalSymbolsAccessible = typeInfo.Type.ContainingAssembly.GivesAccessTo(assembly);
 
-			IEnumerable<ISymbol> mutableFields = instanceMembers.OfType<IFieldSymbol>()
-				.Where(f => f.DeclaredAccessibility is Accessibility.Public && !f.IsReadOnly);
-			IEnumerable<ISymbol> mutableProperties = instanceMembers.OfType<IPropertySymbol>()
-				.Where(p => p.SetMethod is IMethodSymbol setMethod && setMethod.DeclaredAccessibility is Accessibility.Public);
+			IEnumerable<ISymbol> mutableFields = instanceMembers.OfType<IFieldSymbol>().Where(FilterMutableFields);
+			IEnumerable<ISymbol> mutableProperties = instanceMembers.OfType<IPropertySymbol>().Where(FilterMutableProperties);
 
 			var mutableMembers = mutableFields.Concat(mutableProperties);
 			return mutableMembers;
+
+			bool FilterMutableFields(IFieldSymbol field)
+			{
+				return !field.IsReadOnly
+					&& IsAccessible(field.DeclaredAccessibility, areInternalSymbolsAccessible);
+			}
+
+			bool FilterMutableProperties(IPropertySymbol property)
+			{
+				return property.SetMethod is IMethodSymbol setMethod
+					&& IsAccessible(setMethod.DeclaredAccessibility, areInternalSymbolsAccessible);
+			}
+		}
+
+		private static bool IsAccessible(Accessibility accessibility, bool isFriend)
+		{
+			return accessibility is Accessibility.Public
+				|| (isFriend && (accessibility is Accessibility.Internal || accessibility is Accessibility.ProtectedOrInternal));
 		}
 
 		private static SeparatedSyntaxList<ExpressionSyntax> CreateAssignmentExpressions(Document document, IEnumerable<ISymbol> mutableMembers, IEnumerable<ISymbol> symbols)
