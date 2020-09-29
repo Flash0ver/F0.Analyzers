@@ -10,7 +10,7 @@ CodeRefactoringProvider: [ObjectInitializer.cs](../../source/production/F0.Analy
 
 ## Summary
 
-This code refactoring adds an object initializer, assigning matching `locals`, matching `members`, or the `default value expression` to all publicly settable instance fields and properties.
+This code refactoring adds an object initializer, assigning matching `locals`, matching `members`, or the `default value expression` to all publicly/internally settable instance fields and properties.
 - C# 7.0 or lower: `default operator`
 - C# 7.1 or greater: `default literal`
 
@@ -21,7 +21,12 @@ C# language features
 - The `object initializer` feature is available since C# 3.0.
 - The `default literal` feature is available since C# 7.1.
 
-This code refactoring (titled `Create Object Initializer`) creates an object initializer from any object creation expression (`new operator`) and initializes all members that are both accessible and mutable.
+This code refactoring (titled `Create Object Initializer`) creates an object initializer from any object creation expression (`new operator`) and initializes all instance members that are both accessible and mutable.
+
+Assignable members must be accessible from the location of the object initializer:
+- `public` (unrestricted)
+- `internal` (within same assembly or friend assemblies)
+- `protected internal` (within same assembly or friend assemblies)
 
 Candidate values are determined by this matching behavior:
 - _locals_ and _members_, which exist in the current context
@@ -91,6 +96,7 @@ class MyClass
 - [Object initializers](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/object-and-collection-initializers#object-initializers)
 - [default value expressions](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/operators/default)
 - [new operator](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/operators/new-operator)
+- [Friend assemblies](https://docs.microsoft.com/en-us/dotnet/standard/assembly/friend)
 - [C# version 2.0](https://docs.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-version-history#c-version-20)
 - [C# version 3.0](https://docs.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-version-history#c-version-30)
 - [C# version 7.1](https://docs.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-version-history#c-version-71)
@@ -98,6 +104,7 @@ class MyClass
 
 ## History
 
+- [0.5.0](../../CHANGELOG.md#v050-2020-09-29)
 - [0.4.1](../../CHANGELOG.md#v041-2020-07-11)
 - [0.4.0](../../CHANGELOG.md#v040-2020-06-26)
 - [0.2.0](../../CHANGELOG.md#v020-2020-05-21)

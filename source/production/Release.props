@@ -1,8 +1,8 @@
 <Project>
 
   <PropertyGroup>
-    <F0Version>0.4.1</F0Version>
-    <F0ReleaseNotes>Fixed the object initializer code refactoring to no longer assign values to static members.</F0ReleaseNotes>
+    <F0Version>0.5.0</F0Version>
+    <F0ReleaseNotes>Changed the object initializer code refactoring to also assign internal fields and properties when within same or friend assembly.</F0ReleaseNotes>
   </PropertyGroup>
 
 </Project>

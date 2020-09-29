@@ -45,6 +45,9 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 		private static Task VerifyAsync(string initialCode, string expectedCode, LanguageVersion languageVersion)
 			=> Verify.CodeRefactoring<ObjectInitializer>().CodeActionAsync(initialCode, expectedCode, languageVersion);
 
+		private static Task VerifyAsync(string initialCode, string expectedCode, string[][] additionalProjects)
+			=> Verify.CodeRefactoring<ObjectInitializer>().CodeActionAsync(initialCode, expectedCode, additionalProjects, LanguageVersion.Latest);
+
 		private static Task VerifyNoOpAsync(string code)
 			=> Verify.CodeRefactoring<ObjectInitializer>().NoOpAsync(code, LanguageVersion.Latest);
 
