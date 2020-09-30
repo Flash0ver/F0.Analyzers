@@ -12,7 +12,7 @@ namespace F0.Tests
 {
 	public class AssemblyInfoTests
 	{
-		private static readonly Version version = new Version(0, 4, 1, 0);
+		private static readonly Version version = new Version(0, 5, 0, 0);
 
 		static AssemblyInfoTests()
 		{
