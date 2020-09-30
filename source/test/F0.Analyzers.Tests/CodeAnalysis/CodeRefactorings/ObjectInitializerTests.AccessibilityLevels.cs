@@ -5,7 +5,6 @@ using Xunit;
 
 namespace F0.Tests.CodeAnalysis.CodeRefactorings
 {
-	// TODO: https://github.com/Flash0ver/F0.Analyzers/issues/37
 	public partial class ObjectInitializerTests
 	{
 		[Fact]
@@ -21,14 +20,14 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					internal int Internal_Field;
 					protected internal int Protected_Internal_Field;
 					private int Private_Field;
-					//private protected int Private_Protected_Field;
+					private protected int Private_Protected_Field;
 
 					public int Public_Property { get; set; }
 					protected int Protected_Property { get; set; }
 					internal int Internal_Property { get; set; }
 					protected internal int Protected_Internal_Property { get; set; }
 					private int Private_Property { get; set; }
-					//private protected int Private_Protected_Property { get; set; }
+					private protected int Private_Protected_Property { get; set; }
 				}
 
 				class C
@@ -49,14 +48,14 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					internal int Internal_Field;
 					protected internal int Protected_Internal_Field;
 					private int Private_Field;
-					//private protected int Private_Protected_Field;
+					private protected int Private_Protected_Field;
 
 					public int Public_Property { get; set; }
 					protected int Protected_Property { get; set; }
 					internal int Internal_Property { get; set; }
 					protected internal int Protected_Internal_Property { get; set; }
 					private int Private_Property { get; set; }
-					//private protected int Private_Protected_Property { get; set; }
+					private protected int Private_Protected_Property { get; set; }
 				}
 
 				class C
@@ -98,7 +97,7 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 						internal int Internal;
 						protected internal int Protected_Internal;
 						private int Private;
-						//private protected int Private_Protected;
+						private protected int Private_Protected;
 					}
 				}";
 
@@ -112,7 +111,7 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 						internal int Internal { get; set; }
 						protected internal int Protected_Internal { get; set; }
 						private int Private { get; set; }
-						//private protected int Private_Protected { get; set; }
+						private protected int Private_Protected { get; set; }
 					}
 				}";
 
