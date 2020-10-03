@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace F0.Extensions
 {
@@ -11,6 +12,32 @@ namespace F0.Extensions
 
 			foreach (var element in source)
 			{
+				if (result is null)
+				{
+					result = element;
+				}
+				else
+				{
+					result = null;
+					break;
+				}
+			}
+
+			return result;
+		}
+
+		internal static T? SoleOrDefault<T>(this IEnumerable<T> source, Func<T, bool> predicate)
+			where T : class
+		{
+			T? result = null;
+
+			foreach (var element in source)
+			{
+				if (!predicate(element))
+				{
+					continue;
+				}
+
 				if (result is null)
 				{
 					result = element;

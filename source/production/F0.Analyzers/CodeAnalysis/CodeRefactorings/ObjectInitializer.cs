@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Composition;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -128,10 +127,10 @@ namespace F0.CodeAnalysis.CodeRefactorings
 
 		private static SeparatedSyntaxList<ExpressionSyntax> CreateAssignmentExpressions(Document document, IEnumerable<ISymbol> mutableMembers, IEnumerable<ISymbol> symbols)
 		{
-			var localSymbols = symbols.Where(s => s.Kind is SymbolKind.Local).Cast<ILocalSymbol>().ToImmutableArray();
-			var parameterSymbols = symbols.Where(s => s.Kind is SymbolKind.Parameter).Cast<IParameterSymbol>().ToImmutableArray();
-			var fieldSymbols = symbols.Where(s => s.Kind is SymbolKind.Field).Cast<IFieldSymbol>().ToImmutableArray();
-			var propertySymbols = symbols.Where(s => s.Kind is SymbolKind.Property).Cast<IPropertySymbol>().ToImmutableArray();
+			var localSymbols = symbols.Where(s => s.Kind is SymbolKind.Local).Cast<ILocalSymbol>().ToArray();
+			var parameterSymbols = symbols.Where(s => s.Kind is SymbolKind.Parameter).Cast<IParameterSymbol>().ToArray();
+			var fieldSymbols = symbols.Where(s => s.Kind is SymbolKind.Field).Cast<IFieldSymbol>().ToArray();
+			var propertySymbols = symbols.Where(s => s.Kind is SymbolKind.Property).Cast<IPropertySymbol>().ToArray();
 
 			var hasDefaultLiteral = HasDefaultLiteralFeature(document.Project);
 			var generator = hasDefaultLiteral ? null : SyntaxGenerator.GetGenerator(document);
@@ -185,29 +184,25 @@ namespace F0.CodeAnalysis.CodeRefactorings
 			static ISymbol? GetLocalSymbol(ISymbol member, IEnumerable<ILocalSymbol> localSymbols)
 			{
 				return localSymbols
-					.Where(s => s.Name.Equals(member.Name, StringComparison.OrdinalIgnoreCase) && s.Type == GetMemberType(member))
-					.SoleOrDefault();
+					.SoleOrDefault(s => s.Name.Equals(member.Name, StringComparison.OrdinalIgnoreCase) && s.Type == GetMemberType(member));
 			}
 
 			static ISymbol? GetParameterSymbol(ISymbol member, IEnumerable<IParameterSymbol> parameterSymbols)
 			{
 				return parameterSymbols
-					.Where(s => s.Name.Equals(member.Name, StringComparison.OrdinalIgnoreCase) && s.Type == GetMemberType(member))
-					.SoleOrDefault();
+					.SoleOrDefault(s => s.Name.Equals(member.Name, StringComparison.OrdinalIgnoreCase) && s.Type == GetMemberType(member));
 			}
 
 			static ISymbol? GetFieldSymbol(ISymbol member, IEnumerable<IFieldSymbol> fieldSymbols)
 			{
 				return fieldSymbols
-					.Where(s => GetPlainName(s).Equals(member.Name, StringComparison.OrdinalIgnoreCase) && s.Type == GetMemberType(member))
-					.SoleOrDefault();
+					.SoleOrDefault(s => GetPlainName(s).Equals(member.Name, StringComparison.OrdinalIgnoreCase) && s.Type == GetMemberType(member));
 			}
 
 			static ISymbol? GetPropertySymbol(ISymbol member, IEnumerable<IPropertySymbol> propertySymbols)
 			{
 				return propertySymbols
-					.Where(s => s.Name.Equals(member.Name, StringComparison.OrdinalIgnoreCase) && s.Type == GetMemberType(member) && s.GetMethod is IMethodSymbol)
-					.SoleOrDefault();
+					.SoleOrDefault(s => s.Name.Equals(member.Name, StringComparison.OrdinalIgnoreCase) && s.Type == GetMemberType(member) && s.GetMethod is IMethodSymbol);
 			}
 		}
 
