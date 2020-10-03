@@ -43,7 +43,7 @@ namespace F0.Analyzers.Example.CodeAnalysis.CodeRefactorings
 			return poco;
 		}
 
-		public InternalPoco GetInternalTypeFromFriendAssembly()
+		public InternalPoco GetInternalTypeWithinFriendAssembly()
 		{
 			var poco = new InternalPoco();
 			return poco;
