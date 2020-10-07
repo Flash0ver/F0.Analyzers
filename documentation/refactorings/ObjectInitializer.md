@@ -80,13 +80,13 @@ class MyClass
     {
         bool item1 = true;
         return new ValueTuple<bool, int, float, string, object>()
-		{
-			Item1 = item1,
-			Item2 = item2,
-			Item3 = Item3,
-			Item4 = Item4,
-			Item5 = default
-		};
+        {
+            Item1 = item1,
+            Item2 = item2,
+            Item3 = Item3,
+            Item4 = Item4,
+            Item5 = default
+        };
     }
 }
 ```
