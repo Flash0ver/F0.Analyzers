@@ -64,6 +64,12 @@ namespace F0.Analyzers.Example.CodeAnalysis.CodeRefactorings
 			};
 		}
 
+		public BaseClass GetInheritingType()
+		{
+			var inheritance = new DerivedClass();
+			return inheritance;
+		}
+
 		public ValueTuple<bool, string, int> GetModelWithLocals(int item3)
 		{
 			var item1 = false;

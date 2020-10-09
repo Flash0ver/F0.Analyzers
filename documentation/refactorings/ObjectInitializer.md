@@ -10,7 +10,7 @@ CodeRefactoringProvider: [ObjectInitializer.cs](../../source/production/F0.Analy
 
 ## Summary
 
-This code refactoring adds an object initializer, assigning matching `locals`, matching `members`, or the `default value expression` to all publicly/internally settable instance fields and properties.
+This code refactoring adds an object initializer, assigning matching `locals`, matching `members`, or the `default value expression` to all publicly/internally settable instance fields and properties, both declared and inherited.
 - C# 7.0 or lower: `default operator`
 - C# 7.1 or greater: `default literal`
 
@@ -23,7 +23,7 @@ C# language features
 
 This code refactoring (titled `Create Object Initializer`) creates an object initializer from any object creation expression (`new operator`) and initializes all instance members that are both accessible and mutable.
 
-Assignable members must be accessible from the location of the object initializer:
+Assignable members (declared or inherited) must be accessible from the location of the object initializer:
 - `public` (unrestricted)
 - `internal` (within same assembly or friend assemblies)
 - `protected internal` (within same assembly or friend assemblies)
@@ -104,6 +104,7 @@ class MyClass
 
 ## History
 
+- [vNext](../../CHANGELOG.md#vNext)
 - [0.5.0](../../CHANGELOG.md#v050-2020-09-29)
 - [0.4.1](../../CHANGELOG.md#v041-2020-07-11)
 - [0.4.0](../../CHANGELOG.md#v040-2020-06-26)
