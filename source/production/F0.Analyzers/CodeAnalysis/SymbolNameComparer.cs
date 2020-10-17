@@ -9,7 +9,7 @@ namespace F0.CodeAnalysis
 		{
 		}
 
-		internal static SymbolNameComparer Instance { get; } = new SymbolNameComparer();
+		internal static IEqualityComparer<ISymbol> Instance { get; } = new SymbolNameComparer();
 
 		public override bool Equals(ISymbol x, ISymbol y)
 			=> x.Name.Equals(y.Name);
