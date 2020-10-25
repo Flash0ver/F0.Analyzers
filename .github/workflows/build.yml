@@ -17,7 +17,7 @@ jobs:
 
     env:
       Solution_File: ./source/F0.Analyzers.sln
-      Solution_Core_File: ./source/F0.Analyzers.Core.slnf
+      Solution_Core_File: ./source/F0.Analyzers.Core.Unix.slnf # https://github.com/dotnet/msbuild/issues/5715
       NuGet_Configuration_File: ./source/nuget.config
       Build_Configuration: Release
 
