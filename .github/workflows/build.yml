@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [ master ]
 
+env:
+  DOTNET_NOLOGO: true
+
 jobs:
   build:
     name: Build on ${{ matrix.os }} using ${{ matrix.configuration }} configuration
@@ -24,6 +27,7 @@ jobs:
       NuGet_Configuration_File: ./source/nuget.config
 
     steps:
+    # Init
     - name: Checkout
       uses: actions/checkout@v2.3.3
     - name: Setup .NET Core SDK
@@ -32,11 +36,13 @@ jobs:
     - name: Setup MSBuild.exe (add msbuild to PATH)
       uses: microsoft/setup-msbuild@v1.0.2
       if: startsWith(matrix.os, 'windows-')
+    # Restore
     - name: Restore
       run: dotnet restore ${{ env.Solution_File }} --configfile ${{ env.NuGet_Configuration_File }}
     - name: Restore VSIX with ${{ matrix.configuration }} configuration
       run: msbuild ${{ env.Solution_Vsix_File }} /t:Restore /p:Configuration=${{ matrix.configuration }}
       if: startsWith(matrix.os, 'windows-')
+    # Build
     - name: Build ${{ matrix.configuration }} configuration
       run: dotnet build ${{ env.Solution_Core_File }} --configuration ${{ matrix.configuration }} --no-restore
       if: startsWith(matrix.os, 'windows-')
