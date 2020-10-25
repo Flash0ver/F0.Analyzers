@@ -19,6 +19,7 @@ jobs:
       Solution_File: ./source/F0.Analyzers.sln
       Solution_Core_File: ./source/F0.Analyzers.Core.slnf
       Solution_Core_Unix_File: ./source/F0.Analyzers.Core.Unix.slnf # https://github.com/dotnet/msbuild/issues/5715
+      Solution_Vsix_File: ./source/F0.Analyzers.Vsix.slnf
       NuGet_Configuration_File: ./source/nuget.config
       Build_Configuration: Release
 
@@ -28,11 +29,20 @@ jobs:
     - name: Setup .NET Core SDK
       uses: actions/setup-dotnet@v1.7.2
       if: startsWith(matrix.os, 'windows-')
+    - name: Setup MSBuild.exe (add msbuild to PATH)
+      uses: microsoft/setup-msbuild@v1.0.2
+      if: startsWith(matrix.os, 'windows-')
     - name: Restore
       run: dotnet restore ${{ env.Solution_File }} --configfile ${{ env.NuGet_Configuration_File }}
+    - name: Restore VSIX
+      run: msbuild ${{ env.Solution_Vsix_File }} /t:Restore /p:Configuration=${{ env.Build_Configuration }}
+      if: startsWith(matrix.os, 'windows-')
     - name: Build ${{ env.Build_Configuration }} configuration
       run: dotnet build ${{ env.Solution_Core_File }} --configuration ${{ env.Build_Configuration }} --no-restore
       if: startsWith(matrix.os, 'windows-')
     - name: Build ${{ env.Build_Configuration }} configuration non-Windows
       run: dotnet build ${{ env.Solution_Core_Unix_File }} --configuration ${{ env.Build_Configuration }} --no-restore
       if: "!startsWith(matrix.os, 'windows-')"
+    - name: Build VSIX
+      run: msbuild ${{ env.Solution_Vsix_File }} /p:Configuration=${{ env.Build_Configuration }}
+      if: startsWith(matrix.os, 'windows-')
