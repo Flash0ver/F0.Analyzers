@@ -44,10 +44,10 @@ jobs:
       if: startsWith(matrix.os, 'windows-')
     # Build
     - name: Build ${{ matrix.configuration }} configuration
-      run: dotnet build ${{ env.Solution_Core_File }} --configuration ${{ matrix.configuration }} --no-restore
+      run: dotnet build ${{ env.Solution_Core_File }} --configuration ${{ matrix.configuration }} --no-restore --nologo
       if: startsWith(matrix.os, 'windows-')
     - name: Build ${{ matrix.configuration }} configuration non-Windows
-      run: dotnet build ${{ env.Solution_Core_Unix_File }} --configuration ${{ matrix.configuration }} --no-restore
+      run: dotnet build ${{ env.Solution_Core_Unix_File }} --configuration ${{ matrix.configuration }} --no-restore --nologo
       if: "!startsWith(matrix.os, 'windows-')"
     - name: Build VSIX
       run: msbuild ${{ env.Solution_Vsix_File }} /p:Configuration=${{ matrix.configuration }}
