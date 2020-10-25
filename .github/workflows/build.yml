@@ -24,6 +24,9 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2.3.3
+    - name: Setup .NET Core SDK
+      uses: actions/setup-dotnet@v1.7.2
+      if: startsWith(matrix.os, 'windows-')
     - name: Restore
       run: dotnet restore ${{ env.Solution_File }} --configfile ${{ env.NuGet_Configuration_File }}
     - name: Build ${{ env.Build_Configuration }} configuration
