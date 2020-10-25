@@ -8,12 +8,13 @@ on:
 
 jobs:
   build:
-    name: Build on ${{ matrix.os }}
+    name: Build on ${{ matrix.os }} using ${{ matrix.configuration }} configuration
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
         os: [ ubuntu-18.04, windows-2019, macos-10.15 ]
+        configuration: [ Debug, Release ]
 
     env:
       Solution_File: ./source/F0.Analyzers.sln
@@ -21,7 +22,6 @@ jobs:
       Solution_Core_Unix_File: ./source/F0.Analyzers.Core.Unix.slnf # https://github.com/dotnet/msbuild/issues/5715
       Solution_Vsix_File: ./source/F0.Analyzers.Vsix.slnf
       NuGet_Configuration_File: ./source/nuget.config
-      Build_Configuration: Release
 
     steps:
     - name: Checkout
@@ -34,15 +34,15 @@ jobs:
       if: startsWith(matrix.os, 'windows-')
     - name: Restore
       run: dotnet restore ${{ env.Solution_File }} --configfile ${{ env.NuGet_Configuration_File }}
-    - name: Restore VSIX
-      run: msbuild ${{ env.Solution_Vsix_File }} /t:Restore /p:Configuration=${{ env.Build_Configuration }}
+    - name: Restore VSIX with ${{ matrix.configuration }} configuration
+      run: msbuild ${{ env.Solution_Vsix_File }} /t:Restore /p:Configuration=${{ matrix.configuration }}
       if: startsWith(matrix.os, 'windows-')
-    - name: Build ${{ env.Build_Configuration }} configuration
-      run: dotnet build ${{ env.Solution_Core_File }} --configuration ${{ env.Build_Configuration }} --no-restore
+    - name: Build ${{ matrix.configuration }} configuration
+      run: dotnet build ${{ env.Solution_Core_File }} --configuration ${{ matrix.configuration }} --no-restore
       if: startsWith(matrix.os, 'windows-')
-    - name: Build ${{ env.Build_Configuration }} configuration non-Windows
-      run: dotnet build ${{ env.Solution_Core_Unix_File }} --configuration ${{ env.Build_Configuration }} --no-restore
+    - name: Build ${{ matrix.configuration }} configuration non-Windows
+      run: dotnet build ${{ env.Solution_Core_Unix_File }} --configuration ${{ matrix.configuration }} --no-restore
       if: "!startsWith(matrix.os, 'windows-')"
     - name: Build VSIX
-      run: msbuild ${{ env.Solution_Vsix_File }} /p:Configuration=${{ env.Build_Configuration }}
+      run: msbuild ${{ env.Solution_Vsix_File }} /p:Configuration=${{ matrix.configuration }}
       if: startsWith(matrix.os, 'windows-')
