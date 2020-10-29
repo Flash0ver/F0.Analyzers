@@ -1,0 +1,55 @@
+name: Build
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+env:
+  DOTNET_NOLOGO: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+
+jobs:
+  build:
+    name: Build on ${{ matrix.os }} using ${{ matrix.configuration }} configuration
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ ubuntu-18.04, windows-2019, macos-10.15 ]
+        configuration: [ Debug, Release ]
+
+    env:
+      Solution_File: ./source/F0.Analyzers.sln
+      Solution_Core_File: ./source/F0.Analyzers.Core.slnf
+      Solution_Core_Unix_File: ./source/F0.Analyzers.Core.Unix.slnf # https://github.com/dotnet/msbuild/issues/5715
+      Solution_Vsix_File: ./source/F0.Analyzers.Vsix.slnf
+      NuGet_Configuration_File: ./source/nuget.config
+
+    steps:
+    # Init
+    - name: Checkout
+      uses: actions/checkout@v2.3.3
+    - name: Setup .NET Core SDK
+      uses: actions/setup-dotnet@v1.7.2
+      if: startsWith(matrix.os, 'windows-')
+    - name: Setup MSBuild.exe (add msbuild to PATH)
+      uses: microsoft/setup-msbuild@v1.0.2
+      if: startsWith(matrix.os, 'windows-')
+    # Restore
+    - name: Restore
+      run: dotnet restore ${{ env.Solution_File }} --configfile ${{ env.NuGet_Configuration_File }}
+    - name: Restore VSIX with ${{ matrix.configuration }} configuration
+      run: msbuild ${{ env.Solution_Vsix_File }} /t:Restore /p:Configuration=${{ matrix.configuration }}
+      if: startsWith(matrix.os, 'windows-')
+    # Build
+    - name: Build ${{ matrix.configuration }} configuration
+      run: dotnet build ${{ env.Solution_Core_File }} --configuration ${{ matrix.configuration }} --no-restore --nologo
+      if: startsWith(matrix.os, 'windows-')
+    - name: Build ${{ matrix.configuration }} configuration non-Windows
+      run: dotnet build ${{ env.Solution_Core_Unix_File }} --configuration ${{ matrix.configuration }} --no-restore --nologo
+      if: "!startsWith(matrix.os, 'windows-')"
+    - name: Build VSIX
+      run: msbuild ${{ env.Solution_Vsix_File }} /p:Configuration=${{ matrix.configuration }}
+      if: startsWith(matrix.os, 'windows-')
