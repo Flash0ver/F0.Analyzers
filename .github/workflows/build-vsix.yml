@@ -27,7 +27,7 @@ jobs:
       uses: microsoft/setup-msbuild@v1.0.2
     # Restore
     - name: Restore ${{ matrix.configuration }}
-      run: msbuild ${{ env.Solution_Vsix_File }} /t:Restore /p:Configuration=${{ matrix.configuration }}
+      run: msbuild ${{ env.Solution_Vsix_File }} /t:Restore /p:Configuration=${{ matrix.configuration }} -nologo
     # Build
     - name: Build ${{ matrix.configuration }}
-      run: msbuild ${{ env.Solution_Vsix_File }} /p:Configuration=${{ matrix.configuration }}
+      run: msbuild ${{ env.Solution_Vsix_File }} /p:Configuration=${{ matrix.configuration }} -nologo
