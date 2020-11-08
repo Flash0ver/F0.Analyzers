@@ -2,7 +2,8 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFrameworks>net472;netcoreapp3.1</TargetFrameworks>
+    <TargetFrameworks Condition="'$(OS)'=='Windows_NT'">net472;netcoreapp3.1</TargetFrameworks>
+    <TargetFramework Condition="'$(OS)'!='Windows_NT'">netcoreapp3.1</TargetFramework>
     <AssemblyName>F0.Analyzers.Benchmarks</AssemblyName>
     <RootNamespace>F0.Benchmarks</RootNamespace>
   </PropertyGroup>
