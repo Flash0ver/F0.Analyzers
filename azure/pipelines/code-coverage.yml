@@ -52,6 +52,7 @@ jobs:
       restoreArguments: '$(Solution_File)'
       feedsToUse: 'config'
       nugetConfigPath: '$(NuGet_Configuration_File)'
+      verbosityRestore: 'Minimal'
   - task: DotNetCoreCLI@2
     displayName: 'Install .NET Tools'
     inputs:
@@ -63,7 +64,7 @@ jobs:
     displayName: 'Collect Code Coverage'
     inputs:
       command: 'test'
-      arguments: '$(Solution_Filter_File) --collect:"XPlat Code Coverage" --no-restore --results-directory $(Test_Results_Directory) --settings $(Runsettings_File)'
+      arguments: '$(Solution_Filter_File) --collect:"XPlat Code Coverage" --nologo --no-restore --results-directory $(Test_Results_Directory) --settings $(Runsettings_File)'
       publishTestResults: false
   # Generate
   - task: DotNetCoreCLI@2
