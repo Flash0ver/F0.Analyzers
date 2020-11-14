@@ -17,14 +17,14 @@ jobs:
 - job: 'code_coverage'
   strategy:
     matrix:
-      ubuntu:
+      windows:
         imageName: 'windows-2019'
   pool:
     vmImage: $(imageName)
 
   variables:
     NuGet_Configuration_File: '$(System.DefaultWorkingDirectory)/source/nuget.config'
-    Solution_File: '$(System.DefaultWorkingDirectory)/source/F0.Analyzers.sln'
+    Solution_Filter_File: '$(System.DefaultWorkingDirectory)/source/F0.Analyzers.Core.slnf'
     Test_Results_Directory: '$(System.DefaultWorkingDirectory)/source/TestResults'
     Runsettings_File: '$(System.DefaultWorkingDirectory)/source/test/coverlet.runsettings'
     Coverage_Reports_Glob: '$(System.DefaultWorkingDirectory)/source/TestResults/**/coverage.cobertura.xml'
@@ -55,7 +55,7 @@ jobs:
     displayName: 'Collect Code Coverage'
     inputs:
       command: 'test'
-      arguments: '$(Solution_File) --collect:"XPlat Code Coverage" --results-directory $(Test_Results_Directory) --settings $(Runsettings_File)'
+      arguments: '$(Solution_Filter_File) --collect:"XPlat Code Coverage" --results-directory $(Test_Results_Directory) --settings $(Runsettings_File)'
       publishTestResults: false
   # Generate
   - task: DotNetCoreCLI@2
