@@ -23,14 +23,14 @@ jobs:
     vmImage: $(imageName)
 
   variables:
-    NuGet_Configuration_File: './source/nuget.config'
-    Solution_File: './source/F0.Analyzers.sln'
-    Test_Results_Directory: './source/TestResults'
-    Runsettings_File: './source/test/coverlet.runsettings'
-    Coverage_Reports_Glob: './source/TestResults/**/coverage.cobertura.xml'
-    Report_Target_Directory: './source/TestResults/coveragereport'
+    NuGet_Configuration_File: '$(System.DefaultWorkingDirectory)/source/nuget.config'
+    Solution_File: '$(System.DefaultWorkingDirectory)/source/F0.Analyzers.sln'
+    Test_Results_Directory: '$(System.DefaultWorkingDirectory)/source/TestResults'
+    Runsettings_File: '$(System.DefaultWorkingDirectory)/source/test/coverlet.runsettings'
+    Coverage_Reports_Glob: '$(System.DefaultWorkingDirectory)/source/TestResults/**/coverage.cobertura.xml'
+    Report_Target_Directory: '$(System.DefaultWorkingDirectory)/source/TestResults/coveragereport'
     Report_Types: 'Cobertura'
-    Report_Target_File: './source/TestResults/coveragereport/Cobertura.xml'
+    Report_Target_File: '$(System.DefaultWorkingDirectory)/source/TestResults/coveragereport/Cobertura.xml'
 
   steps:
   # Init
