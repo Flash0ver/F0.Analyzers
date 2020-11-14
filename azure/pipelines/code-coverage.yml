@@ -44,14 +44,26 @@ jobs:
       useGlobalJson: true
       performMultiLevelLookup: true
   # Restore
-  - script: dotnet tool restore --configfile $(NuGet_Configuration_File)
+  - task: DotNetCoreCLI@2
     displayName: 'Install .NET Tools'
+    inputs:
+      command: 'custom'
+      custom: 'tool'
+      arguments: 'restore --configfile $(NuGet_Configuration_File)'
   # Collect
-  - script: dotnet test $(Solution_File) --collect:"XPlat Code Coverage" --results-directory $(Test_Results_Directory) --settings $(Runsettings_File)
+  - task: DotNetCoreCLI@2
     displayName: 'Collect Code Coverage'
+    inputs:
+      command: 'test'
+      arguments: '$(Solution_File) --collect:"XPlat Code Coverage" --results-directory $(Test_Results_Directory) --settings $(Runsettings_File)'
+      publishTestResults: false
   # Generate
-  - script: dotnet tool run reportgenerator "-reports:$(Coverage_Reports_Glob)" "-targetdir:$(Report_Target_Directory)" -reporttypes:$(Report_Types)
+  - task: DotNetCoreCLI@2
     displayName: 'Generate Report'
+    inputs:
+      command: 'custom'
+      custom: 'tool'
+      arguments: 'run reportgenerator "-reports:$(Coverage_Reports_Glob)" "-targetdir:$(Report_Target_Directory)" -reporttypes:$(Report_Types)'
   # Report
   - task: PublishCodeCoverageResults@1
     displayName: 'Publish Results'
