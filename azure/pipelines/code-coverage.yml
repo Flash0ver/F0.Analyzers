@@ -18,7 +18,7 @@ jobs:
   strategy:
     matrix:
       ubuntu:
-        imageName: 'ubuntu-latest'
+        imageName: 'windows-2019'
   pool:
     vmImage: $(imageName)
 
