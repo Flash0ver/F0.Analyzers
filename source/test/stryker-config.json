@@ -1,0 +1,16 @@
+{
+  "stryker-config": {
+    "reporters": [
+      "dots",
+      "html"
+    ],
+    "project-file": "F0.Analyzers.csproj",
+    "solution-path": "../../F0.Analyzers.sln",
+    "threshold-high": 80,
+    "threshold-low": 70,
+    "threshold-break": 60,
+    "ignore-methods": [
+      "ConfigureAwait"
+    ]
+  }
+}
