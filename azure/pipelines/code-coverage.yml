@@ -65,7 +65,7 @@ jobs:
     inputs:
       command: 'test'
       arguments: '$(Solution_Filter_File) --collect:"XPlat Code Coverage" --nologo --no-restore --results-directory $(Test_Results_Directory) --settings $(Runsettings_File)'
-      publishTestResults: true
+      publishTestResults: false
   # Generate
   - task: DotNetCoreCLI@2
     displayName: 'Generate Report'
