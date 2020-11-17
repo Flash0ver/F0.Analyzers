@@ -77,7 +77,7 @@ namespace F0.CodeAnalysis.CodeRefactorings
 			var semanticModel = compilation.GetSemanticModel(objectCreationExpression.SyntaxTree);
 
 			var typeInfo = semanticModel.GetTypeInfo(objectCreationExpression);
-			var mutableMembers = GetMutableMembers(ref typeInfo, compilation.Assembly);
+			var mutableMembers = GetMutableMembers(ref typeInfo, compilation);
 
 			var availableSymbols = semanticModel.LookupSymbols(objectCreationExpression.SpanStart);
 
@@ -95,34 +95,55 @@ namespace F0.CodeAnalysis.CodeRefactorings
 			return documentEditor.GetChangedDocument();
 		}
 
-		private static IEnumerable<ISymbol> GetMutableMembers(ref TypeInfo typeInfo, IAssemblySymbol assembly)
+		private static IEnumerable<ISymbol> GetMutableMembers(ref TypeInfo typeInfo, Compilation compilation)
 		{
-			var instanceMembers = typeInfo.Type.GetMembers().Where(s => !s.IsStatic);
-			var areInternalSymbolsAccessible = typeInfo.Type.ContainingAssembly.GivesAccessTo(assembly);
+			var members = new HashSet<ISymbol>(SymbolNameComparer.Instance);
+			var mutableMembers = new List<ISymbol>();
 
-			IEnumerable<ISymbol> mutableFields = instanceMembers.OfType<IFieldSymbol>().Where(FilterMutableFields);
-			IEnumerable<ISymbol> mutableProperties = instanceMembers.OfType<IPropertySymbol>().Where(FilterMutableProperties);
+			var type = typeInfo.Type;
+			var objectType = compilation.GetSpecialType(SpecialType.System_Object);
+			var valueType = compilation.GetSpecialType(SpecialType.System_ValueType);
 
-			var mutableMembers = mutableFields.Concat(mutableProperties);
-			return mutableMembers;
-
-			bool FilterMutableFields(IFieldSymbol field)
+			while (type is { } && type != objectType && type != valueType)
 			{
-				return !field.IsReadOnly
-					&& IsAccessible(field.DeclaredAccessibility, areInternalSymbolsAccessible);
+				var instanceMembers = type.GetMembers().Where(s => !s.IsStatic);
+				var areInternalSymbolsAccessible = type.ContainingAssembly.GivesAccessTo(compilation.Assembly);
+
+				var mutableFields = instanceMembers
+					.OfType<IFieldSymbol>()
+					.Where(members.Add)
+					.Where(field => FilterMutableFields(field, areInternalSymbolsAccessible));
+				var mutableProperties = instanceMembers
+					.OfType<IPropertySymbol>()
+					.Where(members.Add)
+					.Where(property => FilterMutableProperties(property, areInternalSymbolsAccessible));
+
+				mutableMembers.InsertRange(0, mutableProperties);
+				mutableMembers.InsertRange(0, mutableFields);
+
+				type = type.BaseType;
 			}
 
-			bool FilterMutableProperties(IPropertySymbol property)
+			return mutableMembers;
+
+			static bool FilterMutableFields(IFieldSymbol field, bool areInternalSymbolsAccessible)
+			{
+				return !field.IsReadOnly
+					&& IsAccessible(field, areInternalSymbolsAccessible);
+			}
+
+			static bool FilterMutableProperties(IPropertySymbol property, bool areInternalSymbolsAccessible)
 			{
 				return property.SetMethod is IMethodSymbol setMethod
-					&& IsAccessible(setMethod.DeclaredAccessibility, areInternalSymbolsAccessible);
+					&& IsAccessible(setMethod, areInternalSymbolsAccessible);
 			}
 		}
 
-		private static bool IsAccessible(Accessibility accessibility, bool isFriend)
+		private static bool IsAccessible(ISymbol symbol, bool isLocationWithinFriendAssembly)
 		{
+			var accessibility = symbol.DeclaredAccessibility;
 			return accessibility is Accessibility.Public
-				|| (isFriend && (accessibility is Accessibility.Internal || accessibility is Accessibility.ProtectedOrInternal));
+				|| (isLocationWithinFriendAssembly && (accessibility is Accessibility.Internal || accessibility is Accessibility.ProtectedOrInternal));
 		}
 
 		private static SeparatedSyntaxList<ExpressionSyntax> CreateAssignmentExpressions(Document document, IEnumerable<ISymbol> mutableMembers, IEnumerable<ISymbol> symbols)
