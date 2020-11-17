@@ -2,6 +2,9 @@
 CHANGELOG
 
 ## vNext
+
+## v0.6.0 (2020-11-17)
+### Analyzers
 - Changed `ObjectInitializer` code refactoring, additionally assigning inherited members from `base` classes.
 
 ## v0.5.0 (2020-09-29)
