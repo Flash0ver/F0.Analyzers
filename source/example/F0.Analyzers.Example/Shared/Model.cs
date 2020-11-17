@@ -1,6 +1,6 @@
 ﻿namespace F0.Analyzers.Example.Shared
 {
-	internal sealed class Model
+	internal class Model
 	{
 		public bool Condition { get; set; }
 

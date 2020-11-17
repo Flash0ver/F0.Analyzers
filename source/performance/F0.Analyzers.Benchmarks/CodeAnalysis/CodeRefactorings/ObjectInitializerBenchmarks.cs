@@ -22,7 +22,24 @@ namespace F0.Benchmarks.CodeAnalysis.CodeRefactorings
 			var code =
 				@"using System;
 
-				class Model
+				interface IInterface
+				{
+					int Number { get; set; }
+				}
+
+				abstract class ModelBase : IInterface
+				{
+					public int Public;
+					protected int Protected;
+					internal int Internal;
+					protected internal int Protected_Internal;
+					private int Private;
+					private protected int Private_Protected;
+
+					public int Number { get; set; }
+				}
+
+				sealed class Model : ModelBase
 				{
 					public string Text;
 					public readonly string Immutable;
@@ -44,7 +61,7 @@ namespace F0.Benchmarks.CodeAnalysis.CodeRefactorings
 					string field = ""42"";
 					string Property { get; set; }
 
-					void Test(string parameter, int number)
+					void Test(string parameter, int unused)
 					{
 						string local = ""42"";
 
@@ -54,7 +71,7 @@ namespace F0.Benchmarks.CodeAnalysis.CodeRefactorings
 					string Method() => String.Empty;
 				}";
 
-			benchmark.Initialize(code, LanguageVersion.Latest, 29, 37, 29, 54, true);
+			benchmark.Initialize(code, LanguageVersion.Latest, 46, 37, 46, 54, true);
 		}
 
 		[Benchmark]
@@ -67,7 +84,24 @@ namespace F0.Benchmarks.CodeAnalysis.CodeRefactorings
 			var code =
 				@"using System;
 
-				class Model
+				interface IInterface
+				{
+					int Number { get; set; }
+				}
+
+				abstract class ModelBase : IInterface
+				{
+					public int Public;
+					protected int Protected;
+					internal int Internal;
+					protected internal int Protected_Internal;
+					private int Private;
+					private protected int Private_Protected;
+
+					public int Number { get; set; }
+				}
+
+				sealed class Model : ModelBase
 				{
 					public string Text;
 					public readonly string Immutable;
@@ -89,12 +123,16 @@ namespace F0.Benchmarks.CodeAnalysis.CodeRefactorings
 					string field = ""42"";
 					string Property { get; set; }
 
-					void Test(string parameter, int number)
+					void Test(string parameter, int unused)
 					{
 						string local = ""42"";
 
 						var model = new Model(""F0"")
 						{
+							Public = default,
+							Internal = default,
+							Protected_Internal = default,
+							Number = default,
 							Text = default,
 							Local = local,
 							Parameter = parameter,

@@ -1,0 +1,33 @@
+name: Build VSIX
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    name: Build on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ windows-2019 ]
+        configuration: [ Release ]
+
+    env:
+      Solution_Vsix_File: ./source/F0.Analyzers.Vsix.slnf
+
+    steps:
+    # Init
+    - name: Checkout
+      uses: actions/checkout@v2.3.4
+    - name: Setup MSBuild.exe (add msbuild to PATH)
+      uses: microsoft/setup-msbuild@v1.0.2
+    # Restore
+    - name: Restore ${{ matrix.configuration }}
+      run: msbuild ${{ env.Solution_Vsix_File }} /t:Restore /p:Configuration=${{ matrix.configuration }} -nologo
+    # Build
+    - name: Build ${{ matrix.configuration }}
+      run: msbuild ${{ env.Solution_Vsix_File }} /p:Configuration=${{ matrix.configuration }} -nologo

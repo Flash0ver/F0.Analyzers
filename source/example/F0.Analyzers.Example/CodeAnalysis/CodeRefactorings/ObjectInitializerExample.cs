@@ -43,7 +43,7 @@ namespace F0.Analyzers.Example.CodeAnalysis.CodeRefactorings
 			return poco;
 		}
 
-		public InternalPoco GetInternalTypeFromFriendAssembly()
+		public InternalPoco GetInternalTypeWithinFriendAssembly()
 		{
 			var poco = new InternalPoco();
 			return poco;
@@ -62,6 +62,12 @@ namespace F0.Analyzers.Example.CodeAnalysis.CodeRefactorings
 				Field = 1,
 				Property = 2
 			};
+		}
+
+		public BaseClass GetInheritingType()
+		{
+			var inheritance = new DerivedClass();
+			return inheritance;
 		}
 
 		public ValueTuple<bool, string, int> GetModelWithLocals(int item3)

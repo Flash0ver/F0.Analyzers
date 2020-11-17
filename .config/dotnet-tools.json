@@ -2,6 +2,12 @@
   "version": 1,
   "isRoot": true,
   "tools": {
+    "dotnet-reportgenerator-globaltool": {
+      "version": "4.8.0",
+      "commands": [
+        "reportgenerator"
+      ]
+    },
     "dotnet-stryker": {
       "version": "0.20.0",
       "commands": [
