@@ -1,0 +1,82 @@
+name: 'Code Coverage'
+
+trigger:
+  branches:
+    include:
+    - master
+pr:
+  branches:
+    include:
+    - master
+
+variables:
+  DOTNET_NOLOGO: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+
+jobs:
+- job: 'code_coverage'
+  strategy:
+    matrix:
+      windows:
+        imageName: 'windows-2019'
+  pool:
+    vmImage: $(imageName)
+
+  variables:
+    Solution_File: '$(System.DefaultWorkingDirectory)/source/F0.Analyzers.sln'
+    Solution_Filter_File: '$(System.DefaultWorkingDirectory)/source/F0.Analyzers.Core.slnf'
+    NuGet_Configuration_File: '$(System.DefaultWorkingDirectory)/source/nuget.config'
+    Test_Results_Directory: '$(System.DefaultWorkingDirectory)/source/TestResults'
+    Runsettings_File: '$(System.DefaultWorkingDirectory)/source/test/coverlet.runsettings'
+    Coverage_Reports_Glob: '$(System.DefaultWorkingDirectory)/source/TestResults/**/coverage.cobertura.xml'
+    Report_Target_Directory: '$(System.DefaultWorkingDirectory)/source/TestResults/coveragereport'
+    Report_Types: 'Cobertura'
+    Report_Target_File: '$(System.DefaultWorkingDirectory)/source/TestResults/coveragereport/Cobertura.xml'
+
+  steps:
+  # Init
+  - checkout: self
+    displayName: 'Checkout'
+    fetchDepth: 1
+  - task: UseDotNet@2
+    displayName: 'Setup .NET Core SDK'
+    inputs:
+      packageType: 'sdk'
+      useGlobalJson: true
+      performMultiLevelLookup: true
+  # Restore
+  - task: DotNetCoreCLI@2
+    displayName: 'Restore Dependencies'
+    inputs:
+      command: 'restore'
+      restoreArguments: '$(Solution_File)'
+      feedsToUse: 'config'
+      nugetConfigPath: '$(NuGet_Configuration_File)'
+      verbosityRestore: 'Minimal'
+  - task: DotNetCoreCLI@2
+    displayName: 'Install .NET Tools'
+    inputs:
+      command: 'custom'
+      custom: 'tool'
+      arguments: 'restore --configfile $(NuGet_Configuration_File)'
+  # Collect
+  - task: DotNetCoreCLI@2
+    displayName: 'Collect Code Coverage'
+    inputs:
+      command: 'test'
+      arguments: '$(Solution_Filter_File) --collect:"XPlat Code Coverage" --nologo --no-restore --results-directory $(Test_Results_Directory) --settings $(Runsettings_File)'
+      publishTestResults: false
+  # Generate
+  - task: DotNetCoreCLI@2
+    displayName: 'Generate Report'
+    inputs:
+      command: 'custom'
+      custom: 'tool'
+      arguments: 'run reportgenerator "-reports:$(Coverage_Reports_Glob)" "-targetdir:$(Report_Target_Directory)" -reporttypes:$(Report_Types)'
+  # Report
+  - task: PublishCodeCoverageResults@1
+    displayName: 'Publish Results'
+    inputs:
+      codeCoverageTool: 'Cobertura'
+      summaryFileLocation: '$(Report_Target_File)'
+      failIfCoverageEmpty: true
