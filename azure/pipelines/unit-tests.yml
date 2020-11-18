@@ -52,7 +52,7 @@ jobs:
     displayName: 'Execute Unit Tests'
     inputs:
       command: 'test'
-      arguments: '$(Solution_Filter_File) --logger trx --no-restore'
+      arguments: '$(Solution_Filter_File) --logger trx --nologo --no-restore'
       publishTestResults: false
   # Publish
   - task: PublishTestResults@2
