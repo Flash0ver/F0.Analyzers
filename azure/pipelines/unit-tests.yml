@@ -1,0 +1,63 @@
+name: 'Unit Tests'
+
+trigger:
+  branches:
+    include:
+    - master
+pr:
+  branches:
+    include:
+    - master
+
+variables:
+  DOTNET_NOLOGO: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+
+jobs:
+- job: 'unit_tests'
+  strategy:
+    matrix:
+      windows:
+        imageName: 'windows-2019'
+  pool:
+    vmImage: $(imageName)
+
+  variables:
+    Solution_File: '$(System.DefaultWorkingDirectory)/source/F0.Analyzers.sln'
+    Solution_Filter_File: '$(System.DefaultWorkingDirectory)/source/F0.Analyzers.Core.slnf'
+    NuGet_Configuration_File: '$(System.DefaultWorkingDirectory)/source/nuget.config'
+
+  steps:
+  # Init
+  - checkout: self
+    displayName: 'Checkout'
+    fetchDepth: 1
+  - task: UseDotNet@2
+    displayName: 'Setup .NET Core SDK'
+    inputs:
+      packageType: 'sdk'
+      useGlobalJson: true
+      performMultiLevelLookup: true
+  # Restore
+  - task: DotNetCoreCLI@2
+    displayName: 'Restore Dependencies'
+    inputs:
+      command: 'restore'
+      restoreArguments: '$(Solution_File)'
+      feedsToUse: 'config'
+      nugetConfigPath: '$(NuGet_Configuration_File)'
+      verbosityRestore: 'Minimal'
+  # Test
+  - task: DotNetCoreCLI@2
+    displayName: 'Execute Unit Tests'
+    inputs:
+      command: 'test'
+      arguments: '$(Solution_Filter_File) --logger trx --nologo --no-restore'
+      publishTestResults: false
+  # Publish
+  - task: PublishTestResults@2
+    displayName: 'Publish Test Results'
+    inputs:
+      testResultsFormat: 'VSTest'
+      testResultsFiles: '**/*.trx'
+      mergeTestResults: true
