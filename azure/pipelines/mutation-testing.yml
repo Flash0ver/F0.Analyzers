@@ -27,7 +27,6 @@ jobs:
     Test_Project_Directory: '$(System.DefaultWorkingDirectory)/source/test/F0.Analyzers.Tests'
     NuGet_Configuration_File: '$(System.DefaultWorkingDirectory)/nuget.config'
     Stryker_Configuration_File: '$(System.DefaultWorkingDirectory)/source/test/stryker-config.json'
-    Stryker_Reporters: "'html', 'cleartext'"
 
   steps:
   # Init
@@ -61,7 +60,7 @@ jobs:
     inputs:
       command: 'custom'
       custom: 'tool'
-      arguments: 'run dotnet-stryker --config-file-path $(Stryker_Configuration_File) --reporters "[$(Stryker_Reporters)]"'
+      arguments: 'run dotnet-stryker --config-file-path $(Stryker_Configuration_File)'
       workingDirectory: '$(Test_Project_Directory)'
   # Publish
   - task: PublishMutationReport@0

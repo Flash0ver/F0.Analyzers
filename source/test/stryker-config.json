@@ -2,6 +2,7 @@
   "stryker-config": {
     "reporters": [
       "dots",
+      "cleartext",
       "html"
     ],
     "project-file": "F0.Analyzers.csproj",
