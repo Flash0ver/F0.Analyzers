@@ -25,7 +25,7 @@ jobs:
   variables:
     Solution_File: '$(System.DefaultWorkingDirectory)/source/F0.Analyzers.sln'
     Solution_Filter_File: '$(System.DefaultWorkingDirectory)/source/F0.Analyzers.Core.slnf'
-    NuGet_Configuration_File: '$(System.DefaultWorkingDirectory)/source/nuget.config'
+    NuGet_Configuration_File: '$(System.DefaultWorkingDirectory)/nuget.config'
     Test_Results_Directory: '$(System.DefaultWorkingDirectory)/source/TestResults'
     Runsettings_File: '$(System.DefaultWorkingDirectory)/source/test/coverlet.runsettings'
     Coverage_Reports_Glob: '$(System.DefaultWorkingDirectory)/source/TestResults/**/coverage.cobertura.xml'

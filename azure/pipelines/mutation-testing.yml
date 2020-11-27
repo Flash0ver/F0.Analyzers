@@ -23,10 +23,10 @@ jobs:
     vmImage: $(imageName)
 
   variables:
-    Solution_File: './source/F0.Analyzers.sln'
-    Test_Project_Directory: './source/test/F0.Analyzers.Tests'
-    NuGet_Configuration_File: './source/nuget.config'
-    Stryker_Configuration_File: '../stryker-config.json'
+    Solution_File: '$(System.DefaultWorkingDirectory)/source/F0.Analyzers.sln'
+    Test_Project_Directory: '$(System.DefaultWorkingDirectory)/source/test/F0.Analyzers.Tests'
+    NuGet_Configuration_File: '$(System.DefaultWorkingDirectory)/nuget.config'
+    Stryker_Configuration_File: '$(System.DefaultWorkingDirectory)/source/test/stryker-config.json'
     Stryker_Reporters: "'html', 'cleartext'"
 
   steps:
