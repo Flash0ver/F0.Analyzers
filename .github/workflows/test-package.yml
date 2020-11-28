@@ -23,30 +23,20 @@ jobs:
     env:
       Solution_File: ./source/F0.Analyzers.sln
       Solution_Core_File: ./source/F0.Analyzers.Core.slnf
-      Solution_Core_Unix_File: ./source/F0.Analyzers.Core.Unix.slnf # https://github.com/dotnet/msbuild/issues/5715
       NuGet_Configuration_File: ./nuget.config
 
     steps:
     # Init
     - name: Checkout
       uses: actions/checkout@v2.3.4
-    - name: Setup .NET Core SDK
+    - name: Setup .NET SDK
       uses: actions/setup-dotnet@v1.7.2
-      if: startsWith(matrix.os, 'windows-')
     # Restore
     - name: Restore
       run: dotnet restore ${{ env.Solution_File }} --configfile ${{ env.NuGet_Configuration_File }}
     # Build
     - name: Build ${{ matrix.configuration }}
       run: dotnet build ${{ env.Solution_Core_File }} --configuration ${{ matrix.configuration }} --no-restore --nologo
-      if: startsWith(matrix.os, 'windows-')
-    - name: Build ${{ matrix.configuration }} non-Windows
-      run: dotnet build ${{ env.Solution_Core_Unix_File }} --configuration ${{ matrix.configuration }} --no-restore --nologo
-      if: "!startsWith(matrix.os, 'windows-')"
     # Test
     - name: Test ${{ matrix.configuration }}
       run: dotnet test ${{ env.Solution_Core_File }} --configuration ${{ matrix.configuration }} --no-build --nologo
-      if: startsWith(matrix.os, 'windows-')
-    - name: Test ${{ matrix.configuration }} non-Windows
-      run: dotnet test ${{ env.Solution_Core_Unix_File }} --configuration ${{ matrix.configuration }} --no-build --nologo
-      if: "!startsWith(matrix.os, 'windows-')"

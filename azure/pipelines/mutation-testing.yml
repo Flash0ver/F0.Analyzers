@@ -17,8 +17,8 @@ jobs:
 - job: 'mutation_testing'
   strategy:
     matrix:
-      windows:
-        imageName: 'windows-2019'
+      ubuntu:
+        imageName: 'ubuntu-18.04'
   pool:
     vmImage: $(imageName)
 
@@ -34,7 +34,7 @@ jobs:
     displayName: 'Checkout'
     fetchDepth: 1
   - task: UseDotNet@2
-    displayName: 'Setup .NET Core SDK'
+    displayName: 'Setup .NET SDK'
     inputs:
       packageType: 'sdk'
       useGlobalJson: true
