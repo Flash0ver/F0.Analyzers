@@ -3,7 +3,7 @@
 The `F0.Analyzers` open source project is hosted on GitHub, so we start this document off with the [GitHub Community Guidelines](https://help.github.com/en/github/site-policy/github-community-guidelines).
 
 ## Coding Style
-See [.editorconfig](./source/.editorconfig) file.
+See [.editorconfig](./.editorconfig) file.
 
 See also
 * [EditorConfig.org](https://editorconfig.org/)

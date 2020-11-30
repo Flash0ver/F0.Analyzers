@@ -1,21 +1,21 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks Condition="'$(OS)'=='Windows_NT'">net472;netcoreapp3.1</TargetFrameworks>
-    <TargetFramework Condition="'$(OS)'!='Windows_NT'">netcoreapp3.1</TargetFramework>
+    <TargetFrameworks Condition="'$(OS)'=='Windows_NT'">net472;net5.0</TargetFrameworks>
+    <TargetFramework Condition="'$(OS)'!='Windows_NT'">net5.0</TargetFramework>
     <AssemblyName>F0.Analyzers.Tests</AssemblyName>
     <RootNamespace>F0.Tests</RootNamespace>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="coverlet.collector" Version="1.3.0" PrivateAssets="all" />
     <PackageReference Include="FakeItEasy" Version="6.2.1" />
     <PackageReference Include="FakeItEasy.Analyzer.CSharp" Version="6.0.0" />
     <PackageReference Include="FluentAssertions" Version="5.10.3" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.8.0" />
     <PackageReference Include="xunit" Version="2.4.1" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3" />
-    <PackageReference Include="coverlet.collector" Version="1.3.0" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3" PrivateAssets="all" />
   </ItemGroup>
 
   <ItemGroup>

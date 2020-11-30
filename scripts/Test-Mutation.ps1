@@ -13,7 +13,7 @@ $RepositoryRootPath = (Get-Item -Path $PSScriptRoot).Parent
 $SolutionFile = Join-Path -Path $RepositoryRootPath -ChildPath 'source' -AdditionalChildPath 'F0.Analyzers.sln'
 $SolutionFilterFile = Join-Path -Path $RepositoryRootPath -ChildPath 'source' -AdditionalChildPath 'F0.Analyzers.Core.slnf'
 $TestProjectFile = Join-Path -Path $RepositoryRootPath -ChildPath 'source' -AdditionalChildPath 'test', 'F0.Analyzers.Tests', 'F0.Analyzers.Tests.csproj'
-$NuGetConfigurationFile = Join-Path -Path $RepositoryRootPath -ChildPath 'source' -AdditionalChildPath 'nuget.config'
+$NuGetConfigurationFile = Join-Path -Path $RepositoryRootPath -ChildPath 'nuget.config'
 $StrykerConfigurationFile = Join-Path -Path $RepositoryRootPath -ChildPath 'source' -AdditionalChildPath 'test', 'stryker-config.json'
 
 dotnet clean $SolutionFilterFile

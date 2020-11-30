@@ -17,15 +17,15 @@ jobs:
 - job: 'code_coverage'
   strategy:
     matrix:
-      windows:
-        imageName: 'windows-2019'
+      ubuntu:
+        imageName: 'ubuntu-18.04'
   pool:
     vmImage: $(imageName)
 
   variables:
     Solution_File: '$(System.DefaultWorkingDirectory)/source/F0.Analyzers.sln'
     Solution_Filter_File: '$(System.DefaultWorkingDirectory)/source/F0.Analyzers.Core.slnf'
-    NuGet_Configuration_File: '$(System.DefaultWorkingDirectory)/source/nuget.config'
+    NuGet_Configuration_File: '$(System.DefaultWorkingDirectory)/nuget.config'
     Test_Results_Directory: '$(System.DefaultWorkingDirectory)/source/TestResults'
     Runsettings_File: '$(System.DefaultWorkingDirectory)/source/test/coverlet.runsettings'
     Coverage_Reports_Glob: '$(System.DefaultWorkingDirectory)/source/TestResults/**/coverage.cobertura.xml'
@@ -39,7 +39,7 @@ jobs:
     displayName: 'Checkout'
     fetchDepth: 1
   - task: UseDotNet@2
-    displayName: 'Setup .NET Core SDK'
+    displayName: 'Setup .NET SDK'
     inputs:
       packageType: 'sdk'
       useGlobalJson: true
