@@ -5,7 +5,6 @@
     <TargetFramework Condition="'$(OS)'!='Windows_NT'">net5.0</TargetFramework>
     <AssemblyName>F0.Analyzers.Tests</AssemblyName>
     <RootNamespace>F0.Tests</RootNamespace>
-    <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
