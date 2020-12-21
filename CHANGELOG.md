@@ -2,6 +2,8 @@
 CHANGELOG
 
 ## vNext
+### Visual Studio Extension
+- Removed _install_ and _uninstall_ scripts (NuGet tools).
 
 ## v0.6.0 (2020-11-21)
 ### Analyzers
