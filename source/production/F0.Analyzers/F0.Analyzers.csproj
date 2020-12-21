@@ -8,6 +8,9 @@
 
   <PropertyGroup>
     <VersionPrefix>$(F0Version)</VersionPrefix>
+    <Company>f[0]</Company>
+    <Description>C# code refactorings and diagnostic analyzers with code fixes, based on the .NET Compiler Platform (Roslyn).</Description>
+    <Copyright>© f[0]</Copyright>
     <NeutralLanguage>en</NeutralLanguage>
 
     <!-- Avoid ID conflicts with the package project. -->
