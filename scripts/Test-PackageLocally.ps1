@@ -1,15 +1,15 @@
-#Requires -Version 7.0
+#Requires -Version 6.0
 
 [CmdletBinding()]
 param (
-    [Parameter()]
-    [switch]$ReleaseConfiguration
+    [Parameter(Mandatory=$false)]
+    [Alias('c','configuration')]
+    [ValidateSet('Debug', 'Release')]
+    [string]$BuildConfiguration = 'Debug'
 )
 
 Set-StrictMode -Version 3.0
 $ErrorActionPreference = 'Stop'
-
-$BuildConfiguration = $ReleaseConfiguration ? 'Release' : 'Debug'
 
 $RepositoryRootPath = (Get-Item -Path $PSScriptRoot).Parent
 $ProjectName = 'F0.Analyzers'
