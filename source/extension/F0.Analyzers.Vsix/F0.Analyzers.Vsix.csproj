@@ -4,8 +4,8 @@
 
   <PropertyGroup>
     <TargetFramework>net461</TargetFramework>
-    <RootNamespace>F0.Analyzers.Vsix</RootNamespace>
     <AssemblyName>F0.Analyzers</AssemblyName>
+    <RootNamespace>F0.Analyzers.Vsix</RootNamespace>
   </PropertyGroup>
 
   <PropertyGroup>
