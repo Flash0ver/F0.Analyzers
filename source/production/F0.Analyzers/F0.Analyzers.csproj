@@ -14,7 +14,7 @@
     <NeutralLanguage>en</NeutralLanguage>
 
     <!-- Avoid ID conflicts with the package project. -->
-    <PackageId>*$(MSBuildProjectFullPath)*</PackageId>
+    <PackageId>F0-Analyzers</PackageId>
   </PropertyGroup>
 
   <ItemGroup>
