@@ -13,6 +13,7 @@ $ErrorActionPreference = 'Stop'
 
 $RepositoryRootPath = (Get-Item -Path $PSScriptRoot).Parent
 $ProjectName = 'F0.Analyzers'
+$NuGetConfigurationFile = Join-Path -Path $RepositoryRootPath -ChildPath 'nuget.config'
 $ProjectDirectory = Join-Path -Path $RepositoryRootPath -ChildPath 'source' -AdditionalChildPath 'package', 'F0.Analyzers.Package'
 $ProjectFile = Join-Path -Path $ProjectDirectory -ChildPath 'F0.Analyzers.Package.csproj'
 $PackageFile = Join-Path -Path $ProjectDirectory -ChildPath 'bin' -AdditionalChildPath $BuildConfiguration, '*.nupkg'
@@ -20,6 +21,7 @@ $PropertiesFile = Join-Path -Path $RepositoryRootPath -ChildPath 'source' -Addit
 $VersionXPath = '/Project/PropertyGroup/F0Version'
 $VersionSuffix = 'local'
 $LocalFeedName = 'local-feed'
+$PackageSourcePath = "./$LocalFeedName"
 $LocalFeedDirectory = Join-Path -Path $RepositoryRootPath -ChildPath $LocalFeedName
 $ExampleDirectory = Join-Path -Path $RepositoryRootPath -ChildPath 'source' -AdditionalChildPath 'example'
 $ExampleProjects = @(
@@ -28,13 +30,48 @@ $ExampleProjects = @(
     Join-Path -Path $ExampleDirectory -ChildPath 'F0.Analyzers.Example.CSharp7' -AdditionalChildPath 'F0.Analyzers.Example.CSharp7.csproj'
 )
 
-function Clear-LocalFeed {
-    Write-Host 'clear directory' -ForegroundColor Blue
+function Add-LocalFeed {
+    Write-Host 'create directory' -ForegroundColor Blue
+
+    $output = New-Item -Path $RepositoryRootPath -Name $LocalFeedName -ItemType 'directory'
+
+    Write-Host '     ' -NoNewline
+    $output | Select-Object -Last 1 | Write-Host
+}
+
+function New-GitignoreFile {
+    Write-Host 'create gitignore' -ForegroundColor Blue
 
     $GitignoreFileName = '.gitignore'
-    Get-ChildItem -Path $LocalFeedDirectory -Exclude $GitignoreFileName | Remove-Item -Recurse
+    $GitignoreFileContent = "*$([Environment]::NewLine)!$GitignoreFileName$([Environment]::NewLine)"
+    $output = New-Item -Path $LocalFeedDirectory -Name $GitignoreFileName -ItemType 'file' -Value $GitignoreFileContent
+
+    Write-Host '     ' -NoNewline
+    $output | Select-Object -Last 1 | Write-Host
+}
+
+function Remove-LocalFeed {
+    Write-Host 'delete directory' -ForegroundColor Blue
+
+    Remove-Item -Path $LocalFeedDirectory -Recurse
 
     Write-Host "     $LocalFeedDirectory"
+}
+
+function Add-PackageSource {
+    Write-Host 'dotnet nuget add source' -ForegroundColor Blue
+
+    $output = dotnet nuget add source $PackageSourcePath --configfile $NuGetConfigurationFile --name $LocalFeedName
+
+    Write-Host "     $output"
+}
+
+function Remove-PackageSource {
+    Write-Host 'dotnet nuget remove source' -ForegroundColor Blue
+    
+    $output = dotnet nuget remove source $LocalFeedName --configfile $NuGetConfigurationFile
+
+    Write-Host "     $output"
 }
 
 function Clean-Output {
@@ -102,12 +139,23 @@ function Write-TestComplete {
     Write-Host 'Manual local test completed.' -ForegroundColor Green
 }
 
+function Write-Version {
+    $output = dotnet --version
+
+    Write-Host "     .NET SDK $output"
+}
+
 Write-TestInvoke
+Write-Version
 Clean-Output
 Build-Package
+Add-LocalFeed
+New-GitignoreFile
 Deploy-PackageLocally
+Add-PackageSource
 Install-Package
 Wait-ManualTest
 Uninstall-Package
-Clear-LocalFeed
+Remove-PackageSource
+Remove-LocalFeed
 Write-TestComplete
