@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using F0.Tests.Shared;
 using Xunit;
 

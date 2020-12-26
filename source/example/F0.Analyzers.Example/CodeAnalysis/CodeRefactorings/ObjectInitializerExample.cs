@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using F0.Analyzers.Example.Dependencies.Dependency;
 using F0.Analyzers.Example.Shared;
 using Microsoft.Extensions.Hosting;

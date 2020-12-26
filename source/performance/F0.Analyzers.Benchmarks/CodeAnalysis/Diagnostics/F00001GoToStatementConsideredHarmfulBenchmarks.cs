@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using BenchmarkDotNet.Attributes;
 using F0.Benchmarking.CodeAnalysis;
 using F0.Benchmarking.CodeAnalysis.Diagnostics;

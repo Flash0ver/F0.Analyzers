@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using F0.CodeAnalysis.Diagnostics;
 using F0.Testing.CodeAnalysis;

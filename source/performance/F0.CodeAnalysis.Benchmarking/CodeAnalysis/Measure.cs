@@ -1,4 +1,4 @@
-﻿using F0.Benchmarking.CodeAnalysis.CodeFixes;
+using F0.Benchmarking.CodeAnalysis.CodeFixes;
 using F0.Benchmarking.CodeAnalysis.CodeRefactorings;
 using F0.Benchmarking.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.CodeFixes;

@@ -1,4 +1,4 @@
-﻿namespace F0.Tests.Shared
+namespace F0.Tests.Shared
 {
 	public class Model
 	{

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace F0.Analyzers.Example.CodeAnalysis.Diagnostics
 {

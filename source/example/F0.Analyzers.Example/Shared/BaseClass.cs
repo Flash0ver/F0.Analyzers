@@ -1,4 +1,4 @@
-﻿namespace F0.Analyzers.Example.Shared
+namespace F0.Analyzers.Example.Shared
 {
 	internal abstract class BaseClass : IInterface
 	{
