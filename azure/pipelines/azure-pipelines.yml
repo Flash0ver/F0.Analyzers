@@ -1,0 +1,30 @@
+name: 'Azure Pipelines'
+
+trigger:
+  branches:
+    include:
+    - master
+pr:
+  branches:
+    include:
+    - master
+
+variables:
+  DOTNET_NOLOGO: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+  Image_Name: 'ubuntu-18.04'
+  Build_Configuration: 'Release'
+
+jobs:
+# Unit Tests
+- template: templates/unit-tests.yml
+  parameters:
+    imageName: ${{ variables.Image_Name }}
+# Code Coverage
+- template: templates/code-coverage.yml
+  parameters:
+    imageName: ${{ variables.Image_Name }}
+# Mutation Testing
+- template: templates/mutation-testing.yml
+  parameters:
+    imageName: ${{ variables.Image_Name }}
