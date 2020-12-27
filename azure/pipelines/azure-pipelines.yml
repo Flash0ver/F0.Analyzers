@@ -1,16 +1,19 @@
 name: 'Azure Pipelines'
 
 trigger:
+  batch: false
   branches:
     include:
     - master
 pr:
+  autoCancel: false
   branches:
     include:
     - master
 
 variables:
   DOTNET_NOLOGO: true
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
   DOTNET_CLI_TELEMETRY_OPTOUT: true
   Image_Name: 'ubuntu-18.04'
   Build_Configuration: 'Release'
