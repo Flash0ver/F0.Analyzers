@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Reflection;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using F0.Testing.Extensions;
 using Microsoft.CodeAnalysis.CodeRefactorings;
@@ -49,18 +47,6 @@ namespace F0.Testing.CodeAnalysis.CodeRefactorings
 		public Task CodeActionAsync(string initialCode, string expectedCode, LanguageVersion languageVersion)
 		{
 			var tester = CreateTester(initialCode, expectedCode, languageVersion);
-
-			return tester.RunAsync(CancellationToken.None);
-		}
-
-		public Task CodeActionAsync(string initialCode, string expectedCode, LanguageVersion languageVersion, IEnumerable<Assembly> assemblies)
-		{
-			var tester = CreateTester(initialCode, expectedCode, languageVersion);
-
-			foreach (var assembly in assemblies)
-			{
-				tester.TestState.AdditionalReferences.Add(assembly);
-			}
 
 			return tester.RunAsync(CancellationToken.None);
 		}
