@@ -1,31 +1,19 @@
-name: 'Code Coverage'
-
-trigger:
-  branches:
-    include:
-    - master
-pr:
-  branches:
-    include:
-    - master
-
-variables:
-  DOTNET_NOLOGO: true
-  DOTNET_CLI_TELEMETRY_OPTOUT: true
+parameters:
+- name: imageName
+  displayName: 'Agent'
+  type: string
+  default: 'windows-latest'
 
 jobs:
 - job: 'code_coverage'
-  strategy:
-    matrix:
-      ubuntu:
-        imageName: 'ubuntu-18.04'
+  displayName: 'Code Coverage'
   pool:
-    vmImage: $(imageName)
+    vmImage: ${{ parameters.imageName }}
 
   variables:
-    Solution_File: '$(System.DefaultWorkingDirectory)/source/F0.Analyzers.sln'
-    Solution_Filter_File: '$(System.DefaultWorkingDirectory)/source/F0.Analyzers.Core.slnf'
+    Solution_File: '$(System.DefaultWorkingDirectory)/source/F0.Analyzers.Core.slnf'
     NuGet_Configuration_File: '$(System.DefaultWorkingDirectory)/nuget.config'
+    Tool_Manifest_File: '$(System.DefaultWorkingDirectory)/.config/dotnet-tools.json'
     Test_Results_Directory: '$(System.DefaultWorkingDirectory)/source/TestResults'
     Runsettings_File: '$(System.DefaultWorkingDirectory)/source/test/coverlet.runsettings'
     Coverage_Reports_Glob: '$(System.DefaultWorkingDirectory)/source/TestResults/**/coverage.cobertura.xml'
@@ -46,6 +34,12 @@ jobs:
       performMultiLevelLookup: true
   # Restore
   - task: DotNetCoreCLI@2
+    displayName: 'Install .NET Tools'
+    inputs:
+      command: 'custom'
+      custom: 'tool'
+      arguments: 'restore --configfile $(NuGet_Configuration_File) --tool-manifest $(Tool_Manifest_File) --no-cache'
+  - task: DotNetCoreCLI@2
     displayName: 'Restore Dependencies'
     inputs:
       command: 'restore'
@@ -53,18 +47,18 @@ jobs:
       feedsToUse: 'config'
       nugetConfigPath: '$(NuGet_Configuration_File)'
       verbosityRestore: 'Minimal'
+  # Build
   - task: DotNetCoreCLI@2
-    displayName: 'Install .NET Tools'
+    displayName: 'Build Projects'
     inputs:
-      command: 'custom'
-      custom: 'tool'
-      arguments: 'restore --configfile $(NuGet_Configuration_File)'
+      command: 'build'
+      arguments: '$(Solution_File) --no-restore --nologo'
   # Collect
   - task: DotNetCoreCLI@2
     displayName: 'Collect Code Coverage'
     inputs:
       command: 'test'
-      arguments: '$(Solution_Filter_File) --collect:"XPlat Code Coverage" --nologo --no-restore --results-directory $(Test_Results_Directory) --settings $(Runsettings_File)'
+      arguments: '$(Solution_File) --collect:"XPlat Code Coverage" --no-build --nologo --results-directory $(Test_Results_Directory) --settings $(Runsettings_File)'
       publishTestResults: false
   # Generate
   - task: DotNetCoreCLI@2
@@ -72,7 +66,7 @@ jobs:
     inputs:
       command: 'custom'
       custom: 'tool'
-      arguments: 'run reportgenerator "-reports:$(Coverage_Reports_Glob)" "-targetdir:$(Report_Target_Directory)" -reporttypes:$(Report_Types)'
+      arguments: 'run reportgenerator -reports:$(Coverage_Reports_Glob) -targetdir:$(Report_Target_Directory) -reporttypes:$(Report_Types)'
   # Report
   - task: PublishCodeCoverageResults@1
     displayName: 'Publish Results'

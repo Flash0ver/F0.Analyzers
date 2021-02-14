@@ -1,5 +1,4 @@
 using System.Threading.Tasks;
-using F0.Tests.Shared;
 using Xunit;
 
 namespace F0.Tests.CodeAnalysis.CodeRefactorings
@@ -313,7 +312,18 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await VerifyAsync(initialCode, expectedCode, typeof(Model));
+			var externalCode =
+				@"namespace F0.Tests.Shared
+				{
+					public class Model
+					{
+						public string Text { get; set; } = null!;
+						public int Number { get; set; }
+						public bool Condition { get; set; }
+					}
+				}";
+
+			await VerifyAsync(initialCode, expectedCode, new string[][] { new[] { externalCode } });
 		}
 	}
 }

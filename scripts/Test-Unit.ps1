@@ -1,15 +1,15 @@
-#Requires -Version 7.0
+#Requires -Version 6.0
 
 [CmdletBinding()]
 param (
-    [Parameter()]
-    [switch]$ReleaseConfiguration
+    [Parameter(Mandatory=$false)]
+    [Alias('c','configuration')]
+    [ValidateSet('Debug', 'Release')]
+    [string]$BuildConfiguration = 'Debug'
 )
 
 Set-StrictMode -Version 3.0
 $ErrorActionPreference = 'Stop'
-
-$BuildConfiguration = $ReleaseConfiguration ? 'Release' : 'Debug'
 
 $RepositoryRootPath = (Get-Item -Path $PSScriptRoot).Parent
 $SolutionFilterFile = Join-Path -Path $RepositoryRootPath -ChildPath 'source' -AdditionalChildPath 'F0.Analyzers.Core.slnf'

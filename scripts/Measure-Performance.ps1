@@ -2,7 +2,7 @@
 
 [CmdletBinding()]
 param (
-    [Parameter()]
+    [Parameter(Mandatory=$false)]
     [string]$Filter
 )
 
@@ -13,13 +13,14 @@ $RepositoryRootPath = (Get-Item -Path $PSScriptRoot).Parent
 $SolutionFile = Join-Path -Path $RepositoryRootPath -ChildPath 'source' -AdditionalChildPath 'F0.Analyzers.Core.slnf'
 $BenchmarkProjectFile = Join-Path -Path $RepositoryRootPath -ChildPath 'source' -AdditionalChildPath 'performance', 'F0.Analyzers.Benchmarks', 'F0.Analyzers.Benchmarks.csproj'
 
+$Configuration = 'Release'
 $Framework = 'net5.0'
 
 dotnet clean $SolutionFile
 
 if ($Filter) {
-    dotnet run --project $BenchmarkProjectFile --configuration Release --framework $Framework --filter $Filter
+    dotnet run --project $BenchmarkProjectFile --configuration $Configuration --framework $Framework --filter $Filter
 }
 else {
-    dotnet run --project $BenchmarkProjectFile --configuration Release --framework $Framework
+    dotnet run --project $BenchmarkProjectFile --configuration $Configuration --framework $Framework
 }
