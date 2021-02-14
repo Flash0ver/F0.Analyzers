@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Data;
 
 namespace F0.Analyzers.Example.CSharp7.Shared

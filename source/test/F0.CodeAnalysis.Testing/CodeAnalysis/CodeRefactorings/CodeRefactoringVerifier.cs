@@ -1,4 +1,4 @@
-﻿using System.Threading;
+using System.Threading;
 using System.Threading.Tasks;
 using F0.Testing.Extensions;
 using Microsoft.CodeAnalysis.CodeRefactorings;

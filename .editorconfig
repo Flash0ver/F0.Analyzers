@@ -15,7 +15,7 @@ indent_style = space
 indent_size = 4
 
 [*.sln]
-charset = utf-8-bom
+charset = utf-8
 indent_style = tab
 
 [*.{csproj,vbproj,props,targets}]
@@ -24,12 +24,12 @@ indent_style = space
 indent_size = 2
 
 [*.{cs,csx,vb,vbx}]
-charset = utf-8-bom
+charset = utf-8
 indent_style = tab
 max_line_length = 130
 
 [*.xaml]
-charset = utf-8-bom
+charset = utf-8
 indent_style = tab
 
 [*.xml]

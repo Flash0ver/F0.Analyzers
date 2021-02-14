@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using F0.Extensions;
 using FluentAssertions;
 using Xunit;
