@@ -1,0 +1,56 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard1.3</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
+    <DevelopmentDependency>true</DevelopmentDependency>
+    <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);_AddAnalyzersToOutput</TargetsForTfmSpecificContentInPackage>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageId>F0.Analyzers</PackageId>
+    <VersionPrefix>$(F0Version)</VersionPrefix>
+    <Authors>dani.rabl; Flash0ver</Authors>
+    <Company>f[0]</Company>
+    <Product>F0.Analyzers</Product>
+    <Description>C# code refactorings and diagnostic analyzers with code fixes, based on the .NET Compiler Platform (Roslyn).</Description>
+    <Copyright>© f[0]</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/Flash0ver/F0.Analyzers</PackageProjectUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/Flash0ver/F0/master/Branding/NuGet/F0.Analyzers.png</PackageIconUrl>
+    <PackageIcon>Icon.png</PackageIcon>
+    <RepositoryUrl>https://github.com/Flash0ver/F0.Analyzers.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>f[0], f0, analyzers, roslyn, csharp</PackageTags>
+    <PackageReleaseNotes>$(F0ReleaseNotes)</PackageReleaseNotes>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\production\F0.Analyzers\F0.Analyzers.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="tools\*.ps1" CopyToOutputDirectory="PreserveNewest" Pack="true" PackagePath="" />
+  </ItemGroup>
+
+  <Target Name="_AddAnalyzersToOutput">
+    <ItemGroup>
+      <TfmSpecificPackageFile Include="$(OutputPath)\F0.Analyzers.dll" PackagePath="analyzers/dotnet/cs" />
+    </ItemGroup>
+  </Target>
+
+  <ItemGroup Condition="'$(Configuration)' == 'Debug'">
+    <None Include="..\..\..\resources\F0.Analyzers-Preview.png" Pack="true" PackagePath="Icon.png" Visible="false" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(Configuration)' == 'Release'">
+    <None Include="..\..\..\resources\F0.Analyzers.png" Pack="true" PackagePath="Icon.png" Visible="false" />
+  </ItemGroup>
+
+</Project>

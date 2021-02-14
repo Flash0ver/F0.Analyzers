@@ -105,11 +105,11 @@ The ultimate requisite for each release is that all tests pass and the productio
   - [PublicAPI.Shipped.txt](./source/production/F0.Analyzers/PublicApi/PublicAPI.Shipped.txt)
   - [PublicAPI.Unshipped.txt](./source/production/F0.Analyzers/PublicApi/PublicAPI.Unshipped.txt)
 - bump _SemVer_ version
-  - [NuGet package](./source/production/F0.Analyzers/F0.Analyzers.csproj): `/Project/PropertyGroup/Version`
-  - [Visual Studio Extension](./source/extension/F0.Analyzers.Vsix/source.extension.vsixmanifest): `/PackageManifest/Metadata/Identity[@Version]`
+  - [NuGet package](./source/package/F0.Analyzers.Package/F0.Analyzers.Package.csproj): `/Project/PropertyGroup/VersionPrefix`
+  - [Visual Studio Extension](./source/extension/F0.Analyzers.Vsix/source.extension.vsixmanifest): `/PackageManifest/Metadata/Identity/@Version`
 - update Release Notes
-  - [Changelog](./CHANGELOG.md): move the `vNext` section changes into a new release version section
-  - [NuGet package](./source/production/F0.Analyzers/F0.Analyzers.csproj): `/Project/PropertyGroup/PackageReleaseNotes`
+  - [Changelog](./CHANGELOG.md#vNext): move the `vNext` section changes into a new release version section
+  - [NuGet package](./source/package/F0.Analyzers.Package/F0.Analyzers.Package.csproj): `/Project/PropertyGroup/PackageReleaseNotes`
 - ensure that the [Documentation](./documentation/) is updated
 - commit changes
   - merge into `master` branch

@@ -30,4 +30,4 @@ jobs:
       run: msbuild ${{ env.Solution_Vsix_File }} /t:Restore /p:Configuration=${{ matrix.configuration }} -nologo
     # Build
     - name: Build ${{ matrix.configuration }}
-      run: msbuild ${{ env.Solution_Vsix_File }} /p:Configuration=${{ matrix.configuration }} -nologo
+      run: msbuild ${{ env.Solution_Vsix_File }} /p:Configuration=${{ matrix.configuration }} /p:DeployExtension=false -nologo
