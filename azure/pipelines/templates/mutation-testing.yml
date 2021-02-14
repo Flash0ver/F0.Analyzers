@@ -1,31 +1,19 @@
-name: 'Mutation Testing'
-
-trigger:
-  branches:
-    include:
-    - master
-pr:
-  branches:
-    include:
-    - master
-
-variables:
-  DOTNET_NOLOGO: true
-  DOTNET_CLI_TELEMETRY_OPTOUT: true
+parameters:
+- name: imageName
+  displayName: 'Agent'
+  type: string
+  default: 'windows-latest'
 
 jobs:
 - job: 'mutation_testing'
-  strategy:
-    matrix:
-      ubuntu:
-        imageName: 'ubuntu-18.04'
+  displayName: 'Mutation Testing'
   pool:
-    vmImage: $(imageName)
+    vmImage: ${{ parameters.imageName }}
 
   variables:
-    Solution_File: '$(System.DefaultWorkingDirectory)/source/F0.Analyzers.sln'
-    Test_Project_Directory: '$(System.DefaultWorkingDirectory)/source/test/F0.Analyzers.Tests'
     NuGet_Configuration_File: '$(System.DefaultWorkingDirectory)/nuget.config'
+    Tool_Manifest_File: '$(System.DefaultWorkingDirectory)/.config/dotnet-tools.json'
+    Test_Project_Directory: '$(System.DefaultWorkingDirectory)/source/test/F0.Analyzers.Tests'
     Stryker_Configuration_File: '$(System.DefaultWorkingDirectory)/source/test/stryker-config.json'
 
   steps:
@@ -41,19 +29,11 @@ jobs:
       performMultiLevelLookup: true
   # Restore
   - task: DotNetCoreCLI@2
-    displayName: 'Restore Dependencies'
-    inputs:
-      command: 'restore'
-      restoreArguments: '$(Solution_File)'
-      feedsToUse: 'config'
-      nugetConfigPath: '$(NuGet_Configuration_File)'
-      verbosityRestore: 'Minimal'
-  - task: DotNetCoreCLI@2
     displayName: 'Install .NET Tools'
     inputs:
       command: 'custom'
       custom: 'tool'
-      arguments: 'restore --configfile $(NuGet_Configuration_File)'
+      arguments: 'restore --configfile $(NuGet_Configuration_File) --tool-manifest $(Tool_Manifest_File) --no-cache'
   # Mutate
   - task: DotNetCoreCLI@2
     displayName: 'Mutate Project'
