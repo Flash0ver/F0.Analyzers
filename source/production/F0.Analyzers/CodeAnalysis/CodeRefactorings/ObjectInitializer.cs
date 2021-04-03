@@ -31,11 +31,16 @@ namespace F0.CodeAnalysis.CodeRefactorings
 			var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
 			var node = root.FindNode(context.Span);
 
-			if (TryGetObjectCreationExpression(node, out var objectCreationExpression))
+			if (TryGetObjectCreationExpression(node, out var objectCreationExpression) && !HasObjectInitializer(objectCreationExpression))
 			{
-				if (!HasObjectInitializer(objectCreationExpression))
+				var compilation = await context.Document.Project.GetCompilationAsync(context.CancellationToken).ConfigureAwait(false);
+				var semanticModel = compilation.GetSemanticModel(objectCreationExpression.SyntaxTree);
+
+				var typeInfo = semanticModel.GetTypeInfo(objectCreationExpression);
+
+				if (!IsCollection(typeInfo.Type))
 				{
-					var action = CodeAction.Create("Create Object Initializer", c => CreateObjectInitializer(context.Document, objectCreationExpression, c));
+					var action = CodeAction.Create("Create Object Initializer", ct => CreateObjectInitializer(context.Document, semanticModel, objectCreationExpression, typeInfo, ct));
 					context.RegisterRefactoring(action);
 				}
 			}
@@ -71,13 +76,15 @@ namespace F0.CodeAnalysis.CodeRefactorings
 			return childNodes.Any(n => n is InitializerExpressionSyntax);
 		}
 
-		private static async Task<Document> CreateObjectInitializer(Document document, ObjectCreationExpressionSyntax objectCreationExpression, CancellationToken cancellationToken)
+		private static bool IsCollection(ITypeSymbol type)
 		{
-			var compilation = await document.Project.GetCompilationAsync(cancellationToken).ConfigureAwait(false);
-			var semanticModel = compilation.GetSemanticModel(objectCreationExpression.SyntaxTree);
+			var interfaces = type.AllInterfaces;
+			return interfaces.Any(i => i.SpecialType == SpecialType.System_Collections_IEnumerable);
+		}
 
-			var typeInfo = semanticModel.GetTypeInfo(objectCreationExpression);
-			var mutableMembers = GetMutableMembers(ref typeInfo, compilation);
+		private static async Task<Document> CreateObjectInitializer(Document document, SemanticModel semanticModel, ObjectCreationExpressionSyntax objectCreationExpression, TypeInfo typeInfo, CancellationToken cancellationToken)
+		{
+			var mutableMembers = GetMutableMembers(ref typeInfo, semanticModel.Compilation);
 
 			var availableSymbols = semanticModel.LookupSymbols(objectCreationExpression.SpanStart);
 

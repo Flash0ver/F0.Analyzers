@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using F0.Analyzers.Example.Dependencies.Dependency;
 using F0.Analyzers.Example.Shared;
 using Microsoft.Extensions.Hosting;
@@ -63,6 +64,11 @@ namespace F0.Analyzers.Example.CodeAnalysis.CodeRefactorings
 				Property = 2
 			};
 		}
+
+		public IEnumerable<string> GetCollection()
+		{
+			return new List<string>();
+		} 
 
 		public BaseClass GetInheritingType()
 		{

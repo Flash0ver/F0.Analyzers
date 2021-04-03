@@ -2,6 +2,9 @@
 CHANGELOG
 
 ## vNext
+### Analyzers
+- Fixed `ObjectInitializer` code refactoring, no longer registering code actions with collection types.
+
 ### Visual Studio Extension
 - Removed _install_ and _uninstall_ scripts (NuGet tools).
 
