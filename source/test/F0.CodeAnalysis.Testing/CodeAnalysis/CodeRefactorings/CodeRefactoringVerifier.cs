@@ -1,14 +1,19 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using F0.Testing.Extensions;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeRefactorings;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.Testing;
 
 namespace F0.Testing.CodeAnalysis.CodeRefactorings
 {
 	public class CodeRefactoringVerifier<TCodeRefactoring>
 		where TCodeRefactoring : CodeRefactoringProvider, new()
 	{
+		private const string LanguageName = LanguageNames.CSharp;
+
 		internal CodeRefactoringVerifier()
 		{
 		}
@@ -53,12 +58,12 @@ namespace F0.Testing.CodeAnalysis.CodeRefactorings
 
 		public Task CodeActionAsync(string initialCode, string expectedCode, string[][] additionalProjects, LanguageVersion languageVersion)
 		{
-			var assertions = CreateAssertions(initialCode, expectedCode, additionalProjects, languageVersion);
+			var tester = CreateTester(initialCode, expectedCode, languageVersion, additionalProjects);
 
-			return assertions.RunAsync(CancellationToken.None);
+			return tester.RunAsync(CancellationToken.None);
 		}
 
-		private static CodeRefactoringTester<TCodeRefactoring> CreateTester(string initialCode, string? expectedCode = null, LanguageVersion? languageVersion = null)
+		private static CodeRefactoringTester<TCodeRefactoring> CreateTester(string initialCode, string? expectedCode = null, LanguageVersion? languageVersion = null, string[][]? additionalProjects = null)
 		{
 			var normalizedInitialCode = initialCode.Untabify();
 
@@ -73,29 +78,38 @@ namespace F0.Testing.CodeAnalysis.CodeRefactorings
 				tester.LanguageVersion = languageVersion;
 			}
 
+			if (additionalProjects is not null)
+			{
+				AddAdditionalProjects(tester.TestState, additionalProjects);
+			}
+
 			return tester;
 		}
 
-		private static CodeRefactoringAssertions<TCodeRefactoring> CreateAssertions(string initialCode, string expectedCode, string[][] additionalProjects, LanguageVersion? languageVersion = null)
+		private static void AddAdditionalProjects(SolutionState solution, string[][] additionalProjects)
 		{
-			var testCode = initialCode.Untabify();
-			var fixedCode = expectedCode.Untabify();
-			var assertions = new CodeRefactoringAssertions<TCodeRefactoring>(testCode, fixedCode)
-			{
-				LanguageVersion = languageVersion
-			};
-
 			for (var projectIndex = 0; projectIndex < additionalProjects.Length; projectIndex++)
 			{
-				for (var documentIndex = 0; documentIndex < additionalProjects[projectIndex].Length; documentIndex++)
+				var additionalDocuments = additionalProjects[projectIndex];
+				var projectName = Projects.CreateProjectName(projectIndex);
+
+				var project = new ProjectState(projectName, LanguageName, String.Empty, Projects.Extension)
 				{
-					additionalProjects[projectIndex][documentIndex] = additionalProjects[projectIndex][documentIndex].Untabify();
+					OutputKind = OutputKind.DynamicallyLinkedLibrary,
+					DocumentationMode = DocumentationMode.Diagnose,
+				};
+
+				for (var documentIndex = 0; documentIndex < additionalDocuments.Length; documentIndex++)
+				{
+					var sourceText = additionalDocuments[documentIndex];
+					var filename = Documents.CreateDocumentName(projectIndex, documentIndex);
+
+					project.Sources.Add((filename, sourceText));
 				}
+
+				solution.AdditionalProjects.Add(projectName, project);
+				solution.AdditionalProjectReferences.Add(projectName);
 			}
-
-			assertions.AdditionalProjects.AddRange(additionalProjects);
-
-			return assertions;
 		}
 	}
 }

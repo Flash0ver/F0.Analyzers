@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using F0.Testing.CodeAnalysis;
 using FluentAssertions;
 using Xunit;
 
@@ -170,8 +171,8 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 			static string WithFriend(string code)
 			{
 				var Friend =
-					@"using System.Runtime.CompilerServices;
-					[assembly: InternalsVisibleTo(""TestProject0"")]";
+					$@"using System.Runtime.CompilerServices;
+					[assembly: InternalsVisibleTo(""{Projects.AssemblyName}"")]";
 				return Friend + Environment.NewLine + Environment.NewLine + code;
 			}
 		}

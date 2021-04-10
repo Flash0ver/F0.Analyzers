@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using F0.Testing.CodeAnalysis;
 using Xunit;
 
 namespace F0.Tests.CodeAnalysis.CodeRefactorings
@@ -657,14 +658,14 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 		public async Task ComputeRefactoringsAsync_InternalBaseMembers_AreVisibleToFriendAssemblies()
 		{
 			var externalCode =
-				@"using System.Runtime.CompilerServices;
-				[assembly: InternalsVisibleTo(""TestProject0"")]
+				$@"using System.Runtime.CompilerServices;
+				[assembly: InternalsVisibleTo(""{Projects.AssemblyName}"")]
 
 				public class Base
-				{
+				{{
 					internal string BaseField;
-					internal int BaseProperty { get; set; }
-				}";
+					internal int BaseProperty {{ get; set; }}
+				}}";
 
 			var initialCode =
 				@"using System;
