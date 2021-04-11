@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks Condition="'$(OS)'=='Windows_NT'">net472;net5.0</TargetFrameworks>
+    <TargetFrameworks Condition="'$(OS)'=='Windows_NT'">net5.0;net472</TargetFrameworks>
     <TargetFramework Condition="'$(OS)'!='Windows_NT'">net5.0</TargetFramework>
     <AssemblyName>F0.Analyzers.Tests</AssemblyName>
     <RootNamespace>F0.Tests</RootNamespace>

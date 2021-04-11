@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Composition;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading;
@@ -34,6 +35,7 @@ namespace F0.CodeAnalysis.CodeRefactorings
 			if (TryGetObjectCreationExpression(node, out var objectCreationExpression) && !HasObjectInitializer(objectCreationExpression))
 			{
 				var compilation = await context.Document.Project.GetCompilationAsync(context.CancellationToken).ConfigureAwait(false);
+				Debug.Assert(compilation is not null, $"Project doesn't support producing compilations: {{ {nameof(Project.SupportsCompilation)} = {context.Document.Project.SupportsCompilation} }}");
 				var semanticModel = compilation.GetSemanticModel(objectCreationExpression.SyntaxTree);
 
 				var typeInfo = semanticModel.GetTypeInfo(objectCreationExpression);
@@ -48,6 +50,7 @@ namespace F0.CodeAnalysis.CodeRefactorings
 
 		private static bool HasObjectInitializerFeature(Project project)
 		{
+			Debug.Assert(project.ParseOptions is not null, $"{nameof(project.ParseOptions)} is null unexpectedly");
 			var parseOptions = (CSharpParseOptions)project.ParseOptions;
 			return parseOptions.LanguageVersion >= LanguageVersion.CSharp3;
 		}
@@ -198,6 +201,7 @@ namespace F0.CodeAnalysis.CodeRefactorings
 
 		private static bool HasDefaultLiteralFeature(Project project)
 		{
+			Debug.Assert(project.ParseOptions is not null, $"{nameof(project.ParseOptions)} is null unexpectedly");
 			var parseOptions = (CSharpParseOptions)project.ParseOptions;
 			return parseOptions.LanguageVersion >= LanguageVersion.CSharp7_1;
 		}

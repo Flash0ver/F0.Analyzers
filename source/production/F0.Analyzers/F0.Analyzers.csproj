@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>net5.0;netstandard2.0</TargetFrameworks>
     <AssemblyName>F0.Analyzers</AssemblyName>
     <RootNamespace>F0</RootNamespace>
   </PropertyGroup>
@@ -15,6 +15,10 @@
 
     <!-- Avoid ID conflicts with the package project. -->
     <PackageId>F0-Analyzers</PackageId>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+    <NoWarn>$(NoWarn);nullable</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
