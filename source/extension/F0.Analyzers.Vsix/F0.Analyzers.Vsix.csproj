@@ -3,7 +3,7 @@
   <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.props" />
 
   <PropertyGroup>
-    <TargetFramework>net461</TargetFramework>
+    <TargetFramework>net472</TargetFramework>
     <AssemblyName>F0.Analyzers</AssemblyName>
     <RootNamespace>F0.Analyzers.Vsix</RootNamespace>
   </PropertyGroup>
