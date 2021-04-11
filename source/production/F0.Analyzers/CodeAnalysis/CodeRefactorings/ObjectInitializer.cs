@@ -30,6 +30,7 @@ namespace F0.CodeAnalysis.CodeRefactorings
 			}
 
 			var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
+			Debug.Assert(root is not null, $"Document doesn't support providing data: {{ {nameof(Document.SupportsSyntaxTree)} = {context.Document.SupportsSyntaxTree} }}");
 			var node = root.FindNode(context.Span);
 
 			if (TryGetObjectCreationExpression(node, out var objectCreationExpression) && !HasObjectInitializer(objectCreationExpression))
@@ -39,6 +40,7 @@ namespace F0.CodeAnalysis.CodeRefactorings
 				var semanticModel = compilation.GetSemanticModel(objectCreationExpression.SyntaxTree);
 
 				var typeInfo = semanticModel.GetTypeInfo(objectCreationExpression);
+				Debug.Assert(typeInfo.Type is not null, $"Expected {nameof(ObjectCreationExpressionSyntax)} to have a type");
 
 				if (!IsCollection(typeInfo.Type))
 				{
