@@ -111,7 +111,7 @@ namespace F0.CodeAnalysis.CodeRefactorings
 			var objectType = compilation.GetSpecialType(SpecialType.System_Object);
 			var valueType = compilation.GetSpecialType(SpecialType.System_ValueType);
 
-			while (type is { } && type != objectType && type != valueType)
+			while (type is { } && !Equals(type, objectType) && !Equals(type, valueType))
 			{
 				var instanceMembers = type.GetMembers().Where(s => !s.IsStatic);
 				var areInternalSymbolsAccessible = type.ContainingAssembly.GivesAccessTo(compilation.Assembly);
@@ -212,25 +212,25 @@ namespace F0.CodeAnalysis.CodeRefactorings
 			static ISymbol? GetLocalSymbol(ISymbol member, IEnumerable<ILocalSymbol> localSymbols)
 			{
 				return localSymbols
-					.SoleOrDefault(s => s.Name.Equals(member.Name, StringComparison.OrdinalIgnoreCase) && s.Type == GetMemberType(member));
+					.SoleOrDefault(s => s.Name.Equals(member.Name, StringComparison.OrdinalIgnoreCase) && Equals(s.Type, GetMemberType(member)));
 			}
 
 			static ISymbol? GetParameterSymbol(ISymbol member, IEnumerable<IParameterSymbol> parameterSymbols)
 			{
 				return parameterSymbols
-					.SoleOrDefault(s => s.Name.Equals(member.Name, StringComparison.OrdinalIgnoreCase) && s.Type == GetMemberType(member));
+					.SoleOrDefault(s => s.Name.Equals(member.Name, StringComparison.OrdinalIgnoreCase) && Equals(s.Type, GetMemberType(member)));
 			}
 
 			static ISymbol? GetFieldSymbol(ISymbol member, IEnumerable<IFieldSymbol> fieldSymbols)
 			{
 				return fieldSymbols
-					.SoleOrDefault(s => GetPlainName(s).Equals(member.Name, StringComparison.OrdinalIgnoreCase) && s.Type == GetMemberType(member));
+					.SoleOrDefault(s => GetPlainName(s).Equals(member.Name, StringComparison.OrdinalIgnoreCase) && Equals(s.Type, GetMemberType(member)));
 			}
 
 			static ISymbol? GetPropertySymbol(ISymbol member, IEnumerable<IPropertySymbol> propertySymbols)
 			{
 				return propertySymbols
-					.SoleOrDefault(s => s.Name.Equals(member.Name, StringComparison.OrdinalIgnoreCase) && s.Type == GetMemberType(member) && s.GetMethod is IMethodSymbol);
+					.SoleOrDefault(s => s.Name.Equals(member.Name, StringComparison.OrdinalIgnoreCase) && Equals(s.Type, GetMemberType(member)) && s.GetMethod is IMethodSymbol);
 			}
 		}
 
