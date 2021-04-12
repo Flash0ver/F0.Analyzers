@@ -104,6 +104,9 @@ The ultimate requisite for each release is that all tests pass and the productio
 - ensure that _Microsoft.CodeAnalysis.PublicApiAnalyzers_' files are empty
   - [PublicAPI.Shipped.txt](./source/production/F0.Analyzers/PublicApi/PublicAPI.Shipped.txt)
   - [PublicAPI.Unshipped.txt](./source/production/F0.Analyzers/PublicApi/PublicAPI.Unshipped.txt)
+- move all upcoming analyzer release rules
+  - from [AnalyzerReleases.Unshipped.md](./source/production/F0.Analyzers/ReleaseTracking/AnalyzerReleases.Unshipped.md)
+  - to [AnalyzerReleases.Shipped.md](./source/production/F0.Analyzers/ReleaseTracking/AnalyzerReleases.Shipped.md)
 - bump _SemVer_ version
   - [NuGet package](./source/package/F0.Analyzers.Package/F0.Analyzers.Package.csproj): `/Project/PropertyGroup/VersionPrefix`
   - [Visual Studio Extension](./source/extension/F0.Analyzers.Vsix/source.extension.vsixmanifest): `/PackageManifest/Metadata/Identity/@Version`

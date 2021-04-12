@@ -32,7 +32,12 @@
     <EmbeddedResource Update="Resources.resx" Generator="ResXFileCodeGenerator" LastGenOutput="Resources.Designer.cs" />
   </ItemGroup>
 
-  <ItemGroup>
+  <ItemGroup Label="Microsoft.CodeAnalysis.Analyzers">
+    <AdditionalFiles Include="ReleaseTracking\AnalyzerReleases.Shipped.md" />
+    <AdditionalFiles Include="ReleaseTracking\AnalyzerReleases.Unshipped.md" />
+  </ItemGroup>
+
+  <ItemGroup Label="Microsoft.CodeAnalysis.PublicApiAnalyzers">
     <AdditionalFiles Include="PublicApi\PublicAPI.Shipped.txt" />
     <AdditionalFiles Include="PublicApi\PublicAPI.Unshipped.txt" />
   </ItemGroup>
