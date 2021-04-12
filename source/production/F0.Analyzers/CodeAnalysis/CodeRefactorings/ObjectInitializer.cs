@@ -89,7 +89,7 @@ namespace F0.CodeAnalysis.CodeRefactorings
 
 		private static async Task<Document> CreateObjectInitializer(Document document, SemanticModel semanticModel, ObjectCreationExpressionSyntax objectCreationExpression, TypeInfo typeInfo, CancellationToken cancellationToken)
 		{
-			var mutableMembers = GetMutableMembers(ref typeInfo, semanticModel.Compilation);
+			var mutableMembers = GetMutableMembers(typeInfo, semanticModel.Compilation);
 
 			var availableSymbols = semanticModel.LookupSymbols(objectCreationExpression.SpanStart);
 
@@ -107,7 +107,7 @@ namespace F0.CodeAnalysis.CodeRefactorings
 			return documentEditor.GetChangedDocument();
 		}
 
-		private static IEnumerable<ISymbol> GetMutableMembers(ref TypeInfo typeInfo, Compilation compilation)
+		private static IEnumerable<ISymbol> GetMutableMembers(in TypeInfo typeInfo, Compilation compilation)
 		{
 			var members = new HashSet<ISymbol>(SymbolNameComparer.Instance);
 			var mutableMembers = new List<ISymbol>();
