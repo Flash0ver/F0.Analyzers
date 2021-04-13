@@ -41,6 +41,7 @@ namespace F0.CodeAnalysis.CodeRefactorings
 
 				var typeInfo = semanticModel.GetTypeInfo(objectCreationExpression);
 				Debug.Assert(typeInfo.Type is not null, $"Expected {nameof(ObjectCreationExpressionSyntax)} to have a type");
+				Debug.Assert(typeInfo.Type is not IErrorTypeSymbol, $"Type could not be determined due to an error: {typeInfo.Type}");
 
 				if (!IsCollection(typeInfo.Type))
 				{
@@ -113,7 +114,7 @@ namespace F0.CodeAnalysis.CodeRefactorings
 			var mutableMembers = new List<ISymbol>();
 
 			var type = typeInfo.Type;
-			while (type is { } && type.SpecialType != SpecialType.System_Object && type.SpecialType != SpecialType.System_ValueType)
+			while (type is not null && type.SpecialType != SpecialType.System_Object && type.SpecialType != SpecialType.System_ValueType)
 			{
 				var instanceMembers = type.GetMembers().Where(s => !s.IsStatic);
 				var areInternalSymbolsAccessible = type.ContainingAssembly.GivesAccessTo(compilation.Assembly);
@@ -175,18 +176,20 @@ namespace F0.CodeAnalysis.CodeRefactorings
 
 				var matchingSymbol = GetMatchingSymbol(member, localSymbols, parameterSymbols, fieldSymbols, propertySymbols);
 
-				if (matchingSymbol is { })
+				if (matchingSymbol is not null)
 				{
 					right = SyntaxFactory.IdentifierName(matchingSymbol.Name);
 				}
 				else if (hasDefaultLiteral)
 				{
+					Debug.Assert(generator is null);
 					right = SyntaxFactory.LiteralExpression(SyntaxKind.DefaultLiteralExpression, SyntaxFactory.Token(SyntaxKind.DefaultKeyword));
 				}
 				else
 				{
+					Debug.Assert(generator is not null);
 					var type = GetMemberType(member);
-					var typeExpression = generator!.TypeExpression(type);
+					var typeExpression = generator.TypeExpression(type);
 
 					right = (DefaultExpressionSyntax)generator.DefaultExpression(typeExpression);
 				}
@@ -233,7 +236,7 @@ namespace F0.CodeAnalysis.CodeRefactorings
 			static ISymbol? GetPropertySymbol(ISymbol member, IEnumerable<IPropertySymbol> propertySymbols)
 			{
 				return propertySymbols
-					.SoleOrDefault(s => s.Name.Equals(member.Name, StringComparison.OrdinalIgnoreCase) && s.Type.Equals(GetMemberType(member), SymbolEqualityComparer.Default) && s.GetMethod is IMethodSymbol);
+					.SoleOrDefault(s => s.Name.Equals(member.Name, StringComparison.OrdinalIgnoreCase) && s.Type.Equals(GetMemberType(member), SymbolEqualityComparer.Default) && s.GetMethod is not null);
 			}
 		}
 
