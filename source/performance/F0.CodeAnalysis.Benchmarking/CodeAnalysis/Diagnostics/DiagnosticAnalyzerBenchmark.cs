@@ -72,7 +72,7 @@ namespace F0.Benchmarking.CodeAnalysis.Diagnostics
 				throw new InvalidOperationException(message);
 			}
 
-			var sortedDiagnostics = actualDiagnostics.OrderBy(d => d.Location.SourceSpan.Start).ToArray();
+			var sortedDiagnostics = actualDiagnostics.OrderBy(d => d.Location.SourceSpan.Start).ToImmutableArray();
 			var errors = new StringBuilder();
 
 			for (var i = 0; i < expectedDiagnostics.Length; i++)

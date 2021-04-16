@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Composition;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
@@ -116,7 +117,7 @@ namespace F0.CodeAnalysis.CodeRefactorings
 			var type = typeInfo.Type;
 			while (type is not null && type.SpecialType is not SpecialType.System_Object and not SpecialType.System_ValueType)
 			{
-				var instanceMembers = type.GetMembers().Where(s => !s.IsStatic);
+				var instanceMembers = type.GetMembers().Where(s => !s.IsStatic).ToImmutableArray();
 				var areInternalSymbolsAccessible = type.ContainingAssembly.GivesAccessTo(compilation.Assembly);
 
 				var mutableFields = instanceMembers
@@ -156,12 +157,12 @@ namespace F0.CodeAnalysis.CodeRefactorings
 				|| (isLocationWithinFriendAssembly && (accessibility is Accessibility.Internal or Accessibility.ProtectedOrInternal));
 		}
 
-		private static SeparatedSyntaxList<ExpressionSyntax> CreateAssignmentExpressions(Document document, IEnumerable<ISymbol> mutableMembers, IEnumerable<ISymbol> symbols)
+		private static SeparatedSyntaxList<ExpressionSyntax> CreateAssignmentExpressions(Document document, IEnumerable<ISymbol> mutableMembers, ImmutableArray<ISymbol> symbols)
 		{
-			var localSymbols = symbols.Where(s => s.Kind is SymbolKind.Local).Cast<ILocalSymbol>().ToArray();
-			var parameterSymbols = symbols.Where(s => s.Kind is SymbolKind.Parameter).Cast<IParameterSymbol>().ToArray();
-			var fieldSymbols = symbols.Where(s => s.Kind is SymbolKind.Field).Cast<IFieldSymbol>().ToArray();
-			var propertySymbols = symbols.Where(s => s.Kind is SymbolKind.Property).Cast<IPropertySymbol>().ToArray();
+			var localSymbols = symbols.Where(s => s.Kind is SymbolKind.Local).Cast<ILocalSymbol>().ToImmutableArray();
+			var parameterSymbols = symbols.Where(s => s.Kind is SymbolKind.Parameter).Cast<IParameterSymbol>().ToImmutableArray();
+			var fieldSymbols = symbols.Where(s => s.Kind is SymbolKind.Field).Cast<IFieldSymbol>().ToImmutableArray();
+			var propertySymbols = symbols.Where(s => s.Kind is SymbolKind.Property).Cast<IPropertySymbol>().ToImmutableArray();
 
 			var hasDefaultLiteral = HasDefaultLiteralFeature(document.Project);
 			var generator = hasDefaultLiteral ? null : SyntaxGenerator.GetGenerator(document);
