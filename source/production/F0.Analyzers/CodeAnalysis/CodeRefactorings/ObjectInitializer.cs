@@ -114,7 +114,7 @@ namespace F0.CodeAnalysis.CodeRefactorings
 			var mutableMembers = new List<ISymbol>();
 
 			var type = typeInfo.Type;
-			while (type is not null && type.SpecialType != SpecialType.System_Object && type.SpecialType != SpecialType.System_ValueType)
+			while (type is not null && type.SpecialType is not SpecialType.System_Object and not SpecialType.System_ValueType)
 			{
 				var instanceMembers = type.GetMembers().Where(s => !s.IsStatic);
 				var areInternalSymbolsAccessible = type.ContainingAssembly.GivesAccessTo(compilation.Assembly);
@@ -153,7 +153,7 @@ namespace F0.CodeAnalysis.CodeRefactorings
 		{
 			var accessibility = symbol.DeclaredAccessibility;
 			return accessibility is Accessibility.Public
-				|| (isLocationWithinFriendAssembly && (accessibility is Accessibility.Internal || accessibility is Accessibility.ProtectedOrInternal));
+				|| (isLocationWithinFriendAssembly && (accessibility is Accessibility.Internal or Accessibility.ProtectedOrInternal));
 		}
 
 		private static SeparatedSyntaxList<ExpressionSyntax> CreateAssignmentExpressions(Document document, IEnumerable<ISymbol> mutableMembers, IEnumerable<ISymbol> symbols)
