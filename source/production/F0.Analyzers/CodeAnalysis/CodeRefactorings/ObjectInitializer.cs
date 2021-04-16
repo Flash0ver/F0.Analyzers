@@ -22,7 +22,7 @@ namespace F0.CodeAnalysis.CodeRefactorings
 	[Shared]
 	internal sealed class ObjectInitializer : CodeRefactoringProvider
 	{
-		public sealed override async Task ComputeRefactoringsAsync(CodeRefactoringContext context)
+		public override async Task ComputeRefactoringsAsync(CodeRefactoringContext context)
 		{
 			if (!HasObjectInitializerFeature(context.Document.Project))
 			{
@@ -144,7 +144,7 @@ namespace F0.CodeAnalysis.CodeRefactorings
 
 			static bool FilterMutableProperties(IPropertySymbol property, bool areInternalSymbolsAccessible)
 			{
-				return property.SetMethod is IMethodSymbol setMethod
+				return property.SetMethod is { } setMethod
 					&& IsAccessible(setMethod, areInternalSymbolsAccessible);
 			}
 		}

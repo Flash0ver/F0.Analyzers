@@ -28,7 +28,7 @@ namespace F0.Benchmarking.CodeAnalysis
 			var index = 0;
 			for (var i = 0; i < zeroBasedSpan.Start.Line; i++)
 			{
-				index = code.IndexOf(Environment.NewLine, index) + Environment.NewLine.Length;
+				index = code.IndexOf(Environment.NewLine, index, StringComparison.Ordinal) + Environment.NewLine.Length;
 			}
 
 			var startColumn = isVerbatimStringLiteral
@@ -39,7 +39,7 @@ namespace F0.Benchmarking.CodeAnalysis
 
 			for (var i = zeroBasedSpan.Start.Line; i < zeroBasedSpan.End.Line; i++)
 			{
-				index = code.IndexOf(Environment.NewLine, index) + Environment.NewLine.Length;
+				index = code.IndexOf(Environment.NewLine, index, StringComparison.Ordinal) + Environment.NewLine.Length;
 			}
 
 			var endColumn = zeroBasedSpan.Start.Line == zeroBasedSpan.End.Line

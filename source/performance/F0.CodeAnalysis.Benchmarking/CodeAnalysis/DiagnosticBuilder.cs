@@ -31,7 +31,7 @@ namespace F0.Benchmarking.CodeAnalysis
 		}
 
 		public DiagnosticBuilder WithArguments(string argument)
-			=> WithArguments(new string[] { argument });
+			=> WithArguments(new[] { argument });
 
 		public DiagnosticBuilder WithArguments(params string[] arguments)
 		{
