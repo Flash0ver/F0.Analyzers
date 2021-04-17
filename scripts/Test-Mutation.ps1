@@ -21,7 +21,7 @@ dotnet clean $SolutionFilterFile
 dotnet tool restore --configfile $NuGetConfigurationFile
 
 $TestProjectFile = $($TestProjectFile.Replace('\', '/'))
-dotnet tool run dotnet-stryker --solution-path $SolutionFile --test-projects "['$TestProjectFile']" --config-file-path $StrykerConfigurationFile
+dotnet tool run dotnet-stryker --solution-path $SolutionFile --test-projects "['$TestProjectFile']" --config-file-path $StrykerConfigurationFile --language-version preview
 
 if ($OpenReport) {
     $ResultsDirectory = Join-Path -Path $PSScriptRoot -ChildPath 'StrykerOutput'
