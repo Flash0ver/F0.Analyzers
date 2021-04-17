@@ -262,11 +262,11 @@ namespace F0.CodeAnalysis.CodeRefactorings
 
 			if (name.StartsWith("_"))
 			{
-				name = name.Substring(1);
+				name = name[1..];
 			}
 			else if (name.StartsWith("s_") || name.StartsWith("t_"))
 			{
-				name = name.Substring(2);
+				name = name[2..];
 			}
 
 			return name;
