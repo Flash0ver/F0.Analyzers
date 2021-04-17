@@ -86,7 +86,7 @@ namespace F0.CodeAnalysis.CodeRefactorings
 		private static bool IsCollection(ITypeSymbol type)
 		{
 			var interfaces = type.AllInterfaces;
-			return interfaces.Any(i => i.SpecialType == SpecialType.System_Collections_IEnumerable);
+			return interfaces.Any(i => i.SpecialType is SpecialType.System_Collections_IEnumerable);
 		}
 
 		private static async Task<Document> CreateObjectInitializer(Document document, SemanticModel semanticModel, ObjectCreationExpressionSyntax objectCreationExpression, TypeInfo typeInfo, CancellationToken cancellationToken)

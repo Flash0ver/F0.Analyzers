@@ -15,7 +15,7 @@ namespace F0.CodeAnalysis.Diagnostics
 		private const string Description = "GOTO Statement Considered Harmful";
 		private const string HelpLinkUri = "https://github.com/Flash0ver/F0.Analyzers/blob/master/documentation/diagnostics/F00001.md";
 
-		private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId, Title, MessageFormat, Category,
+		private static readonly DiagnosticDescriptor Rule = new(DiagnosticId, Title, MessageFormat, Category,
 			DiagnosticSeverity.Warning, true, Description, HelpLinkUri);
 
 		public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
