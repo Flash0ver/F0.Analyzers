@@ -2,6 +2,8 @@
 CHANGELOG
 
 ## vNext
+
+## v0.6.1
 ### Analyzers
 - Fixed `ObjectInitializer` code refactoring, no longer registering code actions with collection types.
 
