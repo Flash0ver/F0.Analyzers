@@ -5,6 +5,9 @@ CHANGELOG
 ### Analyzers
 - Fixed `ObjectInitializer` code refactoring, no longer registering code actions with collection types.
 
+### NuGet package
+- Changed target framework from `.NET Standard 1.3` to `.NET Standard 2.0`.
+
 ### Visual Studio Extension
 - Removed _install_ and _uninstall_ scripts (NuGet tools).
 
