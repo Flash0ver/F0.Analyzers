@@ -104,7 +104,7 @@ class MyClass
 
 ## History
 
-- [0.6.1](../../CHANGELOG.md#v061)
+- [0.6.1](../../CHANGELOG.md#v061-2021-04-18)
 - [0.6.0](../../CHANGELOG.md#v060-2020-11-21)
 - [0.5.0](../../CHANGELOG.md#v050-2020-09-29)
 - [0.4.1](../../CHANGELOG.md#v041-2020-07-11)
