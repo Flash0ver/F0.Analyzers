@@ -115,7 +115,7 @@ namespace F0.CodeAnalysis.CodeRefactorings
 			var mutableMembers = new List<ISymbol>();
 
 			var type = typeInfo.Type;
-			while (type is not null && type.SpecialType is not SpecialType.System_Object and not SpecialType.System_ValueType)
+			while (IsExplicitBaseType(type))
 			{
 				var instanceMembers = type.GetMembers().Where(s => !s.IsStatic).ToImmutableArray();
 				var areInternalSymbolsAccessible = type.ContainingAssembly.GivesAccessTo(compilation.Assembly);
@@ -136,6 +136,9 @@ namespace F0.CodeAnalysis.CodeRefactorings
 			}
 
 			return mutableMembers;
+
+			static bool IsExplicitBaseType([NotNullWhen(true)] ITypeSymbol? type)
+				=> type is not null && type.SpecialType is not SpecialType.System_Object and not SpecialType.System_ValueType;
 
 			static bool FilterMutableFields(IFieldSymbol field, bool areInternalSymbolsAccessible)
 			{
