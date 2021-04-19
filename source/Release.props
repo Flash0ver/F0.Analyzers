@@ -1,8 +1,8 @@
 <Project>
 
   <PropertyGroup>
-    <F0Version>0.6.0</F0Version>
-    <F0ReleaseNotes>Changed the object initializer code refactoring to also assign inherited members from base classes.</F0ReleaseNotes>
+    <F0Version>0.6.1</F0Version>
+    <F0ReleaseNotes>Fixed the object initializer code refactoring to no longer register a code action with collection types.</F0ReleaseNotes>
   </PropertyGroup>
 
 </Project>
