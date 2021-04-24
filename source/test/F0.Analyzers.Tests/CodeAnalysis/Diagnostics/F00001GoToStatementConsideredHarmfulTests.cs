@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using F0.CodeAnalysis.Diagnostics;
 using F0.Testing.CodeAnalysis;
@@ -43,13 +42,14 @@ class Class
 	{
 	Label:
 		Console.WriteLine(""GOTO Considered Harmful"");
-		goto Label;
+		{|#0:goto Label;|}
 	}
 }";
 			var expected = CreateDiagnostic("F00001")
-				.WithMessage(String.Format("Don't use goto statements: '{0}'", "goto Label;"))
+				.WithMessageFormat("Don't use goto statements: '{0}'")
+				.WithArguments("goto Label;")
 				.WithSeverity(DiagnosticSeverity.Warning)
-				.WithSpan(9, 9, 9, 20);
+				.WithLocation(0);
 
 			await VerifyAsync(code, expected);
 		}
@@ -68,10 +68,10 @@ class Class
 		{
 			case 1:
 				Console.WriteLine(""goto case 2"");
-				goto case 2;
+				{|#0:goto case 2;|}
 			case 2:
 				Console.WriteLine(""goto case 1"");
-				goto case 1;
+				{|#1:goto case 1;|}
 			default:
 				Console.WriteLine(""break"");
 				break;
@@ -82,13 +82,15 @@ class Class
 			var expected = new[]
 			{
 				CreateDiagnostic("F00001")
-					.WithMessage(String.Format("Don't use goto statements: '{0}'", "goto case 2;"))
+					.WithMessageFormat("Don't use goto statements: '{0}'")
+					.WithArguments("goto case 2;")
 					.WithSeverity(DiagnosticSeverity.Warning)
-					.WithSpan(11, 17, 11, 29),
+					.WithLocation(0),
 				CreateDiagnostic("F00001")
-					.WithMessage(String.Format("Don't use goto statements: '{0}'", "goto case 1;"))
+					.WithMessageFormat("Don't use goto statements: '{0}'")
+					.WithArguments("goto case 1;")
 					.WithSeverity(DiagnosticSeverity.Warning)
-					.WithSpan(14, 17, 14, 29)
+					.WithLocation(1)
 			};
 
 			await VerifyAsync(code, expected);
@@ -108,7 +110,7 @@ class Class
 		{
 			case 0:
 				Console.WriteLine(""goto default"");
-				goto default;
+				{|#0:goto default;|}
 			default:
 				Console.WriteLine(""break"");
 				break;
@@ -117,9 +119,10 @@ class Class
 }";
 
 			var expected = CreateDiagnostic("F00001")
-				.WithMessage(String.Format("Don't use goto statements: '{0}'", "goto default;"))
+				.WithMessageFormat("Don't use goto statements: '{0}'")
+				.WithArguments("goto default;")
 				.WithSeverity(DiagnosticSeverity.Warning)
-				.WithSpan(11, 17, 11, 30);
+				.WithLocation(0);
 
 			await VerifyAsync(code, expected);
 		}

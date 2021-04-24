@@ -11,6 +11,7 @@
     "threshold-low": 70,
     "threshold-break": 60,
     "ignore-methods": [
+      "Assert",
       "ConfigureAwait"
     ]
   }

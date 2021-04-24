@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Composition;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading;
@@ -21,7 +23,7 @@ namespace F0.CodeAnalysis.CodeRefactorings
 	[Shared]
 	internal sealed class ObjectInitializer : CodeRefactoringProvider
 	{
-		public sealed override async Task ComputeRefactoringsAsync(CodeRefactoringContext context)
+		public override async Task ComputeRefactoringsAsync(CodeRefactoringContext context)
 		{
 			if (!HasObjectInitializerFeature(context.Document.Project))
 			{
@@ -29,14 +31,18 @@ namespace F0.CodeAnalysis.CodeRefactorings
 			}
 
 			var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
+			Debug.Assert(root is not null, $"Document doesn't support providing data: {{ {nameof(Document.SupportsSyntaxTree)} = {context.Document.SupportsSyntaxTree} }}");
 			var node = root.FindNode(context.Span);
 
 			if (TryGetObjectCreationExpression(node, out var objectCreationExpression) && !HasObjectInitializer(objectCreationExpression))
 			{
 				var compilation = await context.Document.Project.GetCompilationAsync(context.CancellationToken).ConfigureAwait(false);
+				Debug.Assert(compilation is not null, $"Project doesn't support producing compilations: {{ {nameof(Project.SupportsCompilation)} = {context.Document.Project.SupportsCompilation} }}");
 				var semanticModel = compilation.GetSemanticModel(objectCreationExpression.SyntaxTree);
 
 				var typeInfo = semanticModel.GetTypeInfo(objectCreationExpression);
+				Debug.Assert(typeInfo.Type is not null, $"Expected {nameof(ObjectCreationExpressionSyntax)} to have a type");
+				Debug.Assert(typeInfo.Type is not IErrorTypeSymbol, $"Type could not be determined due to an error: {typeInfo.Type}");
 
 				if (!IsCollection(typeInfo.Type))
 				{
@@ -48,6 +54,7 @@ namespace F0.CodeAnalysis.CodeRefactorings
 
 		private static bool HasObjectInitializerFeature(Project project)
 		{
+			Debug.Assert(project.ParseOptions is not null, $"{nameof(project.ParseOptions)} is null unexpectedly");
 			var parseOptions = (CSharpParseOptions)project.ParseOptions;
 			return parseOptions.LanguageVersion >= LanguageVersion.CSharp3;
 		}
@@ -79,12 +86,12 @@ namespace F0.CodeAnalysis.CodeRefactorings
 		private static bool IsCollection(ITypeSymbol type)
 		{
 			var interfaces = type.AllInterfaces;
-			return interfaces.Any(i => i.SpecialType == SpecialType.System_Collections_IEnumerable);
+			return interfaces.Any(i => i.SpecialType is SpecialType.System_Collections_IEnumerable);
 		}
 
 		private static async Task<Document> CreateObjectInitializer(Document document, SemanticModel semanticModel, ObjectCreationExpressionSyntax objectCreationExpression, TypeInfo typeInfo, CancellationToken cancellationToken)
 		{
-			var mutableMembers = GetMutableMembers(ref typeInfo, semanticModel.Compilation);
+			var mutableMembers = GetMutableMembers(typeInfo, semanticModel.Compilation);
 
 			var availableSymbols = semanticModel.LookupSymbols(objectCreationExpression.SpanStart);
 
@@ -102,18 +109,15 @@ namespace F0.CodeAnalysis.CodeRefactorings
 			return documentEditor.GetChangedDocument();
 		}
 
-		private static IEnumerable<ISymbol> GetMutableMembers(ref TypeInfo typeInfo, Compilation compilation)
+		private static IEnumerable<ISymbol> GetMutableMembers(in TypeInfo typeInfo, Compilation compilation)
 		{
 			var members = new HashSet<ISymbol>(SymbolNameComparer.Instance);
 			var mutableMembers = new List<ISymbol>();
 
 			var type = typeInfo.Type;
-			var objectType = compilation.GetSpecialType(SpecialType.System_Object);
-			var valueType = compilation.GetSpecialType(SpecialType.System_ValueType);
-
-			while (type is { } && type != objectType && type != valueType)
+			while (IsExplicitBaseType(type))
 			{
-				var instanceMembers = type.GetMembers().Where(s => !s.IsStatic);
+				var instanceMembers = type.GetMembers().Where(s => !s.IsStatic).ToImmutableArray();
 				var areInternalSymbolsAccessible = type.ContainingAssembly.GivesAccessTo(compilation.Assembly);
 
 				var mutableFields = instanceMembers
@@ -133,6 +137,9 @@ namespace F0.CodeAnalysis.CodeRefactorings
 
 			return mutableMembers;
 
+			static bool IsExplicitBaseType([NotNullWhen(true)] ITypeSymbol? type)
+				=> type is not null && type.SpecialType is not SpecialType.System_Object and not SpecialType.System_ValueType;
+
 			static bool FilterMutableFields(IFieldSymbol field, bool areInternalSymbolsAccessible)
 			{
 				return !field.IsReadOnly
@@ -141,7 +148,7 @@ namespace F0.CodeAnalysis.CodeRefactorings
 
 			static bool FilterMutableProperties(IPropertySymbol property, bool areInternalSymbolsAccessible)
 			{
-				return property.SetMethod is IMethodSymbol setMethod
+				return property.SetMethod is { } setMethod
 					&& IsAccessible(setMethod, areInternalSymbolsAccessible);
 			}
 		}
@@ -150,15 +157,15 @@ namespace F0.CodeAnalysis.CodeRefactorings
 		{
 			var accessibility = symbol.DeclaredAccessibility;
 			return accessibility is Accessibility.Public
-				|| (isLocationWithinFriendAssembly && (accessibility is Accessibility.Internal || accessibility is Accessibility.ProtectedOrInternal));
+				|| (isLocationWithinFriendAssembly && (accessibility is Accessibility.Internal or Accessibility.ProtectedOrInternal));
 		}
 
-		private static SeparatedSyntaxList<ExpressionSyntax> CreateAssignmentExpressions(Document document, IEnumerable<ISymbol> mutableMembers, IEnumerable<ISymbol> symbols)
+		private static SeparatedSyntaxList<ExpressionSyntax> CreateAssignmentExpressions(Document document, IEnumerable<ISymbol> mutableMembers, ImmutableArray<ISymbol> symbols)
 		{
-			var localSymbols = symbols.Where(s => s.Kind is SymbolKind.Local).Cast<ILocalSymbol>().ToArray();
-			var parameterSymbols = symbols.Where(s => s.Kind is SymbolKind.Parameter).Cast<IParameterSymbol>().ToArray();
-			var fieldSymbols = symbols.Where(s => s.Kind is SymbolKind.Field).Cast<IFieldSymbol>().ToArray();
-			var propertySymbols = symbols.Where(s => s.Kind is SymbolKind.Property).Cast<IPropertySymbol>().ToArray();
+			var localSymbols = symbols.Where(s => s.Kind is SymbolKind.Local).Cast<ILocalSymbol>().ToImmutableArray();
+			var parameterSymbols = symbols.Where(s => s.Kind is SymbolKind.Parameter).Cast<IParameterSymbol>().ToImmutableArray();
+			var fieldSymbols = symbols.Where(s => s.Kind is SymbolKind.Field).Cast<IFieldSymbol>().ToImmutableArray();
+			var propertySymbols = symbols.Where(s => s.Kind is SymbolKind.Property).Cast<IPropertySymbol>().ToImmutableArray();
 
 			var hasDefaultLiteral = HasDefaultLiteralFeature(document.Project);
 			var generator = hasDefaultLiteral ? null : SyntaxGenerator.GetGenerator(document);
@@ -173,18 +180,20 @@ namespace F0.CodeAnalysis.CodeRefactorings
 
 				var matchingSymbol = GetMatchingSymbol(member, localSymbols, parameterSymbols, fieldSymbols, propertySymbols);
 
-				if (matchingSymbol is { })
+				if (matchingSymbol is not null)
 				{
 					right = SyntaxFactory.IdentifierName(matchingSymbol.Name);
 				}
 				else if (hasDefaultLiteral)
 				{
+					Debug.Assert(generator is null);
 					right = SyntaxFactory.LiteralExpression(SyntaxKind.DefaultLiteralExpression, SyntaxFactory.Token(SyntaxKind.DefaultKeyword));
 				}
 				else
 				{
+					Debug.Assert(generator is not null);
 					var type = GetMemberType(member);
-					var typeExpression = generator!.TypeExpression(type);
+					var typeExpression = generator.TypeExpression(type);
 
 					right = (DefaultExpressionSyntax)generator.DefaultExpression(typeExpression);
 				}
@@ -198,6 +207,7 @@ namespace F0.CodeAnalysis.CodeRefactorings
 
 		private static bool HasDefaultLiteralFeature(Project project)
 		{
+			Debug.Assert(project.ParseOptions is not null, $"{nameof(project.ParseOptions)} is null unexpectedly");
 			var parseOptions = (CSharpParseOptions)project.ParseOptions;
 			return parseOptions.LanguageVersion >= LanguageVersion.CSharp7_1;
 		}
@@ -212,25 +222,25 @@ namespace F0.CodeAnalysis.CodeRefactorings
 			static ISymbol? GetLocalSymbol(ISymbol member, IEnumerable<ILocalSymbol> localSymbols)
 			{
 				return localSymbols
-					.SoleOrDefault(s => s.Name.Equals(member.Name, StringComparison.OrdinalIgnoreCase) && s.Type == GetMemberType(member));
+					.SoleOrDefault(s => s.Name.Equals(member.Name, StringComparison.OrdinalIgnoreCase) && s.Type.Equals(GetMemberType(member), SymbolEqualityComparer.Default));
 			}
 
 			static ISymbol? GetParameterSymbol(ISymbol member, IEnumerable<IParameterSymbol> parameterSymbols)
 			{
 				return parameterSymbols
-					.SoleOrDefault(s => s.Name.Equals(member.Name, StringComparison.OrdinalIgnoreCase) && s.Type == GetMemberType(member));
+					.SoleOrDefault(s => s.Name.Equals(member.Name, StringComparison.OrdinalIgnoreCase) && s.Type.Equals(GetMemberType(member), SymbolEqualityComparer.Default));
 			}
 
 			static ISymbol? GetFieldSymbol(ISymbol member, IEnumerable<IFieldSymbol> fieldSymbols)
 			{
 				return fieldSymbols
-					.SoleOrDefault(s => GetPlainName(s).Equals(member.Name, StringComparison.OrdinalIgnoreCase) && s.Type == GetMemberType(member));
+					.SoleOrDefault(s => GetPlainName(s).Equals(member.Name, StringComparison.OrdinalIgnoreCase) && s.Type.Equals(GetMemberType(member), SymbolEqualityComparer.Default));
 			}
 
 			static ISymbol? GetPropertySymbol(ISymbol member, IEnumerable<IPropertySymbol> propertySymbols)
 			{
 				return propertySymbols
-					.SoleOrDefault(s => s.Name.Equals(member.Name, StringComparison.OrdinalIgnoreCase) && s.Type == GetMemberType(member) && s.GetMethod is IMethodSymbol);
+					.SoleOrDefault(s => s.Name.Equals(member.Name, StringComparison.OrdinalIgnoreCase) && s.Type.Equals(GetMemberType(member), SymbolEqualityComparer.Default) && s.GetMethod is not null);
 			}
 		}
 
@@ -255,11 +265,11 @@ namespace F0.CodeAnalysis.CodeRefactorings
 
 			if (name.StartsWith("_"))
 			{
-				name = name.Substring(1);
+				name = name[1..];
 			}
 			else if (name.StartsWith("s_") || name.StartsWith("t_"))
 			{
-				name = name.Substring(2);
+				name = name[2..];
 			}
 
 			return name;

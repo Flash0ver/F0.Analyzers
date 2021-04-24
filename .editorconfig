@@ -2,39 +2,25 @@
 root = true
 
 [*]
+charset = utf-8
 tab_width = 4
 trim_trailing_whitespace = true
 insert_final_newline = true
 
-[*.{config,json,yml,yaml}]
-indent_style = space
-indent_size = 2
-
-[*.ps1]
-indent_style = space
-indent_size = 4
-
-[*.sln]
-charset = utf-8
+[*.{xaml,razor,html,htm,cshtml,sln}]
 indent_style = tab
 
-[*.{csproj,vbproj,props,targets}]
-charset = utf-8
-indent_style = space
-indent_size = 2
-
 [*.{cs,csx,vb,vbx}]
-charset = utf-8
 indent_style = tab
 max_line_length = 130
 
-[*.xaml]
-charset = utf-8
-indent_style = tab
-
-[*.xml]
+[*.{xml,csproj,vbproj,props,targets,resx,vsixmanifest,runsettings,config,json,slnf,yml,yaml}]
 indent_style = space
 indent_size = 2
+
+[*.{css,ps1}]
+indent_style = space
+indent_size = 4
 
 [*.{cs,vb}]
 dotnet_style_qualification_for_field = false:suggestion
@@ -43,7 +29,7 @@ dotnet_style_qualification_for_method = false:suggestion
 dotnet_style_qualification_for_event = false:suggestion
 dotnet_style_predefined_type_for_locals_parameters_members = true:suggestion
 dotnet_style_predefined_type_for_member_access = false:suggestion
-dotnet_style_require_accessibility_modifiers = always:suggestion
+dotnet_style_require_accessibility_modifiers = for_non_interface_members:suggestion
 dotnet_style_readonly_field = true:suggestion
 dotnet_style_parentheses_in_arithmetic_binary_operators = always_for_clarity:suggestion
 dotnet_style_parentheses_in_other_binary_operators = always_for_clarity:suggestion
@@ -59,11 +45,15 @@ dotnet_style_prefer_is_null_check_over_reference_equality_method = true:suggesti
 dotnet_style_prefer_conditional_expression_over_assignment = true:suggestion
 dotnet_style_prefer_conditional_expression_over_return = true:suggestion
 dotnet_style_prefer_compound_assignment = true:suggestion
+dotnet_style_prefer_simplified_interpolation = true:suggestion
+dotnet_style_prefer_simplified_boolean_expressions = true:suggestion
 dotnet_style_coalesce_expression = true:suggestion
 dotnet_style_null_propagation = true:suggestion
 dotnet_code_quality_unused_parameters = all:suggestion
 dotnet_sort_system_directives_first = true
 dotnet_separate_import_directive_groups = false
+dotnet_remove_unnecessary_suppression_exclusions = none
+file_header_template = unset
 
 [*.cs]
 csharp_preferred_modifier_order = public,private,protected,internal,static,extern,new,virtual,abstract,sealed,override,readonly,unsafe,volatile,async:suggestion
@@ -80,6 +70,8 @@ csharp_style_expression_bodied_lambdas = when_on_single_line:suggestion
 csharp_style_expression_bodied_local_functions = when_on_single_line:suggestion
 csharp_style_pattern_matching_over_is_with_cast_check = true:suggestion
 csharp_style_pattern_matching_over_as_with_null_check = true:suggestion
+csharp_style_prefer_pattern_matching = true:suggestion
+csharp_style_prefer_not_pattern = true:suggestion
 csharp_style_inlined_variable_declaration = true:suggestion
 csharp_prefer_simple_default_expression = true:suggestion
 csharp_style_throw_expression = true:suggestion
@@ -91,6 +83,7 @@ csharp_style_prefer_index_operator = true:suggestion
 csharp_style_prefer_range_operator = true:suggestion
 csharp_style_deconstructed_variable_declaration = true:suggestion
 csharp_style_pattern_local_over_anonymous_function = true:suggestion
+csharp_style_implicit_object_creation_when_type_is_apparent = true:suggestion
 csharp_using_directive_placement = outside_namespace:suggestion
 csharp_prefer_static_local_function = true:suggestion
 csharp_prefer_simple_using_statement = true:suggestion
@@ -135,3 +128,6 @@ csharp_preserve_single_line_blocks = true
 
 [*.vb]
 visual_basic_preferred_modifier_order = Partial,Default,Private,Protected,Public,Friend,NotOverridable,Overridable,MustOverride,Overloads,Overrides,MustInherit,NotInheritable,Static,Shared,Shadows,ReadOnly,WriteOnly,Dim,Const,WithEvents,Widening,Narrowing,Custom,Async:suggestion
+visual_basic_style_prefer_isnot_expression = true:suggestion
+visual_basic_style_unused_value_expression_statement_preference = unused_local_variable:silent
+visual_basic_style_unused_value_assignment_preference = unused_local_variable:suggestion

@@ -2,6 +2,8 @@
 CHANGELOG
 
 ## vNext
+### NuGet package
+- Changed target framework from `.NET Standard 1.3` to `.NET Standard 2.0`.
 
 ## v0.6.1 (2021-04-18)
 ### Analyzers

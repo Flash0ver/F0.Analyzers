@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFrameworks Condition="'$(OS)'=='Windows_NT'">net472;net5.0</TargetFrameworks>
+    <TargetFrameworks Condition="'$(OS)'=='Windows_NT'">net5.0;net472</TargetFrameworks>
     <TargetFramework Condition="'$(OS)'!='Windows_NT'">net5.0</TargetFramework>
     <AssemblyName>F0.Analyzers.Benchmarks</AssemblyName>
     <RootNamespace>F0.Benchmarks</RootNamespace>
@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="3.6.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="3.8.0" />
   </ItemGroup>
 
   <ItemGroup>

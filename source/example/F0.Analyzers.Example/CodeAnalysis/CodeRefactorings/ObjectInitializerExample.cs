@@ -68,7 +68,7 @@ namespace F0.Analyzers.Example.CodeAnalysis.CodeRefactorings
 		public IEnumerable<string> GetCollection()
 		{
 			return new List<string>();
-		} 
+		}
 
 		public BaseClass GetInheritingType()
 		{

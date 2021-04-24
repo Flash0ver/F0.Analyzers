@@ -51,7 +51,7 @@ namespace F0.Tests.Extensions
 		public void SoleOrDefaultWithPredicate_SequenceContainsNoMatch_ReturnsNull()
 		{
 			// Arrange
-			var sequence = new string[] { "bowl", "of", "petunias" };
+			var sequence = new[] { "bowl", "of", "petunias" };
 
 			// Act
 			var result = sequence.SoleOrDefault(x => x == "42");
@@ -65,7 +65,7 @@ namespace F0.Tests.Extensions
 		{
 			// Arrange
 			var element = "bowl";
-			var sequence = new string[] { element, "of", "petunias" };
+			var sequence = new[] { element, "of", "petunias" };
 
 			// Act
 			var result = sequence.SoleOrDefault(x => x == "bowl");
@@ -78,7 +78,7 @@ namespace F0.Tests.Extensions
 		public void SoleOrDefaultWithPredicate_SequenceContainsMoreThanOneMatch_ReturnsNull()
 		{
 			// Arrange
-			var sequence = new string[] { "bowl", "of", "petunias" };
+			var sequence = new[] { "bowl", "of", "petunias" };
 
 			// Act
 			var result = sequence.SoleOrDefault(x => x.Contains('o'));
