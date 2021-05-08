@@ -10,7 +10,7 @@ namespace F0.Analyzers.Example.CodeAnalysis.CodeRefactorings
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0059:Unnecessary assignment of a value", Justification = "Examples")]
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "Examples")]
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "Examples")]
-	internal sealed class ObjectInitializerExample
+	internal sealed class ObjectInitializerExamples
 	{
 		private readonly string _item1 = "bowl of petunias";
 		private static readonly int s_item2 = 42;

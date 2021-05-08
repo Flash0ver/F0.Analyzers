@@ -2,7 +2,7 @@ using System;
 
 namespace F0.Analyzers.Example.CodeAnalysis.Diagnostics
 {
-	internal sealed class F00001GoToStatementConsideredHarmfulExample
+	internal sealed class F00001GoToStatementConsideredHarmfulExamples
 	{
 		public void GotoStatement()
 		{
