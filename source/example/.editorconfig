@@ -8,3 +8,9 @@ dotnet_diagnostic.CS0414.severity = none
 
 # CS0649: Field is never assigned to, and will always have its default value
 dotnet_diagnostic.CS0649.severity = none
+
+# CA1822: Mark members as static
+dotnet_diagnostic.CA1822.severity = none
+
+# IDE0002: Simplify Member Access
+dotnet_diagnostic.IDE0002.severity = none

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using F0.Testing.Extensions;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Testing;
 
@@ -30,6 +31,13 @@ namespace F0.Testing.CodeAnalysis.Diagnostics
 			return tester.RunAsync(CancellationToken.None);
 		}
 
+		public Task NoOpAsync(string code, ReferenceAssemblies referenceAssemblies, LanguageVersion languageVersion)
+		{
+			var tester = CreateTester(code, languageVersion, referenceAssemblies);
+
+			return tester.RunAsync(CancellationToken.None);
+		}
+
 		public Task DiagnosticAsync(string code, DiagnosticResult diagnostic)
 		{
 			var tester = CreateTester(code);
@@ -48,12 +56,36 @@ namespace F0.Testing.CodeAnalysis.Diagnostics
 			return tester.RunAsync(CancellationToken.None);
 		}
 
-		private static DiagnosticAnalyzerTester<TDiagnosticAnalyzer> CreateTester(string code)
+		public Task DiagnosticAsync(string code, IEnumerable<DiagnosticResult> diagnostics, string[][] additionalProjects, ReferenceAssemblies referenceAssemblies, LanguageVersion languageVersion)
+		{
+			var tester = CreateTester(code, languageVersion, referenceAssemblies, additionalProjects);
+
+			tester.ExpectedDiagnostics.AddRange(diagnostics);
+
+			return tester.RunAsync(CancellationToken.None);
+		}
+
+		private static DiagnosticAnalyzerTester<TDiagnosticAnalyzer> CreateTester(string code, LanguageVersion? languageVersion = null, ReferenceAssemblies? referenceAssemblies = null, string[][]? additionalProjects = null)
 		{
 			var tester = new DiagnosticAnalyzerTester<TDiagnosticAnalyzer>
 			{
 				TestCode = code.Untabify()
 			};
+
+			if (languageVersion.HasValue)
+			{
+				tester.LanguageVersion = languageVersion;
+			}
+
+			if (referenceAssemblies is not null)
+			{
+				tester.TestState.ReferenceAssemblies = referenceAssemblies;
+			}
+
+			if (additionalProjects is not null)
+			{
+				tester.TestState.AddAdditionalProjects(additionalProjects);
+			}
 
 			return tester;
 		}

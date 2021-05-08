@@ -1,6 +1,7 @@
 using F0.Testing.CodeAnalysis.CodeFixes;
 using F0.Testing.CodeAnalysis.CodeRefactorings;
 using F0.Testing.CodeAnalysis.Diagnostics;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CodeRefactorings;
 using Microsoft.CodeAnalysis.CSharp.Testing;
@@ -32,5 +33,14 @@ namespace F0.Testing.CodeAnalysis
 		public static DiagnosticResult Diagnostic<TDiagnosticAnalyzer>(string diagnosticId)
 			where TDiagnosticAnalyzer : DiagnosticAnalyzer, new()
 			=> AnalyzerVerifier<TDiagnosticAnalyzer, CSharpAnalyzerTest<TDiagnosticAnalyzer, XUnitVerifier>, XUnitVerifier>.Diagnostic(diagnosticId);
+
+		public static DiagnosticResult Diagnostic<TDiagnosticAnalyzer>(DiagnosticDescriptor descriptor)
+			where TDiagnosticAnalyzer : DiagnosticAnalyzer, new()
+			=> AnalyzerVerifier<TDiagnosticAnalyzer, CSharpAnalyzerTest<TDiagnosticAnalyzer, XUnitVerifier>, XUnitVerifier>.Diagnostic(descriptor);
+
+		public static DiagnosticResult Diagnostic<TDiagnosticAnalyzer, TCodeFix>(string diagnosticId)
+			where TDiagnosticAnalyzer : DiagnosticAnalyzer, new()
+			where TCodeFix : CodeFixProvider, new()
+			=> CodeFixVerifier<TDiagnosticAnalyzer, TCodeFix, CSharpCodeFixTest<TDiagnosticAnalyzer, TCodeFix, XUnitVerifier>, XUnitVerifier>.Diagnostic(diagnosticId);
 	}
 }

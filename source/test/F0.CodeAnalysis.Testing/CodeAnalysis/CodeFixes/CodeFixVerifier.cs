@@ -34,6 +34,13 @@ namespace F0.Testing.CodeAnalysis.CodeFixes
 		{
 		}
 
+		public Task NoOpAsync(string code)
+		{
+			var tester = CreateTester(code);
+
+			return tester.RunAsync(CancellationToken.None);
+		}
+
 		public Task NoOpAsync(string code, DiagnosticResult diagnostic)
 		{
 			var tester = CreateTester(code);
@@ -70,7 +77,16 @@ namespace F0.Testing.CodeAnalysis.CodeFixes
 			return tester.RunAsync(CancellationToken.None);
 		}
 
-		private static CodeFixTester<TDiagnosticAnalyzer, TCodeFix> CreateTester(string initialCode, string? expectedCode = null)
+		public Task CodeActionAsync(string initialCode, IEnumerable<DiagnosticResult> diagnostics, string expectedCode, ReferenceAssemblies referenceAssemblies)
+		{
+			var tester = CreateTester(initialCode, expectedCode, referenceAssemblies);
+
+			tester.ExpectedDiagnostics.AddRange(diagnostics);
+
+			return tester.RunAsync(CancellationToken.None);
+		}
+
+		private static CodeFixTester<TDiagnosticAnalyzer, TCodeFix> CreateTester(string initialCode, string? expectedCode = null, ReferenceAssemblies? referenceAssemblies = null)
 		{
 			var normalizedInitialCode = initialCode.Untabify();
 
@@ -79,6 +95,11 @@ namespace F0.Testing.CodeAnalysis.CodeFixes
 				TestCode = normalizedInitialCode,
 				FixedCode = expectedCode is null ? normalizedInitialCode : expectedCode.Untabify()
 			};
+
+			if (referenceAssemblies is not null)
+			{
+				tester.TestState.ReferenceAssemblies = referenceAssemblies;
+			}
 
 			return tester;
 		}
