@@ -67,7 +67,7 @@ namespace F0.CodeAnalysis.CodeFixes
 			}
 			else
 			{
-				throw new NotSupportedException();
+				throw new ArgumentException(null, nameof(expression));
 			}
 
 			var root = await document.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false);
