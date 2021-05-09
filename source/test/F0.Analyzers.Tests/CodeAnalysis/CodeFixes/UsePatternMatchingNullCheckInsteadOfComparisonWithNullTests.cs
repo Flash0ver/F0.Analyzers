@@ -753,6 +753,60 @@ class Test
 			await VerifyAsync(code, expected, fix);
 		}
 
+		[Fact]
+		public async Task RegisterCodeFixesAsync_Other_FixIfNullCheck()
+		{
+			var code =
+@"using System;
+
+class Test
+{
+	void Method(Object obj, Nullable<int> value)
+	{
+		_ = obj.GetHashCode() == null;
+		_ = {|#0:obj.GetType() == null|};
+		_ = {|#1:obj.ToString() == null|};
+
+		_ = value.HasValue != null;
+		_ = value.Value != null;
+		_ = value.GetHashCode() != null;
+		_ = value.GetValueOrDefault() != null;
+		_ = value.GetValueOrDefault(default) != null;
+		_ = {|#2:value.ToString() != null|};
+	}
+}";
+
+			var fix =
+@"using System;
+
+class Test
+{
+	void Method(Object obj, Nullable<int> value)
+	{
+		_ = obj.GetHashCode() == null;
+		_ = obj.GetType() is null;
+		_ = obj.ToString() is null;
+
+		_ = value.HasValue != null;
+		_ = value.Value != null;
+		_ = value.GetHashCode() != null;
+		_ = value.GetValueOrDefault() != null;
+		_ = value.GetValueOrDefault(default) != null;
+		_ = value.ToString() is not null;
+	}
+}";
+
+			var expected = new[]
+			{
+				CreateEqualityComparisonDiagnostic(0, "is", "overloaded", "==", "operator", "null"),
+				CreateEqualityComparisonDiagnostic(1, "is", "overloaded", "==", "operator", "null"),
+
+				CreateEqualityComparisonDiagnostic(2, "is not", "overloaded", "!=", "operator", "non-null"),
+			};
+
+			await VerifyAsync(code, expected, fix);
+		}
+
 		private static DiagnosticResult CreateEqualityComparisonDiagnostic(int markupKey, string pattern, string modifier, string memberName, string memberKind, string test)
 			=> Verify.Diagnostic<F0100xPreferPatternMatchingNullCheckOverComparisonWithNull, UsePatternMatchingNullCheckInsteadOfComparisonWithNull>(DiagnosticIds.F01001)
 				.WithSeverity(DiagnosticSeverity.Warning)

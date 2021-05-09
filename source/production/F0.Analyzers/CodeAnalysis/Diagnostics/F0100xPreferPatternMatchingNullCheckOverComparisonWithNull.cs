@@ -15,11 +15,12 @@ namespace F0.CodeAnalysis.Diagnostics
 	[DiagnosticAnalyzer(LanguageNames.CSharp)]
 	internal sealed class F0100xPreferPatternMatchingNullCheckOverComparisonWithNull : DiagnosticAnalyzer
 	{
+		private const string Title = "Prefer is pattern to check for null";
 		private const string Description = "When an expression is matched against the 'null' literal, the compiler guarantees that neither an overloaded operator nor an overridden method is invoked";
 
 		internal static readonly DiagnosticDescriptor EqualityComparisonRule = new(
 			DiagnosticIds.F01001,
-			"Prefer is pattern to check for null",
+			Title,
 			"Prefer '{0}' pattern over calling the (potentially) {1} '{2}' {3} to check for {4}",
 			DiagnosticCategories.BestPractice,
 			DiagnosticSeverity.Warning,
@@ -30,7 +31,7 @@ namespace F0.CodeAnalysis.Diagnostics
 
 		internal static readonly DiagnosticDescriptor IdentityComparisonRule = new(
 			DiagnosticIds.F01002,
-			"Prefer is pattern to check for null",
+			Title,
 			"Prefer '{0}' pattern over calling the '{1}' {2} to check for {3}",
 			DiagnosticCategories.BestPractice,
 			DiagnosticSeverity.Info,

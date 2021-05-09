@@ -406,6 +406,8 @@ class Test
 	{
 		_ = (object)instance == null;
 		_ = (object)instance != null;
+		_ = null == (object)instance;
+		_ = null != (object)instance;
 		_ = Object.Equals(instance, null);
 		_ = !Object.Equals(instance, null);
 		_ = Object.ReferenceEquals(instance, null);
@@ -458,6 +460,32 @@ class Test
 
 		_ = instance is var variable;
 		_ = instance is var _;
+	}
+}";
+
+			await VerifyNoOpAsync(code);
+		}
+
+		[Fact]
+		public async Task Initialize_Other_ReportNoDiagnostics()
+		{
+			var code =
+@"using System;
+
+class Test
+{
+	void Method(Object obj, Nullable<int> value)
+	{
+		_ = obj.GetHashCode();
+		_ = obj.GetType();
+		_ = obj.ToString();
+
+		_ = value.HasValue;
+		_ = value.Value;
+		_ = value.GetHashCode();
+		_ = value.GetValueOrDefault();
+		_ = value.GetValueOrDefault(default);
+		_ = value.ToString();
 	}
 }";
 

@@ -23,6 +23,8 @@ namespace F0.CodeAnalysis.CodeRefactorings
 	[Shared]
 	internal sealed class ObjectInitializer : CodeRefactoringProvider
 	{
+		private const string Title = "Create Object Initializer";
+
 		public override async Task ComputeRefactoringsAsync(CodeRefactoringContext context)
 		{
 			if (!HasObjectInitializerFeature(context.Document.Project))
@@ -46,7 +48,7 @@ namespace F0.CodeAnalysis.CodeRefactorings
 
 				if (!IsCollection(typeInfo.Type))
 				{
-					var action = CodeAction.Create("Create Object Initializer", ct => CreateObjectInitializer(context.Document, semanticModel, objectCreationExpression, typeInfo, ct));
+					var action = CodeAction.Create(Title, ct => CreateObjectInitializer(context.Document, semanticModel, objectCreationExpression, typeInfo, ct));
 					context.RegisterRefactoring(action);
 				}
 			}
