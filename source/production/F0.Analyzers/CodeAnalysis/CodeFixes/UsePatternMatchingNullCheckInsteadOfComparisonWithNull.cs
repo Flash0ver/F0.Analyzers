@@ -39,36 +39,13 @@ namespace F0.CodeAnalysis.CodeFixes
 			var semanticModel = await document.GetSemanticModelAsync(cancellationToken).ConfigureAwait(false);
 			Debug.Assert(semanticModel is not null, $"{nameof(Document)} does not support semantic model: {{ {nameof(Document.SupportsSemanticModel)} = {document.SupportsSemanticModel} }}");
 
-			IsPatternExpressionSyntax newExpression;
-
-			if (expression is BinaryExpressionSyntax binary)
+			var newExpression = expression switch
 			{
-				var syntax = binary.Right.IsKind(SyntaxKind.NullLiteralExpression)
-					? binary.Left
-					: binary.Right;
-
-				if (binary.OperatorToken.IsKind(SyntaxKind.EqualsEqualsToken))
-				{
-					newExpression = CreatePatternExpression(syntax);
-				}
-				else
-				{
-					Debug.Assert(binary.OperatorToken.IsKind(SyntaxKind.ExclamationEqualsToken));
-					newExpression = CreateNegatedPatternExpression(syntax);
-				}
-			}
-			else if (expression is InvocationExpressionSyntax invocation)
-			{
-				newExpression = CreatePatternExpression(invocation);
-			}
-			else if (expression is PrefixUnaryExpressionSyntax prefixUnary)
-			{
-				newExpression = CreateNegatedPatternExpression(prefixUnary);
-			}
-			else
-			{
-				throw new ArgumentException(null, nameof(expression));
-			}
+				BinaryExpressionSyntax binary => CreateFromBinaryExpression(binary),
+				InvocationExpressionSyntax invocation => CreatePatternExpression(invocation),
+				PrefixUnaryExpressionSyntax prefixUnary => CreateNegatedPatternExpression(prefixUnary),
+				_ => throw new ArgumentException(null, nameof(expression)),
+			};
 
 			var root = await document.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false);
 
@@ -76,6 +53,23 @@ namespace F0.CodeAnalysis.CodeFixes
 			var newRoot = root.ReplaceNode(expression, newExpression);
 
 			return document.WithSyntaxRoot(newRoot);
+
+			static IsPatternExpressionSyntax CreateFromBinaryExpression(BinaryExpressionSyntax binary)
+			{
+				var syntax = binary.Right.IsKind(SyntaxKind.NullLiteralExpression)
+					? binary.Left
+					: binary.Right;
+
+				if (binary.OperatorToken.IsKind(SyntaxKind.EqualsEqualsToken))
+				{
+					return CreatePatternExpression(syntax);
+				}
+				else
+				{
+					Debug.Assert(binary.OperatorToken.IsKind(SyntaxKind.ExclamationEqualsToken));
+					return CreateNegatedPatternExpression(syntax);
+				}
+			}
 		}
 
 		private static IsPatternExpressionSyntax CreatePatternExpression(ExpressionSyntax expression)
