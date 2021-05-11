@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Id="F0.Analyzers.Vsix" Version="0.6.1" Language="en-US" Publisher="Flash0Ware" />
+    <Identity Id="F0.Analyzers.Vsix" Version="0.7.0" Language="en-US" Publisher="Flash0Ware" />
     <DisplayName>F0.Analyzers</DisplayName>
     <Description xml:space="preserve">C# code refactorings and diagnostic analyzers with code fixes, based on the .NET Compiler Platform (Roslyn).</Description>
     <MoreInfo>https://github.com/Flash0ver/F0.Analyzers</MoreInfo>

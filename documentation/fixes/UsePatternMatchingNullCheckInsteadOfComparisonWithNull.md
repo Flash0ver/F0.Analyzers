@@ -7,7 +7,7 @@ CodeRefactoringProvider: [UsePatternMatchingNullCheckInsteadOfComparisonWithNull
 | Title      | Use constant 'null' pattern        |
 | Fixes      | [F01001][F01001], [F01002][F01002] |
 | Language   | C# 9.0 or greater                  |
-| Applies to | `[vNext,)`                         |
+| Applies to | `[0.7.0,)`                         |
 
 ## Summary
 
@@ -74,7 +74,7 @@ public void NullCheck(Record instance, IEquatable<Record> equatable, IEqualityCo
 
 ## History
 
-- [vNext](../../CHANGELOG.md#vNext)
+- [0.7.0](../../CHANGELOG.md#v070-2021-05-11)
 
 
 [F01001]: ../diagnostics/F0100x.md#F01001
