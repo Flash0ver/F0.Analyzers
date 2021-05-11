@@ -1,8 +1,8 @@
 <Project>
 
   <PropertyGroup>
-    <F0Version>0.6.1</F0Version>
-    <F0ReleaseNotes>Fixed the object initializer code refactoring to no longer register a code action with collection types.</F0ReleaseNotes>
+    <F0Version>0.7.0</F0Version>
+    <F0ReleaseNotes>Added null check analyzer diagnostics (Warning F01001/Info F01002) and code fixes to replace null checks by equality/identity with is (not) null pattern expressions.</F0ReleaseNotes>
   </PropertyGroup>
 
 </Project>

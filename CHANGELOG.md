@@ -2,6 +2,8 @@
 CHANGELOG
 
 ## vNext
+
+## v0.7.0 (2021-05-11)
 ### Analyzers
 - Added `PreferPatternMatchingNullCheckOverComparisonWithNull` diagnostic analyzer, reporting _Warning F01001_ for `null` check by equality, reporting _Info F01002_ for `null` check by identity.
 - Added `UsePatternMatchingNullCheckInsteadOfComparisonWithNull` code fix provider, replacing both equality `null` checks (_F01001_) and identity `null` checks (_F01002_) with either `is null` or `is not null` pattern expressions.
