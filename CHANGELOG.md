@@ -2,6 +2,10 @@
 CHANGELOG
 
 ## vNext
+### Analyzers
+- Added `PreferPatternMatchingNullCheckOverComparisonWithNull` diagnostic analyzer, reporting _Warning F01001_ for `null` check by equality, reporting _Info F01002_ for `null` check by identity.
+- Added `UsePatternMatchingNullCheckInsteadOfComparisonWithNull` code fix provider, replacing both equality `null` checks (_F01001_) and identity `null` checks (_F01002_) with either `is null` or `is not null` pattern expressions.
+
 ### NuGet package
 - Changed target framework from `.NET Standard 1.3` to `.NET Standard 2.0`.
 
@@ -33,7 +37,7 @@ CHANGELOG
 
 ## v0.3.0 (2020-05-27)
 ### Analyzers
-- Added `GoToStatementConsideredHarmful` diagnostic analyzer, reporting _Warning_ if a `goto` statement is used.
+- Added `GoToStatementConsideredHarmful` diagnostic analyzer, reporting _Warning F00001_ if a `goto` statement is used.
 
 ## v0.2.0 (2020-05-21)
 ### Analyzers

@@ -1,19 +1,14 @@
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using F0.Testing.Extensions;
-using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeRefactorings;
 using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.Testing;
 
 namespace F0.Testing.CodeAnalysis.CodeRefactorings
 {
 	public class CodeRefactoringVerifier<TCodeRefactoring>
 		where TCodeRefactoring : CodeRefactoringProvider, new()
 	{
-		private const string LanguageName = LanguageNames.CSharp;
-
 		internal CodeRefactoringVerifier()
 		{
 		}
@@ -80,36 +75,10 @@ namespace F0.Testing.CodeAnalysis.CodeRefactorings
 
 			if (additionalProjects is not null)
 			{
-				AddAdditionalProjects(tester.TestState, additionalProjects);
+				tester.TestState.AddAdditionalProjects(additionalProjects);
 			}
 
 			return tester;
-		}
-
-		private static void AddAdditionalProjects(SolutionState solution, string[][] additionalProjects)
-		{
-			for (var projectIndex = 0; projectIndex < additionalProjects.Length; projectIndex++)
-			{
-				var additionalDocuments = additionalProjects[projectIndex];
-				var projectName = Projects.CreateProjectName(projectIndex);
-
-				var project = new ProjectState(projectName, LanguageName, String.Empty, Projects.Extension)
-				{
-					OutputKind = OutputKind.DynamicallyLinkedLibrary,
-					DocumentationMode = DocumentationMode.Diagnose,
-				};
-
-				for (var documentIndex = 0; documentIndex < additionalDocuments.Length; documentIndex++)
-				{
-					var sourceText = additionalDocuments[documentIndex];
-					var filename = Documents.CreateDocumentName(projectIndex, documentIndex);
-
-					project.Sources.Add((filename, sourceText));
-				}
-
-				solution.AdditionalProjects.Add(projectName, project);
-				solution.AdditionalProjectReferences.Add(projectName);
-			}
 		}
 	}
 }

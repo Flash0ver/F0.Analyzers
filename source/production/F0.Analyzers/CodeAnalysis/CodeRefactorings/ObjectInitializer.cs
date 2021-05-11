@@ -23,6 +23,8 @@ namespace F0.CodeAnalysis.CodeRefactorings
 	[Shared]
 	internal sealed class ObjectInitializer : CodeRefactoringProvider
 	{
+		private const string Title = "Create Object Initializer";
+
 		public override async Task ComputeRefactoringsAsync(CodeRefactoringContext context)
 		{
 			if (!HasObjectInitializerFeature(context.Document.Project))
@@ -40,13 +42,13 @@ namespace F0.CodeAnalysis.CodeRefactorings
 				Debug.Assert(compilation is not null, $"Project doesn't support producing compilations: {{ {nameof(Project.SupportsCompilation)} = {context.Document.Project.SupportsCompilation} }}");
 				var semanticModel = compilation.GetSemanticModel(objectCreationExpression.SyntaxTree);
 
-				var typeInfo = semanticModel.GetTypeInfo(objectCreationExpression);
+				var typeInfo = semanticModel.GetTypeInfo(objectCreationExpression, context.CancellationToken);
 				Debug.Assert(typeInfo.Type is not null, $"Expected {nameof(ObjectCreationExpressionSyntax)} to have a type");
 				Debug.Assert(typeInfo.Type is not IErrorTypeSymbol, $"Type could not be determined due to an error: {typeInfo.Type}");
 
 				if (!IsCollection(typeInfo.Type))
 				{
-					var action = CodeAction.Create("Create Object Initializer", ct => CreateObjectInitializer(context.Document, semanticModel, objectCreationExpression, typeInfo, ct));
+					var action = CodeAction.Create(Title, ct => CreateObjectInitializer(context.Document, semanticModel, objectCreationExpression, typeInfo, ct));
 					context.RegisterRefactoring(action);
 				}
 			}
@@ -246,17 +248,12 @@ namespace F0.CodeAnalysis.CodeRefactorings
 
 		private static INamedTypeSymbol GetMemberType(ISymbol member)
 		{
-			if (member is IPropertySymbol property)
+			return member switch
 			{
-				return (INamedTypeSymbol)property.Type;
-			}
-
-			if (member is IFieldSymbol field)
-			{
-				return (INamedTypeSymbol)field.Type;
-			}
-
-			throw new NotSupportedException();
+				IPropertySymbol property => (INamedTypeSymbol)property.Type,
+				IFieldSymbol field => (INamedTypeSymbol)field.Type,
+				_ => throw new ArgumentException(null, nameof(member)),
+			};
 		}
 
 		private static string GetPlainName(IFieldSymbol fieldSymbol)
@@ -281,7 +278,7 @@ namespace F0.CodeAnalysis.CodeRefactorings
 
 			if (expressionList.Count is 1)
 			{
-				var expression = expressionList.Single();
+				var expression = expressionList[0];
 				expressionList = expressionList.Replace(expression, expression.WithTrailingTrivia(endOfLineTrivia));
 			}
 			else

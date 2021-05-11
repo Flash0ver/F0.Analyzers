@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using F0.CodeAnalysis;
 using F0.CodeAnalysis.Diagnostics;
 using F0.Testing.CodeAnalysis;
 using Microsoft.CodeAnalysis;
@@ -45,7 +46,7 @@ class Class
 		{|#0:goto Label;|}
 	}
 }";
-			var expected = CreateDiagnostic("F00001")
+			var expected = CreateDiagnostic()
 				.WithMessageFormat("Don't use goto statements: '{0}'")
 				.WithArguments("goto Label;")
 				.WithSeverity(DiagnosticSeverity.Warning)
@@ -81,12 +82,12 @@ class Class
 
 			var expected = new[]
 			{
-				CreateDiagnostic("F00001")
+				CreateDiagnostic()
 					.WithMessageFormat("Don't use goto statements: '{0}'")
 					.WithArguments("goto case 2;")
 					.WithSeverity(DiagnosticSeverity.Warning)
 					.WithLocation(0),
-				CreateDiagnostic("F00001")
+				CreateDiagnostic()
 					.WithMessageFormat("Don't use goto statements: '{0}'")
 					.WithArguments("goto case 1;")
 					.WithSeverity(DiagnosticSeverity.Warning)
@@ -118,7 +119,7 @@ class Class
 	}
 }";
 
-			var expected = CreateDiagnostic("F00001")
+			var expected = CreateDiagnostic()
 				.WithMessageFormat("Don't use goto statements: '{0}'")
 				.WithArguments("goto default;")
 				.WithSeverity(DiagnosticSeverity.Warning)
@@ -127,8 +128,8 @@ class Class
 			await VerifyAsync(code, expected);
 		}
 
-		private static DiagnosticResult CreateDiagnostic(string diagnosticId)
-			=> Verify.Diagnostic<F00001GoToStatementConsideredHarmful>(diagnosticId);
+		private static DiagnosticResult CreateDiagnostic()
+			=> Verify.Diagnostic<F00001GoToStatementConsideredHarmful>(DiagnosticIds.F00001);
 
 		private static Task VerifyAsync(string code, DiagnosticResult diagnostic)
 			=> Verify.DiagnosticAnalyzer<F00001GoToStatementConsideredHarmful>().DiagnosticAsync(code, diagnostic);

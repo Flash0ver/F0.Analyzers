@@ -8,15 +8,16 @@ namespace F0.CodeAnalysis.Diagnostics
 	[DiagnosticAnalyzer(LanguageNames.CSharp)]
 	internal sealed class F00001GoToStatementConsideredHarmful : DiagnosticAnalyzer
 	{
-		private const string DiagnosticId = "F00001";
-		private const string Title = "GotoConsideredHarmful";
-		private const string MessageFormat = "Don't use goto statements: '{0}'";
-		private const string Category = "CodeSmell";
-		private const string Description = "GOTO Statement Considered Harmful";
-		private const string HelpLinkUri = "https://github.com/Flash0ver/F0.Analyzers/blob/master/documentation/diagnostics/F00001.md";
-
-		private static readonly DiagnosticDescriptor Rule = new(DiagnosticId, Title, MessageFormat, Category,
-			DiagnosticSeverity.Warning, true, Description, HelpLinkUri);
+		private static readonly DiagnosticDescriptor Rule = new(
+			DiagnosticIds.F00001,
+			"GotoConsideredHarmful",
+			"Don't use goto statements: '{0}'",
+			DiagnosticCategories.CodeSmell,
+			DiagnosticSeverity.Warning,
+			true,
+			"GOTO Statement Considered Harmful",
+			"https://github.com/Flash0ver/F0.Analyzers/blob/master/documentation/diagnostics/F00001.md"
+		);
 
 		public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
@@ -24,6 +25,7 @@ namespace F0.CodeAnalysis.Diagnostics
 		{
 			context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
 			context.EnableConcurrentExecution();
+
 			context.RegisterSyntaxNodeAction(SyntaxNodeAction, GotoStatementSyntaxKinds);
 		}
 

@@ -169,6 +169,19 @@ namespace F0.Benchmarking.CodeAnalysis.Diagnostics
 			return diagnostics.ToImmutable();
 		}
 
+		public ImmutableArray<Diagnostic> CreateDiagnostics(params (string Id, Action<DiagnosticBuilder> Builder)[] builds)
+		{
+			var diagnostics = ImmutableArray.CreateBuilder<Diagnostic>();
+			foreach (var (id, builder) in builds)
+			{
+				var descriptor = analyzer.SupportedDiagnostics.Single(d => d.Id.Equals(id, StringComparison.Ordinal));
+				var diagnostic = CreateDiagnostic(descriptor, builder);
+				diagnostics.Add(diagnostic);
+			}
+
+			return diagnostics.ToImmutable();
+		}
+
 		private Diagnostic CreateDiagnostic(DiagnosticDescriptor descriptor, Action<DiagnosticBuilder> build)
 		{
 			var builder = new DiagnosticBuilder(source, syntaxTree);

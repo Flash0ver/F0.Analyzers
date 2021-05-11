@@ -28,6 +28,7 @@ $ExampleProjects = @(
     Join-Path -Path $ExampleDirectory -ChildPath 'F0.Analyzers.Example' -AdditionalChildPath 'F0.Analyzers.Example.csproj'
     Join-Path -Path $ExampleDirectory -ChildPath 'F0.Analyzers.Example.CSharp2' -AdditionalChildPath 'F0.Analyzers.Example.CSharp2.csproj'
     Join-Path -Path $ExampleDirectory -ChildPath 'F0.Analyzers.Example.CSharp7' -AdditionalChildPath 'F0.Analyzers.Example.CSharp7.csproj'
+    Join-Path -Path $ExampleDirectory -ChildPath 'F0.Analyzers.Example.CSharp8' -AdditionalChildPath 'F0.Analyzers.Example.CSharp8.csproj'
 )
 
 function Add-LocalFeed {
@@ -68,7 +69,7 @@ function Add-PackageSource {
 
 function Remove-PackageSource {
     Write-Host 'dotnet nuget remove source' -ForegroundColor Blue
-    
+
     $output = dotnet nuget remove source $LocalFeedName --configfile $NuGetConfigurationFile
 
     Write-Host "     $output"
