@@ -1,4 +1,4 @@
-# Object Initializer
+# Use Pattern Matching to check for null
 
 CodeRefactoringProvider: [UsePatternMatchingNullCheckInsteadOfComparisonWithNull.cs](../../source/production/F0.Analyzers/CodeAnalysis/CodeFixes/UsePatternMatchingNullCheckInsteadOfComparisonWithNull.cs)
 
