@@ -718,36 +718,61 @@ class Test
 		{
 			var code =
 @"using System;
+using System.Collections.Generic;
+using System.Linq;
 
 record Record();
 
 class Test
 {
-	void Method(Record record)
+	void Method(Record record, IEnumerable<string> collection)
 	{
-		_ = {|#0:record.Equals(null)|} == true;
-		_ = {|#1:!record.Equals(null)|} == false;
+		_ = {|#0:record == null|} == true;
+		_ = {|#1:record != null|} == false;
+		_ = {|#2:record.Equals(null)|} == true;
+		_ = {|#3:!record.Equals(null)|} == false;
+
+		_ = collection.Where(item => {|#4:item == null|});
+		_ = collection.Where(item => {|#5:item != null|});
+		_ = collection.Where(item => {|#6:item.Equals(null)|});
+		_ = collection.Where(item => {|#7:!item.Equals(null)|});
 	}
 }";
 
 			var fix =
 @"using System;
+using System.Collections.Generic;
+using System.Linq;
 
 record Record();
 
 class Test
 {
-	void Method(Record record)
+	void Method(Record record, IEnumerable<string> collection)
 	{
 		_ = record is null == true;
 		_ = record is not null == false;
+		_ = record is null == true;
+		_ = record is not null == false;
+
+		_ = collection.Where(item => item is null);
+		_ = collection.Where(item => item is not null);
+		_ = collection.Where(item => item is null);
+		_ = collection.Where(item => item is not null);
 	}
 }";
 
 			var expected = new[]
 			{
-				CreateEqualityComparisonDiagnostic(0, "is", "overridden", "Equals", "method", "null"),
-				CreateEqualityComparisonDiagnostic(1, "is not", "overridden", "Equals", "method", "non-null"),
+				CreateEqualityComparisonDiagnostic(0, "is", "overloaded", "==", "operator", "null"),
+				CreateEqualityComparisonDiagnostic(1, "is not", "overloaded", "!=", "operator", "non-null"),
+				CreateEqualityComparisonDiagnostic(2, "is", "overridden", "Equals", "method", "null"),
+				CreateEqualityComparisonDiagnostic(3, "is not", "overridden", "Equals", "method", "non-null"),
+
+				CreateEqualityComparisonDiagnostic(4, "is", "overloaded", "==", "operator", "null"),
+				CreateEqualityComparisonDiagnostic(5, "is not", "overloaded", "!=", "operator", "non-null"),
+				CreateEqualityComparisonDiagnostic(6, "is", "overridden", "Equals", "method", "null"),
+				CreateEqualityComparisonDiagnostic(7, "is not", "overridden", "Equals", "method", "non-null"),
 			};
 
 			await VerifyAsync(code, expected, fix);
@@ -802,6 +827,57 @@ class Test
 				CreateEqualityComparisonDiagnostic(1, "is", "overloaded", "==", "operator", "null"),
 
 				CreateEqualityComparisonDiagnostic(2, "is not", "overloaded", "!=", "operator", "non-null"),
+			};
+
+			await VerifyAsync(code, expected, fix);
+		}
+
+		[Fact]
+		public async Task RegisterCodeFixesAsync_ArgumentSyntax_FixIfNullCheck()
+		{
+			var code =
+@"using System;
+using System.Diagnostics;
+
+record Record();
+
+class Test
+{
+	void Method(string text)
+	{
+		Debug.Assert({|#0:text == null|});
+		Debug.Assert({|#1:text != null|});
+
+		Debug.Assert({|#2:text.Equals(null)|});
+		Debug.Assert({|#3:!text.Equals(null)|});
+	}
+}";
+
+			var fix =
+@"using System;
+using System.Diagnostics;
+
+record Record();
+
+class Test
+{
+	void Method(string text)
+	{
+		Debug.Assert(text is null);
+		Debug.Assert(text is not null);
+
+		Debug.Assert(text is null);
+		Debug.Assert(text is not null);
+	}
+}";
+
+			var expected = new[]
+			{
+				CreateEqualityComparisonDiagnostic(0, "is", "overloaded", "==", "operator", "null"),
+				CreateEqualityComparisonDiagnostic(1, "is not", "overloaded", "!=", "operator", "non-null"),
+
+				CreateEqualityComparisonDiagnostic(2, "is", "overridden", "Equals", "method", "null"),
+				CreateEqualityComparisonDiagnostic(3, "is not", "overridden", "Equals", "method", "non-null"),
 			};
 
 			await VerifyAsync(code, expected, fix);

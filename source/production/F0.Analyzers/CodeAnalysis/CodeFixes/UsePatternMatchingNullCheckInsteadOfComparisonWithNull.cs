@@ -26,25 +26,33 @@ namespace F0.CodeAnalysis.CodeFixes
 			var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
 
 			Debug.Assert(root is not null, $"Document doesn't support providing data: {{ {nameof(Document.SupportsSyntaxTree)} = {context.Document.SupportsSyntaxTree} }}");
-			var expression = root.FindNode(context.Span);
+			var node = root.FindNode(context.Span, false, true);
 
 			Debug.Assert(context.Diagnostics.Length is 1);
 			var diagnostic = context.Diagnostics[0];
-			var action = CodeAction.Create(Title, ct => ReplaceWithPatternMatching(context.Document, expression, ct), diagnostic.Id);
+			var action = CodeAction.Create(Title, ct => ReplaceWithPatternMatching(context.Document, node, ct), diagnostic.Id);
 			context.RegisterCodeFix(action, diagnostic);
 		}
 
-		private static async Task<Document> ReplaceWithPatternMatching(Document document, SyntaxNode expression, CancellationToken cancellationToken)
+		private static Task<Document> ReplaceWithPatternMatching(Document document, SyntaxNode node, CancellationToken cancellationToken)
 		{
-			var semanticModel = await document.GetSemanticModelAsync(cancellationToken).ConfigureAwait(false);
-			Debug.Assert(semanticModel is not null, $"{nameof(Document)} does not support semantic model: {{ {nameof(Document.SupportsSemanticModel)} = {document.SupportsSemanticModel} }}");
+			var expression = node switch
+			{
+				ExpressionSyntax syntax => syntax,
+				_ => throw new ArgumentException($"Invalid argument '{node}' of type '{node.GetType()}' was specified.", nameof(node)),
+			};
 
+			return ReplaceWithPatternMatching(document, expression, cancellationToken);
+		}
+
+		private static async Task<Document> ReplaceWithPatternMatching(Document document, ExpressionSyntax expression, CancellationToken cancellationToken)
+		{
 			var newExpression = expression switch
 			{
 				BinaryExpressionSyntax binary => CreateFromBinaryExpression(binary),
 				InvocationExpressionSyntax invocation => CreatePatternExpression(invocation),
 				PrefixUnaryExpressionSyntax prefixUnary => CreateNegatedPatternExpression(prefixUnary),
-				_ => throw new ArgumentException(null, nameof(expression)),
+				_ => throw new ArgumentException($"Invalid argument '{expression}' of type '{expression.GetType()}' was specified.", nameof(expression)),
 			};
 
 			var root = await document.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false);

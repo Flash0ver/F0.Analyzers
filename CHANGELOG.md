@@ -2,6 +2,8 @@
 CHANGELOG
 
 ## vNext
+### Analyzers
+- Fixed `UsePatternMatchingNullCheckInsteadOfComparisonWithNull` code fix provider, when fixing `null` check expressions in arguments.
 
 ## v0.7.0 (2021-05-11)
 ### Analyzers

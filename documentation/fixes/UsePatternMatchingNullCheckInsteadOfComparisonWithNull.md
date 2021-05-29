@@ -74,6 +74,7 @@ public void NullCheck(Record instance, IEquatable<Record> equatable, IEqualityCo
 
 ## History
 
+- [vNext](../../CHANGELOG.md#vNext)
 - [0.7.0](../../CHANGELOG.md#v070-2021-05-11)
 
 
