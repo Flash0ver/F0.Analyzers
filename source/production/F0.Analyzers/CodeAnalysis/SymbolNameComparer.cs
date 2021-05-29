@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
@@ -18,7 +19,7 @@ namespace F0.CodeAnalysis
 			Debug.Assert(x is not null, $"{nameof(x)} not expected to be null");
 			Debug.Assert(y is not null, $"{nameof(y)} not expected to be null");
 
-			return x.Name.Equals(y.Name);
+			return x.Name.Equals(y.Name, StringComparison.Ordinal);
 		}
 
 		public override int GetHashCode([DisallowNull] ISymbol obj)
