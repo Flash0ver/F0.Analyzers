@@ -16,7 +16,7 @@ namespace F0.CodeAnalysis.Diagnostics
 			DiagnosticSeverity.Warning,
 			true,
 			"GOTO Statement Considered Harmful",
-			"https://github.com/Flash0ver/F0.Analyzers/blob/master/documentation/diagnostics/F00001.md"
+			DiagnosticHelpLinkUris.F00001
 		);
 
 		public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
@@ -29,8 +29,11 @@ namespace F0.CodeAnalysis.Diagnostics
 			context.RegisterSyntaxNodeAction(SyntaxNodeAction, GotoStatementSyntaxKinds);
 		}
 
-		private static readonly ImmutableArray<SyntaxKind> GotoStatementSyntaxKinds = ImmutableArray.Create(SyntaxKind.GotoStatement,
-			SyntaxKind.GotoCaseStatement, SyntaxKind.GotoDefaultStatement);
+		private static readonly ImmutableArray<SyntaxKind> GotoStatementSyntaxKinds = ImmutableArray.Create(
+			SyntaxKind.GotoStatement,
+			SyntaxKind.GotoCaseStatement,
+			SyntaxKind.GotoDefaultStatement
+		);
 
 		private static void SyntaxNodeAction(SyntaxNodeAnalysisContext syntaxNodeContext)
 		{

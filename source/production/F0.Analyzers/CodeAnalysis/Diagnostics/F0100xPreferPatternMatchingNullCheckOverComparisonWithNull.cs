@@ -26,7 +26,7 @@ namespace F0.CodeAnalysis.Diagnostics
 			DiagnosticSeverity.Warning,
 			true,
 			Description,
-			"https://github.com/Flash0ver/F0.Analyzers/blob/master/documentation/diagnostics/F0100x.md#F01001"
+			DiagnosticHelpLinkUris.F01001
 		);
 
 		internal static readonly DiagnosticDescriptor IdentityComparisonRule = new(
@@ -37,7 +37,7 @@ namespace F0.CodeAnalysis.Diagnostics
 			DiagnosticSeverity.Info,
 			true,
 			Description,
-			"https://github.com/Flash0ver/F0.Analyzers/blob/master/documentation/diagnostics/F0100x.md#F01002"
+			DiagnosticHelpLinkUris.F01002
 		);
 
 		private const string ObjectReferenceEquals = "ReferenceEquals";
