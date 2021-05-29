@@ -24,12 +24,7 @@ $LocalFeedName = 'local-feed'
 $PackageSourcePath = "./$LocalFeedName"
 $LocalFeedDirectory = Join-Path -Path $RepositoryRootPath -ChildPath $LocalFeedName
 $ExampleDirectory = Join-Path -Path $RepositoryRootPath -ChildPath 'source' -AdditionalChildPath 'example'
-$ExampleProjects = @(
-    Join-Path -Path $ExampleDirectory -ChildPath 'F0.Analyzers.Example' -AdditionalChildPath 'F0.Analyzers.Example.csproj'
-    Join-Path -Path $ExampleDirectory -ChildPath 'F0.Analyzers.Example.CSharp2' -AdditionalChildPath 'F0.Analyzers.Example.CSharp2.csproj'
-    Join-Path -Path $ExampleDirectory -ChildPath 'F0.Analyzers.Example.CSharp7' -AdditionalChildPath 'F0.Analyzers.Example.CSharp7.csproj'
-    Join-Path -Path $ExampleDirectory -ChildPath 'F0.Analyzers.Example.CSharp8' -AdditionalChildPath 'F0.Analyzers.Example.CSharp8.csproj'
-)
+$ExampleProjects =  Get-ChildItem -Path $ExampleDirectory -Filter '*.csproj' -Recurse -Depth 1 -File
 
 function Add-LocalFeed {
     Write-Host 'create directory' -ForegroundColor Blue
