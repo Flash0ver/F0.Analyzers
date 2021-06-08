@@ -252,7 +252,7 @@ namespace F0.CodeAnalysis.CodeRefactorings
 			{
 				IPropertySymbol property => (INamedTypeSymbol)property.Type,
 				IFieldSymbol field => (INamedTypeSymbol)field.Type,
-				_ => throw new ArgumentException(null, nameof(member)),
+				_ => throw new ArgumentException($"Invalid argument '{member}' of type '{member.GetType()}' was specified.", nameof(member)),
 			};
 		}
 
