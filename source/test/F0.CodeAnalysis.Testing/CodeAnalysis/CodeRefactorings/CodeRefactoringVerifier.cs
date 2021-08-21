@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using F0.Testing.Extensions;
 using Microsoft.CodeAnalysis.CodeRefactorings;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.Testing;
 
 namespace F0.Testing.CodeAnalysis.CodeRefactorings
 {
@@ -51,14 +52,28 @@ namespace F0.Testing.CodeAnalysis.CodeRefactorings
 			return tester.RunAsync(CancellationToken.None);
 		}
 
-		public Task CodeActionAsync(string initialCode, string expectedCode, string[][] additionalProjects, LanguageVersion languageVersion)
+		public Task CodeActionAsync(string initialCode, string expectedCode, LanguageVersion languageVersion, ReferenceAssemblies referenceAssemblies)
 		{
-			var tester = CreateTester(initialCode, expectedCode, languageVersion, additionalProjects);
+			var tester = CreateTester(initialCode, expectedCode, languageVersion, referenceAssemblies);
 
 			return tester.RunAsync(CancellationToken.None);
 		}
 
-		private static CodeRefactoringTester<TCodeRefactoring> CreateTester(string initialCode, string? expectedCode = null, LanguageVersion? languageVersion = null, string[][]? additionalProjects = null)
+		public Task CodeActionAsync(string initialCode, string expectedCode, LanguageVersion languageVersion, string[][] additionalProjects)
+		{
+			var tester = CreateTester(initialCode, expectedCode, languageVersion, null, additionalProjects);
+
+			return tester.RunAsync(CancellationToken.None);
+		}
+
+		public Task CodeActionAsync(string initialCode, string expectedCode, LanguageVersion languageVersion, ReferenceAssemblies referenceAssemblies, string[][] additionalProjects)
+		{
+			var tester = CreateTester(initialCode, expectedCode, languageVersion, referenceAssemblies, additionalProjects);
+
+			return tester.RunAsync(CancellationToken.None);
+		}
+
+		private static CodeRefactoringTester<TCodeRefactoring> CreateTester(string initialCode, string? expectedCode = null, LanguageVersion? languageVersion = null, ReferenceAssemblies? referenceAssemblies = null, string[][]? additionalProjects = null)
 		{
 			var normalizedInitialCode = initialCode.Untabify();
 
@@ -71,6 +86,11 @@ namespace F0.Testing.CodeAnalysis.CodeRefactorings
 			if (languageVersion.HasValue)
 			{
 				tester.LanguageVersion = languageVersion;
+			}
+
+			if (referenceAssemblies is not null)
+			{
+				tester.TestState.ReferenceAssemblies = referenceAssemblies;
 			}
 
 			if (additionalProjects is not null)

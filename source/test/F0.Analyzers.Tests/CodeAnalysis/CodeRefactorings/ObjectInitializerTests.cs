@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using F0.CodeAnalysis.CodeRefactorings;
 using F0.Testing.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.Testing;
 using Xunit;
 
 namespace F0.Tests.CodeAnalysis.CodeRefactorings
@@ -40,11 +41,11 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 		private static Task VerifyAsync(string initialCode, string expectedCode, LanguageVersion languageVersion)
 			=> Verify.CodeRefactoring<ObjectInitializer>().CodeActionAsync(initialCode, expectedCode, languageVersion);
 
-		private static Task VerifyAsync(string initialCode, string expectedCode, string[][] additionalProjects)
-			=> Verify.CodeRefactoring<ObjectInitializer>().CodeActionAsync(initialCode, expectedCode, additionalProjects, LanguageVersion.Latest);
+		private static Task VerifyAsync(string initialCode, string expectedCode, LanguageVersion languageVersion, ReferenceAssemblies referenceAssemblies)
+			=> Verify.CodeRefactoring<ObjectInitializer>().CodeActionAsync(initialCode, expectedCode, languageVersion, referenceAssemblies);
 
-		private static Task VerifyAsync(string initialCode, string expectedCode, string[][] additionalProjects, LanguageVersion languageVersion)
-			=> Verify.CodeRefactoring<ObjectInitializer>().CodeActionAsync(initialCode, expectedCode, additionalProjects, languageVersion);
+		private static Task VerifyAsync(string initialCode, string expectedCode, string[][] additionalProjects)
+			=> Verify.CodeRefactoring<ObjectInitializer>().CodeActionAsync(initialCode, expectedCode, LanguageVersion.Latest, additionalProjects);
 
 		private static Task VerifyNoOpAsync(string code)
 			=> Verify.CodeRefactoring<ObjectInitializer>().NoOpAsync(code, LanguageVersion.Latest);

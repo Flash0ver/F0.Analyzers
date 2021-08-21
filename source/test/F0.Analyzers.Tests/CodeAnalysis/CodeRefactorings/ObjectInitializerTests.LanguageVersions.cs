@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.Testing;
 using Xunit;
 
 namespace F0.Tests.CodeAnalysis.CodeRefactorings
@@ -173,6 +174,63 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 				}";
 
 			await VerifyAsync(initialCode, expectedCode, LanguageVersion.CSharp7_1);
+		}
+
+		[Fact]
+		public async Task ComputeRefactoringsAsync_CSharp9_InitAccessor()
+		{
+			var initialCode =
+				@"using System;
+
+				class GlobalType { }
+
+				namespace Namespace.Types
+				{
+					class NamespacedType { }
+				}
+
+				class Model { public GlobalType Global; public Namespace.Types.NamespacedType Namespaced { get; init; } public Tuple<string, Type, System.Data.DbType> Constructed { get; init; } }
+
+				namespace Namespace
+				{
+					class C
+					{
+						void Test()
+						{
+							var model = [|new Model()|];
+						}
+					}
+				}";
+
+			var expectedCode =
+				@"using System;
+
+				class GlobalType { }
+
+				namespace Namespace.Types
+				{
+					class NamespacedType { }
+				}
+
+				class Model { public GlobalType Global; public Namespace.Types.NamespacedType Namespaced { get; init; } public Tuple<string, Type, System.Data.DbType> Constructed { get; init; } }
+
+				namespace Namespace
+				{
+					class C
+					{
+						void Test()
+						{
+							var model = new Model()
+							{
+								Global = default,
+								Namespaced = default,
+								Constructed = default
+							};
+						}
+					}
+				}";
+
+			await VerifyAsync(initialCode, expectedCode, LanguageVersion.CSharp9, ReferenceAssemblies.Net.Net50);
 		}
 	}
 }
