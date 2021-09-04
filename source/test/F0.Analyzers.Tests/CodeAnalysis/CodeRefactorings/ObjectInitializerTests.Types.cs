@@ -1,4 +1,6 @@
 using System.Threading.Tasks;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.Testing;
 using Xunit;
 
 namespace F0.Tests.CodeAnalysis.CodeRefactorings
@@ -136,7 +138,6 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 			await VerifyAsync(initialCode, expectedCode);
 		}
 
-
 		[Fact]
 		public async Task ComputeRefactoringsAsync_ClassWithMultipleProperties_CreatesObjectInitializerWithMultipleProperties()
 		{
@@ -173,7 +174,6 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 
 			await VerifyAsync(initialCode, expectedCode);
 		}
-
 
 		[Fact]
 		public async Task ComputeRefactoringsAsync_ClassWithConstructor_CreatesObjectInitializerAndKeepsParameter()
@@ -324,6 +324,117 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 				}";
 
 			await VerifyAsync(initialCode, expectedCode, new string[][] { new[] { externalCode } });
+		}
+
+		[Fact]
+		public async Task ComputeRefactoringsAsync_PositionalRecordTypeWithPrimaryConstructor_CreatesObjectInitializerWithTheSynthesizedAutoPropertiesFromTheParameterList()
+		{
+			var initialCode =
+				@"using System;
+
+				record Model(string Text, int Number, bool Condition);
+
+				class C
+				{
+					void Test()
+					{
+						var model = [|new Model(""F0"", 0x_F0, false)|];
+					}
+				}";
+
+			var expectedCode =
+				@"using System;
+
+				record Model(string Text, int Number, bool Condition);
+
+				class C
+				{
+					void Test()
+					{
+						var model = new Model(""F0"", 0x_F0, false)
+						{
+							Text = default,
+							Number = default,
+							Condition = default
+						};
+					}
+				}";
+
+			await VerifyAsync(initialCode, expectedCode, LanguageVersion.CSharp9, ReferenceAssemblies.Net.Net50);
+		}
+
+		[Fact]
+		public async Task ComputeRefactoringsAsync_RecordTypeWithStandardPropertyAndFieldSyntax_CreatesObjectInitializerWithMembersFromTheRecordBody()
+		{
+			var initialCode =
+				@"using System;
+
+				record Model { public string Text { get; init; } public int Number { get; set; } public bool Condition; }
+
+				class C
+				{
+					void Test()
+					{
+						var model = [|new Model()|];
+					}
+				}";
+
+			var expectedCode =
+				@"using System;
+
+				record Model { public string Text { get; init; } public int Number { get; set; } public bool Condition; }
+
+				class C
+				{
+					void Test()
+					{
+						var model = new Model()
+						{
+							Condition = default,
+							Text = default,
+							Number = default
+						};
+					}
+				}";
+
+			await VerifyAsync(initialCode, expectedCode, LanguageVersion.CSharp9, ReferenceAssemblies.Net.Net50);
+		}
+
+		[Fact]
+		public async Task ComputeRefactoringsAsync_RecordTypeWithSynthesizedAndDeclaredProperties_CreatesObjectInitializerWithAllProperties()
+		{
+			var initialCode =
+				@"using System;
+
+				record Model(string Text, int Number) { public int Number { get; init; } public bool Condition { get; init; } }
+
+				class C
+				{
+					void Test()
+					{
+						var model = [|new Model(""F0"", 0x_F0)|];
+					}
+				}";
+
+			var expectedCode =
+				@"using System;
+
+				record Model(string Text, int Number) { public int Number { get; init; } public bool Condition { get; init; } }
+
+				class C
+				{
+					void Test()
+					{
+						var model = new Model(""F0"", 0x_F0)
+						{
+							Text = default,
+							Number = default,
+							Condition = default
+						};
+					}
+				}";
+
+			await VerifyAsync(initialCode, expectedCode, LanguageVersion.CSharp9, ReferenceAssemblies.Net.Net50);
 		}
 	}
 }

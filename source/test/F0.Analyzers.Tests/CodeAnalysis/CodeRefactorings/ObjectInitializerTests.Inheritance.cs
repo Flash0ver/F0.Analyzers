@@ -1,5 +1,7 @@
 using System.Threading.Tasks;
 using F0.Testing.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.Testing;
 using Xunit;
 
 namespace F0.Tests.CodeAnalysis.CodeRefactorings
@@ -708,6 +710,46 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 				}";
 
 			await VerifyAsync(initialCode, expectedCode, new string[][] { new[] { externalCode } });
+		}
+
+		[Fact]
+		public async Task ComputeRefactoringsAsync_RecordType_AssignBaseMembersBeforeDerivedMembers()
+		{
+			var initialCode =
+				@"using System;
+
+				abstract record Base(string Text) { public int Number { get; init; } }
+				sealed record Derived(string Text, char Character) : Base(Text) { public bool Condition { get; init; } }
+
+				class C
+				{
+					void Test()
+					{
+						var instance = [|new Derived("""", ' ')|];
+					}
+				}";
+
+			var expectedCode =
+				@"using System;
+
+				abstract record Base(string Text) { public int Number { get; init; } }
+				sealed record Derived(string Text, char Character) : Base(Text) { public bool Condition { get; init; } }
+
+				class C
+				{
+					void Test()
+					{
+						var instance = new Derived("""", ' ')
+						{
+							Text = default,
+							Number = default,
+							Character = default,
+							Condition = default
+						};
+					}
+				}";
+
+			await VerifyAsync(initialCode, expectedCode, LanguageVersion.CSharp9, ReferenceAssemblies.Net.Net50);
 		}
 	}
 }
