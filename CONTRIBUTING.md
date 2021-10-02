@@ -124,3 +124,6 @@ The ultimate requisite for each release is that all tests pass and the productio
     - with new _tag_ @ `master` (prefix with the letter `v`)
     - with _release title_ `F0.Analyzers {Version}` (without `v` prefix)
     - with description
+- finish the [milestone](https://github.com/Flash0ver/F0.Analyzers/milestones)
+  - edit & close current milestone
+  - open new milestone, with title `vNext`
