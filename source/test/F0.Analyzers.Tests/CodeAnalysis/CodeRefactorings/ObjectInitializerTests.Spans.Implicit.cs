@@ -6,7 +6,7 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 	public partial class ObjectInitializerTests
 	{
 		[Fact]
-		public async Task ComputeRefactoringsAsync_NotSupportedSelection_NoOp()
+		public async Task ComputeRefactoringsAsync_Implicit_NotSupportedSelection_NoOp()
 		{
 			var code =
 				@"using System;
@@ -17,7 +17,7 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 				{
 					void Test()$$
 					{
-						var empty = new Empty();
+						Empty empty = new();
 					}
 				}";
 
@@ -25,7 +25,7 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 		}
 
 		[Fact]
-		public async Task ComputeRefactoringsAsync_CursorBeforeNewStatement_CreatesObjectInitializer()
+		public async Task ComputeRefactoringsAsync_Implicit_CursorBeforeNewStatement_CreatesObjectInitializer()
 		{
 			var initialCode =
 				@"using System;
@@ -36,7 +36,7 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 				{
 					void Test()
 					{
-						var model = $$new Model();
+						Model model = $$new();
 					}
 				}";
 
@@ -49,7 +49,7 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 				{
 					void Test()
 					{
-						var model = new Model()
+						Model model = new()
 						{
 							Text = default
 						};
@@ -60,7 +60,7 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 		}
 
 		[Fact]
-		public async Task ComputeRefactoringsAsync_CursorBeforeTypeName_CreatesObjectInitializer()
+		public async Task ComputeRefactoringsAsync_Implicit_CursorBeforeArgumentList_CreatesObjectInitializer()
 		{
 			var initialCode =
 				@"using System;
@@ -71,7 +71,7 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 				{
 					void Test()
 					{
-						var model = new $$Model();
+						Model model = new$$();
 					}
 				}";
 
@@ -84,7 +84,7 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 				{
 					void Test()
 					{
-						var model = new Model()
+						Model model = new()
 						{
 							Text = default
 						};
@@ -95,42 +95,7 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 		}
 
 		[Fact]
-		public async Task ComputeRefactoringsAsync_CursorBeforeArgumentList_CreatesObjectInitializer()
-		{
-			var initialCode =
-				@"using System;
-
-				class Model { public string Text { get; set; } }
-
-				class C
-				{
-					void Test()
-					{
-						var model = new Model$$();
-					}
-				}";
-
-			var expectedCode =
-				@"using System;
-
-				class Model { public string Text { get; set; } }
-
-				class C
-				{
-					void Test()
-					{
-						var model = new Model()
-						{
-							Text = default
-						};
-					}
-				}";
-
-			await VerifyAsync(initialCode, expectedCode);
-		}
-
-		[Fact]
-		public async Task ComputeRefactoringsAsync_CursorAfterArgumentList_NoAction()
+		public async Task ComputeRefactoringsAsync_Implicit_CursorAfterArgumentList_NoAction()
 		{
 			var code =
 				@"using System;
@@ -141,7 +106,7 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 				{
 					void Test()
 					{
-						var model = new Model()$$;
+						Model model = new()$$;
 					}
 				}";
 
@@ -149,7 +114,7 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 		}
 
 		[Fact]
-		public async Task ComputeRefactoringsAsync_ArgumentListIsSelected_CreatesObjectInitializer()
+		public async Task ComputeRefactoringsAsync_Implicit_ArgumentListIsSelected_CreatesObjectInitializer()
 		{
 			var initialCode =
 				@"using System;
@@ -160,7 +125,7 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 				{
 					void Test()
 					{
-						var model = new Model[|()|];
+						Model model = new[|()|];
 					}
 				}";
 
@@ -173,7 +138,7 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 				{
 					void Test()
 					{
-						var model = new Model()
+						Model model = new()
 						{
 							Text = default
 						};
@@ -184,7 +149,7 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 		}
 
 		[Fact]
-		public async Task ComputeRefactoringsAsync_CursorInEmptyArgumentList_CreatesObjectInitializer()
+		public async Task ComputeRefactoringsAsync_Implicit_CursorInEmptyArgumentList_CreatesObjectInitializer()
 		{
 			var initialCode =
 				@"using System;
@@ -195,7 +160,7 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 				{
 					void Test()
 					{
-						var model = new Model($$);
+						Model model = new($$);
 					}
 				}";
 
@@ -208,7 +173,7 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 				{
 					void Test()
 					{
-						var model = new Model()
+						Model model = new()
 						{
 							Text = default
 						};

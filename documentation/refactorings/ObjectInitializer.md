@@ -17,11 +17,12 @@ This code refactoring adds an object initializer, assigning matching `locals`, m
 ## Remarks
 
 C# language features
-- The `default operator` feature is available since C# 2.0.
-- The `object initializer` feature is available since C# 3.0.
-- The `default literal` feature is available since C# 7.1.
+- The `default operator` feature is available since _C# 2.0_.
+- The `object initializer` feature is available since _C# 3.0_.
+- The `default literal` feature is available since _C# 7.1_.
+- The `target-typed new expressions` feature is available since _C# 9.0_.
 
-This code refactoring (titled `Create Object Initializer`) creates an object initializer from any object creation expression (`new operator`) and initializes all instance members that are both accessible and mutable.
+This code refactoring (titled `Create Object Initializer`) creates an object initializer from any explicit or implicit object creation expression (`new operator`) and initializes all instance members that are both accessible and mutable.
 
 Assignable members (declared or inherited) must be accessible from the location of the object initializer:
 - `public` (unrestricted)
@@ -96,14 +97,17 @@ class MyClass
 - [Object initializers](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/object-and-collection-initializers#object-initializers)
 - [default value expressions](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/operators/default)
 - [new operator](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/operators/new-operator)
+- [target-typed new expressions](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/proposals/csharp-9.0/target-typed-new)
 - [Friend assemblies](https://docs.microsoft.com/en-us/dotnet/standard/assembly/friend)
 - [C# version 2.0](https://docs.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-version-history#c-version-20)
 - [C# version 3.0](https://docs.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-version-history#c-version-30)
 - [C# version 7.1](https://docs.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-version-history#c-version-71)
+- [C# version 9.0](https://docs.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-version-history#c-version-90)
 - [C# Coding Style](https://github.com/dotnet/runtime/blob/master/docs/coding-guidelines/coding-style.md)
 
 ## History
 
+- [vNext](../../CHANGELOG.md#vNext)
 - [0.6.1](../../CHANGELOG.md#v061-2021-04-18)
 - [0.6.0](../../CHANGELOG.md#v060-2020-11-21)
 - [0.5.0](../../CHANGELOG.md#v050-2020-09-29)

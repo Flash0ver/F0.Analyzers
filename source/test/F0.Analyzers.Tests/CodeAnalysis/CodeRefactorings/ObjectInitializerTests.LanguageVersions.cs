@@ -232,5 +232,62 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 
 			await VerifyAsync(initialCode, expectedCode, LanguageVersion.CSharp9, ReferenceAssemblies.Net.Net50);
 		}
+
+		[Fact]
+		public async Task ComputeRefactoringsAsync_CSharp9_TargetTypedNewExpression()
+		{
+			var initialCode =
+				@"using System;
+
+				class GlobalType { }
+
+				namespace Namespace.Types
+				{
+					class NamespacedType { }
+				}
+
+				class Model { public GlobalType Global; public Namespace.Types.NamespacedType Namespaced { get; set; } public Tuple<string, Type, System.Data.DbType> Constructed { get; set; } }
+
+				namespace Namespace
+				{
+					class C
+					{
+						void Test()
+						{
+							Model model = [|new()|];
+						}
+					}
+				}";
+
+			var expectedCode =
+				@"using System;
+
+				class GlobalType { }
+
+				namespace Namespace.Types
+				{
+					class NamespacedType { }
+				}
+
+				class Model { public GlobalType Global; public Namespace.Types.NamespacedType Namespaced { get; set; } public Tuple<string, Type, System.Data.DbType> Constructed { get; set; } }
+
+				namespace Namespace
+				{
+					class C
+					{
+						void Test()
+						{
+							Model model = new()
+							{
+								Global = default,
+								Namespaced = default,
+								Constructed = default
+							};
+						}
+					}
+				}";
+
+			await VerifyAsync(initialCode, expectedCode, LanguageVersion.CSharp9);
+		}
 	}
 }
