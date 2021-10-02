@@ -15,7 +15,7 @@ variables:
   DOTNET_NOLOGO: true
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
   DOTNET_CLI_TELEMETRY_OPTOUT: true
-  Image_Name: 'ubuntu-18.04'
+  Image_Name: 'ubuntu-20.04'
   Build_Configuration: 'Release'
 
 jobs:
