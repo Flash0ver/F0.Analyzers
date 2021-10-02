@@ -43,7 +43,7 @@ namespace F0.CodeAnalysis.CodeRefactorings
 				var semanticModel = compilation.GetSemanticModel(objectCreationExpression.SyntaxTree);
 
 				var typeInfo = semanticModel.GetTypeInfo(objectCreationExpression, context.CancellationToken);
-				Debug.Assert(typeInfo.Type is not null, $"Expected {nameof(ObjectCreationExpressionSyntax)} to have a type");
+				Debug.Assert(typeInfo.Type is not null, $"Expected {nameof(BaseObjectCreationExpressionSyntax)} to have a type");
 				Debug.Assert(typeInfo.Type is not IErrorTypeSymbol, $"Type could not be determined due to an error: {typeInfo.Type}");
 
 				if (!IsCollection(typeInfo.Type))
@@ -61,15 +61,15 @@ namespace F0.CodeAnalysis.CodeRefactorings
 			return parseOptions.LanguageVersion >= LanguageVersion.CSharp3;
 		}
 
-		private static bool TryGetObjectCreationExpression(SyntaxNode node, [NotNullWhen(true)] out ObjectCreationExpressionSyntax? objectCreationExpression)
+		private static bool TryGetObjectCreationExpression(SyntaxNode node, [NotNullWhen(true)] out BaseObjectCreationExpressionSyntax? objectCreationExpression)
 		{
-			if (node is ObjectCreationExpressionSyntax nodeExpression)
+			if (node is BaseObjectCreationExpressionSyntax nodeExpression)
 			{
 				objectCreationExpression = nodeExpression;
 				return true;
 			}
 
-			if (node.Parent is ObjectCreationExpressionSyntax parentExpression)
+			if (node.Parent is BaseObjectCreationExpressionSyntax parentExpression)
 			{
 				objectCreationExpression = parentExpression;
 				return true;
@@ -79,7 +79,7 @@ namespace F0.CodeAnalysis.CodeRefactorings
 			return false;
 		}
 
-		private static bool HasObjectInitializer(ObjectCreationExpressionSyntax objectCreationExpression)
+		private static bool HasObjectInitializer(BaseObjectCreationExpressionSyntax objectCreationExpression)
 		{
 			var childNodes = objectCreationExpression.ChildNodes();
 			return childNodes.Any(n => n is InitializerExpressionSyntax);
@@ -91,7 +91,7 @@ namespace F0.CodeAnalysis.CodeRefactorings
 			return interfaces.Any(i => i.SpecialType is SpecialType.System_Collections_IEnumerable);
 		}
 
-		private static async Task<Document> CreateObjectInitializer(Document document, SemanticModel semanticModel, ObjectCreationExpressionSyntax objectCreationExpression, TypeInfo typeInfo, CancellationToken cancellationToken)
+		private static async Task<Document> CreateObjectInitializer(Document document, SemanticModel semanticModel, BaseObjectCreationExpressionSyntax objectCreationExpression, TypeInfo typeInfo, CancellationToken cancellationToken)
 		{
 			var mutableMembers = GetMutableMembers(typeInfo, semanticModel.Compilation);
 
