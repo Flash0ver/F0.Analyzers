@@ -30,7 +30,8 @@ See [CHANGELOG.md](./CHANGELOG.md).
 ## Contributing Guidelines
 See [CONTRIBUTING.md](./CONTRIBUTING.md).
 
-## Visual Studio Compatibility
-Consuming _code refactorings_ via `PackageReference` requires at least _Visual Studio 2019 version 16.5.0_.
-
-> Analyzer authors can now distribute custom code refactorings as a NuGet package when previously it could only be distributed as a VSIX.
+## Compatibility
+### .NET 5.0
+supports _SDK 5.0.100_ and later
+### Visual Studio 2019
+supports _16.8.0_ and later
