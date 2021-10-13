@@ -1,8 +1,8 @@
 <Project>
 
   <PropertyGroup>
-    <F0Version>0.7.1</F0Version>
-    <F0ReleaseNotes>Fixed null check code fixes to replace null checks with pattern matching in arguments.</F0ReleaseNotes>
+    <F0Version>0.8.0</F0Version>
+    <F0ReleaseNotes>Changed the object initializer code refactoring to also support C# 9 target-typed new expressions (implicit object creation expressions).</F0ReleaseNotes>
   </PropertyGroup>
 
 </Project>
