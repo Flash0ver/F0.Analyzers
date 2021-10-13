@@ -3,7 +3,7 @@ CHANGELOG
 
 ## vNext
 
-## v0.8.0 (2021-10-12)
+## v0.8.0 (2021-10-13)
 ### Analyzers
 - Changed `ObjectInitializer` code refactoring, additionally supporting _implicit object creation expressions_ (i.e. _target-typed `new` expressions_), introduced in _C# 9.0_.
 
