@@ -54,3 +54,4 @@ jobs:
       testResultsFormat: 'VSTest'
       testResultsFiles: '**/*.trx'
       mergeTestResults: true
+      failTaskOnFailedTests: false
