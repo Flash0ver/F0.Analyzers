@@ -23,7 +23,7 @@ namespace F0.Benchmarks
 			static IConfig CreateBenchmarkConfiguration()
 				=> DefaultConfig.Instance
 					.AddJob(Job.InProcess.WithRuntime(ClrRuntime.Net472))
-					.AddJob(Job.InProcess.WithRuntime(CoreRuntime.Core50))
+					.AddJob(Job.InProcess.WithRuntime(CoreRuntime.Core60))
 					.AddColumn(StatisticColumn.Min, StatisticColumn.Max, StatisticColumn.Median)
 					.AddDiagnoser(MemoryDiagnoser.Default)
 					.AddExporter(DefaultExporters.AsciiDoc)
