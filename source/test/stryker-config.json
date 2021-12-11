@@ -6,7 +6,6 @@
       "html"
     ],
     "project": "F0.Analyzers.csproj",
-    "solution": "../../F0.Analyzers.sln",
     "thresholds": {
       "high": 80,
       "low": 70,
