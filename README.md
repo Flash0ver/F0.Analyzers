@@ -31,7 +31,12 @@ See [CHANGELOG.md](./CHANGELOG.md).
 See [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 ## Compatibility
+requires _Roslyn v3.8.0_ or later (see [packages of the .NET Compiler Platform](https://github.com/dotnet/roslyn/blob/main/docs/wiki/NuGet-packages.md))
 ### .NET 5.0
-supports _SDK 5.0.100_ and later
+supports [SDK 5.0.100](https://github.com/dotnet/core/blob/main/release-notes/5.0/5.0.0/5.0.0.md) and later
 ### Visual Studio 2019
-supports _16.8.0_ and later
+supports [16.8.0](https://docs.microsoft.com/en-us/visualstudio/releases/2019/release-notes-v16.8) and later
+### Rider
+supports [2020.3](https://www.jetbrains.com/rider/whatsnew/2020-3/) and later
+### Visual Studio Code
+supports _OmniSharp (C#)_ [1.23.7](https://github.com/OmniSharp/omnisharp-vscode/releases/tag/v1.23.7) and later
