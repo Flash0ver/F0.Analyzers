@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-
 namespace F0.Extensions
 {
 	internal static class EnumerableExtensions

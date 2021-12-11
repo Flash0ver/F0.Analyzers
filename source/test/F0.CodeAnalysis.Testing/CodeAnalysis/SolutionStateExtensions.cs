@@ -1,7 +1,3 @@
-using System;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.Testing;
-
 namespace F0.Testing.CodeAnalysis
 {
 	internal static class SolutionStateExtensions

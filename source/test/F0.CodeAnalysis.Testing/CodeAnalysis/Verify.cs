@@ -1,13 +1,9 @@
 using F0.Testing.CodeAnalysis.CodeFixes;
 using F0.Testing.CodeAnalysis.CodeRefactorings;
 using F0.Testing.CodeAnalysis.Diagnostics;
-using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CodeRefactorings;
-using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Diagnostics;
-using Microsoft.CodeAnalysis.Testing;
-using Microsoft.CodeAnalysis.Testing.Verifiers;
 
 namespace F0.Testing.CodeAnalysis
 {

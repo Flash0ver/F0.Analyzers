@@ -1,9 +1,4 @@
-using System.Collections.Generic;
 using F0.CodeAnalysis;
-using FakeItEasy;
-using FluentAssertions;
-using Microsoft.CodeAnalysis;
-using Xunit;
 
 namespace F0.Tests.CodeAnalysis
 {

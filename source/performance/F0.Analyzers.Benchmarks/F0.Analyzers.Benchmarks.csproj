@@ -21,4 +21,9 @@
     <ProjectReference Include="..\F0.CodeAnalysis.Benchmarking\F0.CodeAnalysis.Benchmarking.csproj" />
   </ItemGroup>
 
+  <ItemGroup Condition="'$(ImplicitUsings)' == 'true' Or '$(ImplicitUsings)' == 'enable'">
+    <Using Include="BenchmarkDotNet.Attributes" />
+    <Using Include="Microsoft.CodeAnalysis.CSharp" />
+  </ItemGroup>
+
 </Project>

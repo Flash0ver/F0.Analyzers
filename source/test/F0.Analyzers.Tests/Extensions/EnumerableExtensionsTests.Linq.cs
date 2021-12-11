@@ -1,7 +1,4 @@
-using System.Linq;
 using F0.Extensions;
-using FluentAssertions;
-using Xunit;
 
 namespace F0.Tests.Extensions
 {

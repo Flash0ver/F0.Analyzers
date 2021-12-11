@@ -26,4 +26,13 @@
     <ProjectReference Include="..\F0.CodeAnalysis.Testing\F0.CodeAnalysis.Testing.csproj" />
   </ItemGroup>
 
+  <ItemGroup Condition="'$(ImplicitUsings)' == 'true' Or '$(ImplicitUsings)' == 'enable'">
+    <Using Include="FakeItEasy" />
+    <Using Include="FluentAssertions" />
+    <Using Include="Microsoft.CodeAnalysis" />
+    <Using Include="Microsoft.CodeAnalysis.CSharp" />
+    <Using Include="Microsoft.CodeAnalysis.Testing" />
+    <Using Include="Xunit" />
+  </ItemGroup>
+
 </Project>

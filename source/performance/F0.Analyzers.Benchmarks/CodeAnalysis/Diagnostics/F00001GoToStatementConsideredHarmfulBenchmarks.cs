@@ -1,9 +1,6 @@
-using System.Threading.Tasks;
-using BenchmarkDotNet.Attributes;
 using F0.Benchmarking.CodeAnalysis;
 using F0.Benchmarking.CodeAnalysis.Diagnostics;
 using F0.CodeAnalysis.Diagnostics;
-using Microsoft.CodeAnalysis.CSharp;
 
 namespace F0.Benchmarks.CodeAnalysis.Diagnostics
 {

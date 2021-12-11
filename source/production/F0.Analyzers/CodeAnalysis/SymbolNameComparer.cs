@@ -1,9 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using Microsoft.CodeAnalysis;
-
 namespace F0.CodeAnalysis
 {
 	internal sealed class SymbolNameComparer : EqualityComparer<ISymbol>

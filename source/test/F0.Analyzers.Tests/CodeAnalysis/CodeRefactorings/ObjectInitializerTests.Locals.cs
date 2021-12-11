@@ -1,6 +1,3 @@
-using System.Threading.Tasks;
-using Xunit;
-
 namespace F0.Tests.CodeAnalysis.CodeRefactorings
 {
 	public partial class ObjectInitializerTests

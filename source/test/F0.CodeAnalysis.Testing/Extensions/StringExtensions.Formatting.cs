@@ -1,5 +1,3 @@
-using System;
-using System.Linq;
 using Microsoft.CodeAnalysis.Formatting;
 
 namespace F0.Testing.Extensions
