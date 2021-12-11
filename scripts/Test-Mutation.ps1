@@ -10,6 +10,7 @@ Set-StrictMode -Version 3.0
 $ErrorActionPreference = 'Stop'
 
 $RepositoryRootPath = (Get-Item -Path $PSScriptRoot).Parent
+$SolutionFile = Join-Path -Path $RepositoryRootPath -ChildPath 'source' -AdditionalChildPath 'F0.Analyzers.sln'
 $SolutionFilterFile = Join-Path -Path $RepositoryRootPath -ChildPath 'source' -AdditionalChildPath 'F0.Analyzers.Core.slnf'
 $TestProjectDirectory = Join-Path -Path $RepositoryRootPath -ChildPath 'source' -AdditionalChildPath 'test', 'F0.Analyzers.Tests'
 $NuGetConfigurationFile = Join-Path -Path $RepositoryRootPath -ChildPath 'nuget.config'
@@ -19,7 +20,7 @@ dotnet clean $SolutionFilterFile
 
 dotnet tool restore --configfile $NuGetConfigurationFile
 
-Start-Process -FilePath 'dotnet' -ArgumentList "tool run dotnet-stryker --config-file $StrykerConfigurationFile" -WorkingDirectory $TestProjectDirectory -NoNewWindow -Wait
+Start-Process -FilePath 'dotnet' -ArgumentList "tool run dotnet-stryker --solution $SolutionFile --config-file $StrykerConfigurationFile" -WorkingDirectory $TestProjectDirectory -NoNewWindow -Wait
 
 if ($OpenReport) {
     $ResultsDirectory = Join-Path -Path $TestProjectDirectory -ChildPath 'StrykerOutput'
