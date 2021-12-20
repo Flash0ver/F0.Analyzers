@@ -1,14 +1,14 @@
 using F0.Testing.CodeAnalysis;
 
-namespace F0.Tests.CodeAnalysis.CodeRefactorings
+namespace F0.Tests.CodeAnalysis.CodeRefactorings;
+
+public partial class ObjectInitializerTests
 {
-	public partial class ObjectInitializerTests
+	[Fact]
+	public async Task ComputeRefactoringsAsync_AccessModifiersInternal_AssignsAccessibleMembers()
 	{
-		[Fact]
-		public async Task ComputeRefactoringsAsync_AccessModifiersInternal_AssignsAccessibleMembers()
-		{
-			var initialCode =
-				@"using System;
+		var initialCode =
+			@"using System;
 
 				class AccessModifiers
 				{
@@ -35,8 +35,8 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			var expectedCode =
-				@"using System;
+		var expectedCode =
+			@"using System;
 
 				class AccessModifiers
 				{
@@ -71,21 +71,21 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await VerifyAsync(initialCode, expectedCode);
-		}
+		await VerifyAsync(initialCode, expectedCode);
+	}
 
-		[Theory]
-		[MemberData(nameof(TestData_AccessModifiers_AssignsAccessibleMembers))]
-		public async Task ComputeRefactoringsAsync_AccessModifiersExternal_AssignsAccessibleMembers(string displayName, string externalCode, string initialCode, string expectedCode)
-		{
-			displayName.Should().NotBeNullOrWhiteSpace();
-			await VerifyAsync(initialCode, expectedCode, new string[][] { new[] { externalCode } });
-		}
+	[Theory]
+	[MemberData(nameof(TestData_AccessModifiers_AssignsAccessibleMembers))]
+	public async Task ComputeRefactoringsAsync_AccessModifiersExternal_AssignsAccessibleMembers(string displayName, string externalCode, string initialCode, string expectedCode)
+	{
+		displayName.Should().NotBeNullOrWhiteSpace();
+		await VerifyAsync(initialCode, expectedCode, new string[][] { new[] { externalCode } });
+	}
 
-		public static TheoryData<string, string, string, string> TestData_AccessModifiers_AssignsAccessibleMembers()
-		{
-			var Type_Fields =
-				@"namespace F0.Analyzers.Tests
+	public static TheoryData<string, string, string, string> TestData_AccessModifiers_AssignsAccessibleMembers()
+	{
+		var Type_Fields =
+			@"namespace F0.Analyzers.Tests
 				{
 					public class AccessModifiers
 					{
@@ -98,8 +98,8 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			var Type_Properties =
-				@"namespace F0.Analyzers.Tests
+		var Type_Properties =
+			@"namespace F0.Analyzers.Tests
 				{
 					public class AccessModifiers
 					{
@@ -112,8 +112,8 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			var markup =
-				@"using System;
+		var markup =
+			@"using System;
 				using F0.Analyzers.Tests;
 
 				class C
@@ -124,8 +124,8 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			var ObjectInitializer_InternalsInaccessible =
-				@"using System;
+		var ObjectInitializer_InternalsInaccessible =
+			@"using System;
 				using F0.Analyzers.Tests;
 
 				class C
@@ -139,8 +139,8 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			var ObjectInitializer_InternalsAccessible =
-				@"using System;
+		var ObjectInitializer_InternalsAccessible =
+			@"using System;
 				using F0.Analyzers.Tests;
 
 				class C
@@ -156,7 +156,7 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			return new TheoryData<string, string, string, string>
+		return new TheoryData<string, string, string, string>
 			{
 				{ "Fields no internals", Type_Fields, markup, ObjectInitializer_InternalsInaccessible },
 				{ "Properties no internals", Type_Properties, markup, ObjectInitializer_InternalsInaccessible },
@@ -164,13 +164,12 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 				{ "Properties with internals", WithFriend(Type_Properties), markup, ObjectInitializer_InternalsAccessible },
 			};
 
-			static string WithFriend(string code)
-			{
-				var Friend =
-					$@"using System.Runtime.CompilerServices;
+		static string WithFriend(string code)
+		{
+			var Friend =
+				$@"using System.Runtime.CompilerServices;
 					[assembly: InternalsVisibleTo(""{Projects.AssemblyName}"")]";
-				return Friend + Environment.NewLine + Environment.NewLine + code;
-			}
+			return Friend + Environment.NewLine + Environment.NewLine + code;
 		}
 	}
 }

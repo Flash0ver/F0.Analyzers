@@ -2,21 +2,21 @@ using F0.Benchmarking.CodeAnalysis;
 using F0.Benchmarking.CodeAnalysis.Diagnostics;
 using F0.CodeAnalysis.Diagnostics;
 
-namespace F0.Benchmarks.CodeAnalysis.Diagnostics
+namespace F0.Benchmarks.CodeAnalysis.Diagnostics;
+
+public class F00001GoToStatementConsideredHarmfulBenchmarks
 {
-	public class F00001GoToStatementConsideredHarmfulBenchmarks
+	private readonly DiagnosticAnalyzerBenchmark<F00001GoToStatementConsideredHarmful> benchmark;
+
+	public F00001GoToStatementConsideredHarmfulBenchmarks()
 	{
-		private readonly DiagnosticAnalyzerBenchmark<F00001GoToStatementConsideredHarmful> benchmark;
+		benchmark = Measure.DiagnosticAnalyzer<F00001GoToStatementConsideredHarmful>();
+	}
 
-		public F00001GoToStatementConsideredHarmfulBenchmarks()
-		{
-			benchmark = Measure.DiagnosticAnalyzer<F00001GoToStatementConsideredHarmful>();
-		}
-
-		[GlobalSetup]
-		public void Setup()
-		{
-			var code =
+	[GlobalSetup]
+	public void Setup()
+	{
+		var code =
 @"using System;
 
 class Class
@@ -63,24 +63,23 @@ class Class
 	}
 }";
 
-			benchmark.Initialize(code, LanguageVersion.Latest);
-		}
+		benchmark.Initialize(code, LanguageVersion.Latest);
+	}
 
-		[Benchmark]
-		public Task GoToStatementConsideredHarmful()
-			=> benchmark.InvokeAsync();
+	[Benchmark]
+	public Task GoToStatementConsideredHarmful()
+		=> benchmark.InvokeAsync();
 
-		[GlobalCleanup]
-		public void Cleanup()
-		{
-			var diagnostics = benchmark.CreateDiagnostics(
-				d => d.WithLocation(14, 9, 14, 20).WithArguments("goto Label;"),
-				d => d.WithLocation(23, 17, 23, 29).WithArguments("goto case 2;"),
-				d => d.WithLocation(26, 17, 26, 29).WithArguments("goto case 1;"),
-				d => d.WithLocation(39, 17, 39, 30).WithArguments("goto default;")
-			);
+	[GlobalCleanup]
+	public void Cleanup()
+	{
+		var diagnostics = benchmark.CreateDiagnostics(
+			d => d.WithLocation(14, 9, 14, 20).WithArguments("goto Label;"),
+			d => d.WithLocation(23, 17, 23, 29).WithArguments("goto case 2;"),
+			d => d.WithLocation(26, 17, 26, 29).WithArguments("goto case 1;"),
+			d => d.WithLocation(39, 17, 39, 30).WithArguments("goto default;")
+		);
 
-			benchmark.Inspect(diagnostics);
-		}
+		benchmark.Inspect(diagnostics);
 	}
 }

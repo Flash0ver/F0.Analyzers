@@ -1,22 +1,21 @@
-namespace F0.CodeAnalysis
+namespace F0.CodeAnalysis;
+
+internal sealed class SymbolNameComparer : EqualityComparer<ISymbol>
 {
-	internal sealed class SymbolNameComparer : EqualityComparer<ISymbol>
+	private SymbolNameComparer()
 	{
-		private SymbolNameComparer()
-		{
-		}
-
-		internal static IEqualityComparer<ISymbol> Instance { get; } = new SymbolNameComparer();
-
-		public override bool Equals(ISymbol? x, ISymbol? y)
-		{
-			Debug.Assert(x is not null, $"{nameof(x)} not expected to be null");
-			Debug.Assert(y is not null, $"{nameof(y)} not expected to be null");
-
-			return x.Name.Equals(y.Name, StringComparison.Ordinal);
-		}
-
-		public override int GetHashCode([DisallowNull] ISymbol obj)
-			=> obj.Name.GetHashCode();
 	}
+
+	internal static IEqualityComparer<ISymbol> Instance { get; } = new SymbolNameComparer();
+
+	public override bool Equals(ISymbol? x, ISymbol? y)
+	{
+		Debug.Assert(x is not null, $"{nameof(x)} not expected to be null");
+		Debug.Assert(y is not null, $"{nameof(y)} not expected to be null");
+
+		return x.Name.Equals(y.Name, StringComparison.Ordinal);
+	}
+
+	public override int GetHashCode([DisallowNull] ISymbol obj)
+		=> obj.Name.GetHashCode();
 }

@@ -3,21 +3,21 @@ using F0.Benchmarking.CodeAnalysis.CodeFixes;
 using F0.CodeAnalysis.CodeFixes;
 using F0.CodeAnalysis.Diagnostics;
 
-namespace F0.Benchmarks.CodeAnalysis.CodeFixes
+namespace F0.Benchmarks.CodeAnalysis.CodeFixes;
+
+public class UsePatternMatchingNullCheckInsteadOfComparisonWithNullBenchmarks
 {
-	public class UsePatternMatchingNullCheckInsteadOfComparisonWithNullBenchmarks
+	private readonly CodeFixBenchmark<F0100xPreferPatternMatchingNullCheckOverComparisonWithNull, UsePatternMatchingNullCheckInsteadOfComparisonWithNull> benchmark;
+
+	public UsePatternMatchingNullCheckInsteadOfComparisonWithNullBenchmarks()
 	{
-		private readonly CodeFixBenchmark<F0100xPreferPatternMatchingNullCheckOverComparisonWithNull, UsePatternMatchingNullCheckInsteadOfComparisonWithNull> benchmark;
+		benchmark = Measure.CodeFix<F0100xPreferPatternMatchingNullCheckOverComparisonWithNull, UsePatternMatchingNullCheckInsteadOfComparisonWithNull>();
+	}
 
-		public UsePatternMatchingNullCheckInsteadOfComparisonWithNullBenchmarks()
-		{
-			benchmark = Measure.CodeFix<F0100xPreferPatternMatchingNullCheckOverComparisonWithNull, UsePatternMatchingNullCheckInsteadOfComparisonWithNull>();
-		}
-
-		[GlobalSetup]
-		public void Setup()
-		{
-			var code =
+	[GlobalSetup]
+	public void Setup()
+	{
+		var code =
 @"using System;
 
 record Record();
@@ -32,17 +32,17 @@ class Class
 	}
 }";
 
-			benchmark.Initialize(code, LanguageVersion.Latest);
-		}
+		benchmark.Initialize(code, LanguageVersion.Latest);
+	}
 
-		[Benchmark]
-		public Task UseConstantNullPattern()
-			=> benchmark.InvokeAsync();
+	[Benchmark]
+	public Task UseConstantNullPattern()
+		=> benchmark.InvokeAsync();
 
-		[GlobalCleanup]
-		public void Cleanup()
-		{
-			var code =
+	[GlobalCleanup]
+	public void Cleanup()
+	{
+		var code =
 @"using System;
 
 record Record();
@@ -57,7 +57,6 @@ class Class
 	}
 }";
 
-			benchmark.Inspect(code);
-		}
+		benchmark.Inspect(code);
 	}
 }

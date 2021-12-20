@@ -1,145 +1,144 @@
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 
-namespace F0.CodeAnalysis.CodeFixes
+namespace F0.CodeAnalysis.CodeFixes;
+
+[ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(UsePatternMatchingNullCheckInsteadOfComparisonWithNull))]
+[Shared]
+internal sealed class UsePatternMatchingNullCheckInsteadOfComparisonWithNull : CodeFixProvider
 {
-	[ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(UsePatternMatchingNullCheckInsteadOfComparisonWithNull))]
-	[Shared]
-	internal sealed class UsePatternMatchingNullCheckInsteadOfComparisonWithNull : CodeFixProvider
+	private const string Title = "Use constant 'null' pattern";
+
+	public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(DiagnosticIds.F01001, DiagnosticIds.F01002);
+	public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
+
+	public override async Task RegisterCodeFixesAsync(CodeFixContext context)
 	{
-		private const string Title = "Use constant 'null' pattern";
+		var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
 
-		public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(DiagnosticIds.F01001, DiagnosticIds.F01002);
-		public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
+		Debug.Assert(root is not null, $"Document doesn't support providing data: {{ {nameof(Document.SupportsSyntaxTree)} = {context.Document.SupportsSyntaxTree} }}");
+		var node = root.FindNode(context.Span, false, true);
 
-		public override async Task RegisterCodeFixesAsync(CodeFixContext context)
+		Debug.Assert(context.Diagnostics.Length is 1);
+		var diagnostic = context.Diagnostics[0];
+		var action = CodeAction.Create(Title, ct => ReplaceWithPatternMatching(context.Document, node, ct), diagnostic.Id);
+		context.RegisterCodeFix(action, diagnostic);
+	}
+
+	private static Task<Document> ReplaceWithPatternMatching(Document document, SyntaxNode node, CancellationToken cancellationToken)
+	{
+		var expression = node switch
 		{
-			var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
+			ExpressionSyntax syntax => syntax,
+			_ => throw new ArgumentException($"Invalid argument '{node}' of type '{node.GetType()}' was specified.", nameof(node)),
+		};
 
-			Debug.Assert(root is not null, $"Document doesn't support providing data: {{ {nameof(Document.SupportsSyntaxTree)} = {context.Document.SupportsSyntaxTree} }}");
-			var node = root.FindNode(context.Span, false, true);
+		return ReplaceWithPatternMatching(document, expression, cancellationToken);
+	}
 
-			Debug.Assert(context.Diagnostics.Length is 1);
-			var diagnostic = context.Diagnostics[0];
-			var action = CodeAction.Create(Title, ct => ReplaceWithPatternMatching(context.Document, node, ct), diagnostic.Id);
-			context.RegisterCodeFix(action, diagnostic);
-		}
-
-		private static Task<Document> ReplaceWithPatternMatching(Document document, SyntaxNode node, CancellationToken cancellationToken)
+	private static async Task<Document> ReplaceWithPatternMatching(Document document, ExpressionSyntax expression, CancellationToken cancellationToken)
+	{
+		var newExpression = expression switch
 		{
-			var expression = node switch
-			{
-				ExpressionSyntax syntax => syntax,
-				_ => throw new ArgumentException($"Invalid argument '{node}' of type '{node.GetType()}' was specified.", nameof(node)),
-			};
+			BinaryExpressionSyntax binary => CreateFromBinaryExpression(binary),
+			InvocationExpressionSyntax invocation => CreatePatternExpression(invocation),
+			PrefixUnaryExpressionSyntax prefixUnary => CreateNegatedPatternExpression(prefixUnary),
+			_ => throw new ArgumentException($"Invalid argument '{expression}' of type '{expression.GetType()}' was specified.", nameof(expression)),
+		};
 
-			return ReplaceWithPatternMatching(document, expression, cancellationToken);
-		}
+		var root = await document.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false);
 
-		private static async Task<Document> ReplaceWithPatternMatching(Document document, ExpressionSyntax expression, CancellationToken cancellationToken)
+		Debug.Assert(root is not null, $"Document doesn't support providing data: {{ {nameof(Document.SupportsSyntaxTree)} = {document.SupportsSyntaxTree} }}");
+		var newRoot = root.ReplaceNode(expression, newExpression);
+
+		return document.WithSyntaxRoot(newRoot);
+
+		static IsPatternExpressionSyntax CreateFromBinaryExpression(BinaryExpressionSyntax binary)
 		{
-			var newExpression = expression switch
+			var syntax = binary.Right.IsKind(SyntaxKind.NullLiteralExpression)
+				? binary.Left
+				: binary.Right;
+
+			if (binary.OperatorToken.IsKind(SyntaxKind.EqualsEqualsToken))
 			{
-				BinaryExpressionSyntax binary => CreateFromBinaryExpression(binary),
-				InvocationExpressionSyntax invocation => CreatePatternExpression(invocation),
-				PrefixUnaryExpressionSyntax prefixUnary => CreateNegatedPatternExpression(prefixUnary),
-				_ => throw new ArgumentException($"Invalid argument '{expression}' of type '{expression.GetType()}' was specified.", nameof(expression)),
-			};
-
-			var root = await document.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false);
-
-			Debug.Assert(root is not null, $"Document doesn't support providing data: {{ {nameof(Document.SupportsSyntaxTree)} = {document.SupportsSyntaxTree} }}");
-			var newRoot = root.ReplaceNode(expression, newExpression);
-
-			return document.WithSyntaxRoot(newRoot);
-
-			static IsPatternExpressionSyntax CreateFromBinaryExpression(BinaryExpressionSyntax binary)
-			{
-				var syntax = binary.Right.IsKind(SyntaxKind.NullLiteralExpression)
-					? binary.Left
-					: binary.Right;
-
-				if (binary.OperatorToken.IsKind(SyntaxKind.EqualsEqualsToken))
-				{
-					return CreatePatternExpression(syntax);
-				}
-				else
-				{
-					Debug.Assert(binary.OperatorToken.IsKind(SyntaxKind.ExclamationEqualsToken));
-					return CreateNegatedPatternExpression(syntax);
-				}
-			}
-		}
-
-		private static IsPatternExpressionSyntax CreatePatternExpression(ExpressionSyntax expression)
-		{
-			var literal = SyntaxFactory.LiteralExpression(SyntaxKind.NullLiteralExpression);
-			var pattern = SyntaxFactory.ConstantPattern(literal);
-
-			return expression switch
-			{
-				CastExpressionSyntax cast => SyntaxFactory.IsPatternExpression(cast.Expression, pattern),
-				ParenthesizedExpressionSyntax { Expression: CastExpressionSyntax cast } => SyntaxFactory.IsPatternExpression(cast.Expression, pattern),
-				_ => SyntaxFactory.IsPatternExpression(expression, pattern),
-			};
-		}
-
-		private static IsPatternExpressionSyntax CreateNegatedPatternExpression(ExpressionSyntax expression)
-		{
-			var literal = SyntaxFactory.LiteralExpression(SyntaxKind.NullLiteralExpression);
-			var pattern = SyntaxFactory.UnaryPattern(SyntaxFactory.ConstantPattern(literal));
-
-			return expression switch
-			{
-				CastExpressionSyntax cast => SyntaxFactory.IsPatternExpression(cast.Expression, pattern),
-				ParenthesizedExpressionSyntax { Expression: CastExpressionSyntax cast } => SyntaxFactory.IsPatternExpression(cast.Expression, pattern),
-				_ => SyntaxFactory.IsPatternExpression(expression, pattern),
-			};
-		}
-
-		private static IsPatternExpressionSyntax CreatePatternExpression(InvocationExpressionSyntax invocation)
-		{
-			Debug.Assert(invocation.Expression is MemberAccessExpressionSyntax);
-
-			if (invocation.ArgumentList.Arguments.Count is 2)
-			{
-				var first = invocation.ArgumentList.Arguments[0].Expression;
-				var second = invocation.ArgumentList.Arguments[1].Expression;
-
-				return second.IsKind(SyntaxKind.NullLiteralExpression)
-					? CreatePatternExpression(first)
-					: CreatePatternExpression(second);
+				return CreatePatternExpression(syntax);
 			}
 			else
 			{
-				Debug.Assert(invocation.ArgumentList.Arguments.Count is 1);
-
-				var memberAccess = (MemberAccessExpressionSyntax)invocation.Expression;
-				return CreatePatternExpression(memberAccess.Expression);
+				Debug.Assert(binary.OperatorToken.IsKind(SyntaxKind.ExclamationEqualsToken));
+				return CreateNegatedPatternExpression(syntax);
 			}
 		}
+	}
 
-		private static IsPatternExpressionSyntax CreateNegatedPatternExpression(PrefixUnaryExpressionSyntax prefixUnary)
+	private static IsPatternExpressionSyntax CreatePatternExpression(ExpressionSyntax expression)
+	{
+		var literal = SyntaxFactory.LiteralExpression(SyntaxKind.NullLiteralExpression);
+		var pattern = SyntaxFactory.ConstantPattern(literal);
+
+		return expression switch
 		{
-			var invocation = (InvocationExpressionSyntax)prefixUnary.Operand;
-			Debug.Assert(invocation.Expression is MemberAccessExpressionSyntax);
+			CastExpressionSyntax cast => SyntaxFactory.IsPatternExpression(cast.Expression, pattern),
+			ParenthesizedExpressionSyntax { Expression: CastExpressionSyntax cast } => SyntaxFactory.IsPatternExpression(cast.Expression, pattern),
+			_ => SyntaxFactory.IsPatternExpression(expression, pattern),
+		};
+	}
 
-			if (invocation.ArgumentList.Arguments.Count is 2)
-			{
-				var first = invocation.ArgumentList.Arguments[0].Expression;
-				var second = invocation.ArgumentList.Arguments[1].Expression;
+	private static IsPatternExpressionSyntax CreateNegatedPatternExpression(ExpressionSyntax expression)
+	{
+		var literal = SyntaxFactory.LiteralExpression(SyntaxKind.NullLiteralExpression);
+		var pattern = SyntaxFactory.UnaryPattern(SyntaxFactory.ConstantPattern(literal));
 
-				return second.IsKind(SyntaxKind.NullLiteralExpression)
-					? CreateNegatedPatternExpression(first)
-					: CreateNegatedPatternExpression(second);
-			}
-			else
-			{
-				Debug.Assert(invocation.ArgumentList.Arguments.Count is 1);
+		return expression switch
+		{
+			CastExpressionSyntax cast => SyntaxFactory.IsPatternExpression(cast.Expression, pattern),
+			ParenthesizedExpressionSyntax { Expression: CastExpressionSyntax cast } => SyntaxFactory.IsPatternExpression(cast.Expression, pattern),
+			_ => SyntaxFactory.IsPatternExpression(expression, pattern),
+		};
+	}
 
-				var memberAccess = (MemberAccessExpressionSyntax)invocation.Expression;
-				return CreateNegatedPatternExpression(memberAccess.Expression);
-			}
+	private static IsPatternExpressionSyntax CreatePatternExpression(InvocationExpressionSyntax invocation)
+	{
+		Debug.Assert(invocation.Expression is MemberAccessExpressionSyntax);
+
+		if (invocation.ArgumentList.Arguments.Count is 2)
+		{
+			var first = invocation.ArgumentList.Arguments[0].Expression;
+			var second = invocation.ArgumentList.Arguments[1].Expression;
+
+			return second.IsKind(SyntaxKind.NullLiteralExpression)
+				? CreatePatternExpression(first)
+				: CreatePatternExpression(second);
+		}
+		else
+		{
+			Debug.Assert(invocation.ArgumentList.Arguments.Count is 1);
+
+			var memberAccess = (MemberAccessExpressionSyntax)invocation.Expression;
+			return CreatePatternExpression(memberAccess.Expression);
+		}
+	}
+
+	private static IsPatternExpressionSyntax CreateNegatedPatternExpression(PrefixUnaryExpressionSyntax prefixUnary)
+	{
+		var invocation = (InvocationExpressionSyntax)prefixUnary.Operand;
+		Debug.Assert(invocation.Expression is MemberAccessExpressionSyntax);
+
+		if (invocation.ArgumentList.Arguments.Count is 2)
+		{
+			var first = invocation.ArgumentList.Arguments[0].Expression;
+			var second = invocation.ArgumentList.Arguments[1].Expression;
+
+			return second.IsKind(SyntaxKind.NullLiteralExpression)
+				? CreateNegatedPatternExpression(first)
+				: CreateNegatedPatternExpression(second);
+		}
+		else
+		{
+			Debug.Assert(invocation.ArgumentList.Arguments.Count is 1);
+
+			var memberAccess = (MemberAccessExpressionSyntax)invocation.Expression;
+			return CreateNegatedPatternExpression(memberAccess.Expression);
 		}
 	}
 }

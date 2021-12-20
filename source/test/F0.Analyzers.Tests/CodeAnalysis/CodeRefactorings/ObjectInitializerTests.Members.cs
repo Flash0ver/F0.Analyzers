@@ -1,12 +1,12 @@
-namespace F0.Tests.CodeAnalysis.CodeRefactorings
+namespace F0.Tests.CodeAnalysis.CodeRefactorings;
+
+public partial class ObjectInitializerTests
 {
-	public partial class ObjectInitializerTests
+	[Fact]
+	public async Task ComputeRefactoringsAsync_MatchingInstanceFieldExists_AssignsFieldToProperty()
 	{
-		[Fact]
-		public async Task ComputeRefactoringsAsync_MatchingInstanceFieldExists_AssignsFieldToProperty()
-		{
-			var initialCode =
-				@"using System;
+		var initialCode =
+			@"using System;
 
 				class Model { public string Text { get; set; } }
 
@@ -20,8 +20,8 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			var expectedCode =
-				@"using System;
+		var expectedCode =
+			@"using System;
 
 				class Model { public string Text { get; set; } }
 
@@ -38,14 +38,14 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await VerifyAsync(initialCode, expectedCode);
-		}
+		await VerifyAsync(initialCode, expectedCode);
+	}
 
-		[Fact]
-		public async Task ComputeRefactoringsAsync_MatchingFieldsWithValidPrefixedNamesExist_AssignsFieldsToFields()
-		{
-			var initialCode =
-				@"using System;
+	[Fact]
+	public async Task ComputeRefactoringsAsync_MatchingFieldsWithValidPrefixedNamesExist_AssignsFieldsToFields()
+	{
+		var initialCode =
+			@"using System;
 
 				class C
 				{
@@ -59,8 +59,8 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			var expectedCode =
-				@"using System;
+		var expectedCode =
+			@"using System;
 
 				class C
 				{
@@ -79,14 +79,14 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await VerifyAsync(initialCode, expectedCode);
-		}
+		await VerifyAsync(initialCode, expectedCode);
+	}
 
-		[Fact]
-		public async Task ComputeRefactoringsAsync_FieldWithInvalidPrefixedNameExists_AssignsDefaultToField()
-		{
-			var initialCode =
-				@"using System;
+	[Fact]
+	public async Task ComputeRefactoringsAsync_FieldWithInvalidPrefixedNameExists_AssignsDefaultToField()
+	{
+		var initialCode =
+			@"using System;
 
 				class C
 				{
@@ -98,8 +98,8 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			var expectedCode =
-				@"using System;
+		var expectedCode =
+			@"using System;
 
 				class C
 				{
@@ -114,14 +114,14 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await VerifyAsync(initialCode, expectedCode);
-		}
+		await VerifyAsync(initialCode, expectedCode);
+	}
 
-		[Fact]
-		public async Task ComputeRefactoringsAsync_MatchingInstanceFieldNameButWrongType_AssignsDefaultToProperty()
-		{
-			var initialCode =
-				@"using System;
+	[Fact]
+	public async Task ComputeRefactoringsAsync_MatchingInstanceFieldNameButWrongType_AssignsDefaultToProperty()
+	{
+		var initialCode =
+			@"using System;
 
 				class Model { public string Text { get; set; } }
 
@@ -135,8 +135,8 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			var expectedCode =
-				@"using System;
+		var expectedCode =
+			@"using System;
 
 				class Model { public string Text { get; set; } }
 
@@ -153,14 +153,14 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await VerifyAsync(initialCode, expectedCode);
-		}
+		await VerifyAsync(initialCode, expectedCode);
+	}
 
-		[Fact]
-		public async Task ComputeRefactoringsAsync_MatchingInstanceFieldTypeButWrongName_AssignsDefaultToProperty()
-		{
-			var initialCode =
-				@"using System;
+	[Fact]
+	public async Task ComputeRefactoringsAsync_MatchingInstanceFieldTypeButWrongName_AssignsDefaultToProperty()
+	{
+		var initialCode =
+			@"using System;
 
 				class Model { public string Text { get; set; } }
 
@@ -174,8 +174,8 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			var expectedCode =
-				@"using System;
+		var expectedCode =
+			@"using System;
 
 				class Model { public string Text { get; set; } }
 
@@ -192,14 +192,14 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await VerifyAsync(initialCode, expectedCode);
-		}
+		await VerifyAsync(initialCode, expectedCode);
+	}
 
-		[Fact]
-		public async Task ComputeRefactoringsAsync_MultipleMatchingInstanceFields_AssignsDefaultToProperty()
-		{
-			var initialCode =
-				@"using System;
+	[Fact]
+	public async Task ComputeRefactoringsAsync_MultipleMatchingInstanceFields_AssignsDefaultToProperty()
+	{
+		var initialCode =
+			@"using System;
 
 				class Model { public string Text { get; set; } }
 
@@ -214,8 +214,8 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			var expectedCode =
-				@"using System;
+		var expectedCode =
+			@"using System;
 
 				class Model { public string Text { get; set; } }
 
@@ -233,14 +233,14 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await VerifyAsync(initialCode, expectedCode);
-		}
+		await VerifyAsync(initialCode, expectedCode);
+	}
 
-		[Fact]
-		public async Task ComputeRefactoringsAsync_MatchingReadonlyFieldExists_AssignsFieldToProperty()
-		{
-			var initialCode =
-				@"using System;
+	[Fact]
+	public async Task ComputeRefactoringsAsync_MatchingReadonlyFieldExists_AssignsFieldToProperty()
+	{
+		var initialCode =
+			@"using System;
 
 				class Model { public string Text { get; set; } }
 
@@ -254,8 +254,8 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			var expectedCode =
-				@"using System;
+		var expectedCode =
+			@"using System;
 
 				class Model { public string Text { get; set; } }
 
@@ -272,14 +272,14 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await VerifyAsync(initialCode, expectedCode);
-		}
+		await VerifyAsync(initialCode, expectedCode);
+	}
 
-		[Fact]
-		public async Task ComputeRefactoringsAsync_MatchingConstantFieldExists_AssignsFieldToProperty()
-		{
-			var initialCode =
-				@"using System;
+	[Fact]
+	public async Task ComputeRefactoringsAsync_MatchingConstantFieldExists_AssignsFieldToProperty()
+	{
+		var initialCode =
+			@"using System;
 
 				class Model { public string Text { get; set; } }
 
@@ -293,8 +293,8 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			var expectedCode =
-				@"using System;
+		var expectedCode =
+			@"using System;
 
 				class Model { public string Text { get; set; } }
 
@@ -311,14 +311,14 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await VerifyAsync(initialCode, expectedCode);
-		}
+		await VerifyAsync(initialCode, expectedCode);
+	}
 
-		[Fact]
-		public async Task ComputeRefactoringsAsync_MatchingStaticFieldExists_AssignsFieldToProperty()
-		{
-			var initialCode =
-				@"using System;
+	[Fact]
+	public async Task ComputeRefactoringsAsync_MatchingStaticFieldExists_AssignsFieldToProperty()
+	{
+		var initialCode =
+			@"using System;
 
 				class Model { public string Text { get; set; } }
 
@@ -332,8 +332,8 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			var expectedCode =
-				@"using System;
+		var expectedCode =
+			@"using System;
 
 				class Model { public string Text { get; set; } }
 
@@ -350,14 +350,14 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await VerifyAsync(initialCode, expectedCode);
-		}
+		await VerifyAsync(initialCode, expectedCode);
+	}
 
-		[Fact]
-		public async Task ComputeRefactoringsAsync_MatchingStaticReadonlyFieldExists_AssignsFieldToProperty()
-		{
-			var initialCode =
-				@"using System;
+	[Fact]
+	public async Task ComputeRefactoringsAsync_MatchingStaticReadonlyFieldExists_AssignsFieldToProperty()
+	{
+		var initialCode =
+			@"using System;
 
 				class Model { public string Text { get; set; } }
 
@@ -371,8 +371,8 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			var expectedCode =
-				@"using System;
+		var expectedCode =
+			@"using System;
 
 				class Model { public string Text { get; set; } }
 
@@ -389,14 +389,14 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await VerifyAsync(initialCode, expectedCode);
-		}
+		await VerifyAsync(initialCode, expectedCode);
+	}
 
-		[Fact]
-		public async Task ComputeRefactoringsAsync_MatchingInstancePropertyExists_AssignsPropertyToProperty()
-		{
-			var initialCode =
-				@"using System;
+	[Fact]
+	public async Task ComputeRefactoringsAsync_MatchingInstancePropertyExists_AssignsPropertyToProperty()
+	{
+		var initialCode =
+			@"using System;
 
 				class Model { public string Text { get; set; } }
 
@@ -410,8 +410,8 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			var expectedCode =
-				@"using System;
+		var expectedCode =
+			@"using System;
 
 				class Model { public string Text { get; set; } }
 
@@ -428,14 +428,14 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await VerifyAsync(initialCode, expectedCode);
-		}
+		await VerifyAsync(initialCode, expectedCode);
+	}
 
-		[Fact]
-		public async Task ComputeRefactoringsAsync_MatchingInstancePropertyNameButWrongType_AssignsDefaultToProperty()
-		{
-			var initialCode =
-				@"using System;
+	[Fact]
+	public async Task ComputeRefactoringsAsync_MatchingInstancePropertyNameButWrongType_AssignsDefaultToProperty()
+	{
+		var initialCode =
+			@"using System;
 
 				class Model { public string Text { get; set; } }
 
@@ -449,8 +449,8 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			var expectedCode =
-				@"using System;
+		var expectedCode =
+			@"using System;
 
 				class Model { public string Text { get; set; } }
 
@@ -467,14 +467,14 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await VerifyAsync(initialCode, expectedCode);
-		}
+		await VerifyAsync(initialCode, expectedCode);
+	}
 
-		[Fact]
-		public async Task ComputeRefactoringsAsync_MatchingInstancePropertyTypeButWrongName_AssignsDefaultToProperty()
-		{
-			var initialCode =
-				@"using System;
+	[Fact]
+	public async Task ComputeRefactoringsAsync_MatchingInstancePropertyTypeButWrongName_AssignsDefaultToProperty()
+	{
+		var initialCode =
+			@"using System;
 
 				class Model { public string Text { get; set; } }
 
@@ -488,8 +488,8 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			var expectedCode =
-				@"using System;
+		var expectedCode =
+			@"using System;
 
 				class Model { public string Text { get; set; } }
 
@@ -506,14 +506,14 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await VerifyAsync(initialCode, expectedCode);
-		}
+		await VerifyAsync(initialCode, expectedCode);
+	}
 
-		[Fact]
-		public async Task ComputeRefactoringsAsync_MultipleMatchingInstanceProperties_AssignsDefaultToProperty()
-		{
-			var initialCode =
-				@"using System;
+	[Fact]
+	public async Task ComputeRefactoringsAsync_MultipleMatchingInstanceProperties_AssignsDefaultToProperty()
+	{
+		var initialCode =
+			@"using System;
 
 				class Model { public string Text { get; set; } }
 
@@ -528,8 +528,8 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			var expectedCode =
-				@"using System;
+		var expectedCode =
+			@"using System;
 
 				class Model { public string Text { get; set; } }
 
@@ -547,14 +547,14 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await VerifyAsync(initialCode, expectedCode);
-		}
+		await VerifyAsync(initialCode, expectedCode);
+	}
 
-		[Fact]
-		public async Task ComputeRefactoringsAsync_MatchingStaticPropertyExists_AssignsPropertyToProperty()
-		{
-			var initialCode =
-				@"using System;
+	[Fact]
+	public async Task ComputeRefactoringsAsync_MatchingStaticPropertyExists_AssignsPropertyToProperty()
+	{
+		var initialCode =
+			@"using System;
 
 				class Model { public string Text { get; set; } }
 
@@ -568,8 +568,8 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			var expectedCode =
-				@"using System;
+		var expectedCode =
+			@"using System;
 
 				class Model { public string Text { get; set; } }
 
@@ -586,14 +586,14 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await VerifyAsync(initialCode, expectedCode);
-		}
+		await VerifyAsync(initialCode, expectedCode);
+	}
 
-		[Fact]
-		public async Task ComputeRefactoringsAsync_MatchingPropertyWithoutGetAccessor_AssignsDefaultToProperty()
-		{
-			var initialCode =
-				@"using System;
+	[Fact]
+	public async Task ComputeRefactoringsAsync_MatchingPropertyWithoutGetAccessor_AssignsDefaultToProperty()
+	{
+		var initialCode =
+			@"using System;
 
 				class Model { public string Text { get; set; } }
 
@@ -607,8 +607,8 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			var expectedCode =
-				@"using System;
+		var expectedCode =
+			@"using System;
 
 				class Model { public string Text { get; set; } }
 
@@ -625,14 +625,14 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await VerifyAsync(initialCode, expectedCode);
-		}
+		await VerifyAsync(initialCode, expectedCode);
+	}
 
-		[Fact]
-		public async Task ComputeRefactoringsAsync_MatchingFieldAndMatchingProperty_AssignsFieldToProperty()
-		{
-			var initialCode =
-				@"using System;
+	[Fact]
+	public async Task ComputeRefactoringsAsync_MatchingFieldAndMatchingProperty_AssignsFieldToProperty()
+	{
+		var initialCode =
+			@"using System;
 
 				class Model { public string Text { get; set; } }
 
@@ -647,8 +647,8 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			var expectedCode =
-				@"using System;
+		var expectedCode =
+			@"using System;
 
 				class Model { public string Text { get; set; } }
 
@@ -666,7 +666,6 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await VerifyAsync(initialCode, expectedCode);
-		}
+		await VerifyAsync(initialCode, expectedCode);
 	}
 }

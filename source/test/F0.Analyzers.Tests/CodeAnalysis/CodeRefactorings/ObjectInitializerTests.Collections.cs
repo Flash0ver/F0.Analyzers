@@ -1,12 +1,12 @@
-namespace F0.Tests.CodeAnalysis.CodeRefactorings
+namespace F0.Tests.CodeAnalysis.CodeRefactorings;
+
+public partial class ObjectInitializerTests
 {
-	public partial class ObjectInitializerTests
+	[Fact]
+	public async Task ComputeRefactoringsAsync_Array_NoOp()
 	{
-		[Fact]
-		public async Task ComputeRefactoringsAsync_Array_NoOp()
-		{
-			var code =
-				@"using System;
+		var code =
+			@"using System;
 
 				class C
 				{
@@ -16,14 +16,14 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await VerifyNoOpAsync(code);
-		}
+		await VerifyNoOpAsync(code);
+	}
 
-		[Fact]
-		public async Task ComputeRefactoringsAsync_ArrayList_NoOp()
-		{
-			var code =
-				@"using System;
+	[Fact]
+	public async Task ComputeRefactoringsAsync_ArrayList_NoOp()
+	{
+		var code =
+			@"using System;
 				using System.Collections;
 
 				class C
@@ -34,14 +34,14 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await VerifyNoOpAsync(code);
-		}
+		await VerifyNoOpAsync(code);
+	}
 
-		[Fact]
-		public async Task ComputeRefactoringsAsync_Collection_NoOp()
-		{
-			var code =
-				@"using System;
+	[Fact]
+	public async Task ComputeRefactoringsAsync_Collection_NoOp()
+	{
+		var code =
+			@"using System;
 				using System.Collections.Generic;
 
 				class C
@@ -52,14 +52,14 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await VerifyNoOpAsync(code);
-		}
+		await VerifyNoOpAsync(code);
+	}
 
-		[Fact]
-		public async Task ComputeRefactoringsAsync_AssociativeCollection_NoOp()
-		{
-			var code =
-				@"using System;
+	[Fact]
+	public async Task ComputeRefactoringsAsync_AssociativeCollection_NoOp()
+	{
+		var code =
+			@"using System;
 				using System.Collections.Generic;
 
 				class C
@@ -70,7 +70,6 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await VerifyNoOpAsync(code);
-		}
+		await VerifyNoOpAsync(code);
 	}
 }

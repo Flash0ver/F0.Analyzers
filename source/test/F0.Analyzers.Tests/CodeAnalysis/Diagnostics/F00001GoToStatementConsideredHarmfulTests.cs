@@ -2,18 +2,18 @@ using F0.CodeAnalysis;
 using F0.CodeAnalysis.Diagnostics;
 using F0.Testing.CodeAnalysis;
 
-namespace F0.Tests.CodeAnalysis.Diagnostics
-{
-	public class F00001GoToStatementConsideredHarmfulTests
-	{
-		[Fact]
-		public void F00001GoToStatementConsideredHarmful_CheckType()
-			=> Verify.DiagnosticAnalyzer<F00001GoToStatementConsideredHarmful>().Type();
+namespace F0.Tests.CodeAnalysis.Diagnostics;
 
-		[Fact]
-		public async Task Initialize_NoGotoStatement_ReportsNoDiagnostic()
-		{
-			var code =
+public class F00001GoToStatementConsideredHarmfulTests
+{
+	[Fact]
+	public void F00001GoToStatementConsideredHarmful_CheckType()
+		=> Verify.DiagnosticAnalyzer<F00001GoToStatementConsideredHarmful>().Type();
+
+	[Fact]
+	public async Task Initialize_NoGotoStatement_ReportsNoDiagnostic()
+	{
+		var code =
 @"using System;
 
 class Class
@@ -24,13 +24,13 @@ class Class
 	}
 }";
 
-			await VerifyNoOpAsync(code);
-		}
+		await VerifyNoOpAsync(code);
+	}
 
-		[Fact]
-		public async Task Initialize_GotoStatement_ReportsWarning()
-		{
-			var code =
+	[Fact]
+	public async Task Initialize_GotoStatement_ReportsWarning()
+	{
+		var code =
 @"using System;
 
 class Class
@@ -42,19 +42,19 @@ class Class
 		{|#0:goto Label;|}
 	}
 }";
-			var expected = CreateDiagnostic()
-				.WithMessageFormat("Don't use goto statements: '{0}'")
-				.WithArguments("goto Label;")
-				.WithSeverity(DiagnosticSeverity.Warning)
-				.WithLocation(0);
+		var expected = CreateDiagnostic()
+			.WithMessageFormat("Don't use goto statements: '{0}'")
+			.WithArguments("goto Label;")
+			.WithSeverity(DiagnosticSeverity.Warning)
+			.WithLocation(0);
 
-			await VerifyAsync(code, expected);
-		}
+		await VerifyAsync(code, expected);
+	}
 
-		[Fact]
-		public async Task Initialize_GotoCaseStatement_ReportsWarning()
-		{
-			var code =
+	[Fact]
+	public async Task Initialize_GotoCaseStatement_ReportsWarning()
+	{
+		var code =
 @"using System;
 
 class Class
@@ -76,8 +76,8 @@ class Class
 	}
 }";
 
-			var expected = new[]
-			{
+		var expected = new[]
+		{
 				CreateDiagnostic()
 					.WithMessageFormat("Don't use goto statements: '{0}'")
 					.WithArguments("goto case 2;")
@@ -90,13 +90,13 @@ class Class
 					.WithLocation(1)
 			};
 
-			await VerifyAsync(code, expected);
-		}
+		await VerifyAsync(code, expected);
+	}
 
-		[Fact]
-		public async Task Initialize_GotoDefaultStatement_ReportsWarning()
-		{
-			var code =
+	[Fact]
+	public async Task Initialize_GotoDefaultStatement_ReportsWarning()
+	{
+		var code =
 @"using System;
 
 class Class
@@ -115,25 +115,24 @@ class Class
 	}
 }";
 
-			var expected = CreateDiagnostic()
-				.WithMessageFormat("Don't use goto statements: '{0}'")
-				.WithArguments("goto default;")
-				.WithSeverity(DiagnosticSeverity.Warning)
-				.WithLocation(0);
+		var expected = CreateDiagnostic()
+			.WithMessageFormat("Don't use goto statements: '{0}'")
+			.WithArguments("goto default;")
+			.WithSeverity(DiagnosticSeverity.Warning)
+			.WithLocation(0);
 
-			await VerifyAsync(code, expected);
-		}
-
-		private static DiagnosticResult CreateDiagnostic()
-			=> Verify.Diagnostic<F00001GoToStatementConsideredHarmful>(DiagnosticIds.F00001);
-
-		private static Task VerifyAsync(string code, DiagnosticResult diagnostic)
-			=> Verify.DiagnosticAnalyzer<F00001GoToStatementConsideredHarmful>().DiagnosticAsync(code, diagnostic);
-
-		private static Task VerifyAsync(string code, params DiagnosticResult[] diagnostics)
-			=> Verify.DiagnosticAnalyzer<F00001GoToStatementConsideredHarmful>().DiagnosticAsync(code, diagnostics);
-
-		private static Task VerifyNoOpAsync(string code)
-			=> Verify.DiagnosticAnalyzer<F00001GoToStatementConsideredHarmful>().NoOpAsync(code);
+		await VerifyAsync(code, expected);
 	}
+
+	private static DiagnosticResult CreateDiagnostic()
+		=> Verify.Diagnostic<F00001GoToStatementConsideredHarmful>(DiagnosticIds.F00001);
+
+	private static Task VerifyAsync(string code, DiagnosticResult diagnostic)
+		=> Verify.DiagnosticAnalyzer<F00001GoToStatementConsideredHarmful>().DiagnosticAsync(code, diagnostic);
+
+	private static Task VerifyAsync(string code, params DiagnosticResult[] diagnostics)
+		=> Verify.DiagnosticAnalyzer<F00001GoToStatementConsideredHarmful>().DiagnosticAsync(code, diagnostics);
+
+	private static Task VerifyNoOpAsync(string code)
+		=> Verify.DiagnosticAnalyzer<F00001GoToStatementConsideredHarmful>().NoOpAsync(code);
 }

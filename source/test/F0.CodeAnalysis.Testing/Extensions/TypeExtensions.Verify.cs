@@ -6,50 +6,49 @@ using Microsoft.CodeAnalysis.CodeRefactorings;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Xunit;
 
-namespace F0.Testing.Extensions
+namespace F0.Testing.Extensions;
+
+internal static class TypeExtensions
 {
-	internal static class TypeExtensions
+	private static readonly string[] cSharp = new string[] { LanguageNames.CSharp };
+
+	internal static void VerifyAccessibility(this Type type)
+		=> Assert.True(type.IsNotPublic, "Analyzer should not be part of the public API");
+
+	internal static void VerifyNonInheritable(this Type type)
+		=> Assert.True(type.IsSealed, "Analyzer should not be inheritable.");
+
+	internal static void VerifySharedAttribute(this Type type)
 	{
-		private static readonly string[] cSharp = new string[] { LanguageNames.CSharp };
+		var attribute = type.GetCustomAttribute<SharedAttribute>();
 
-		internal static void VerifyAccessibility(this Type type)
-			=> Assert.True(type.IsNotPublic, "Analyzer should not be part of the public API");
+		Assert.False(attribute is null, "Missing 'Shared' attribute.");
+		Assert.Null(attribute.SharingBoundary);
+	}
 
-		internal static void VerifyNonInheritable(this Type type)
-			=> Assert.True(type.IsSealed, "Analyzer should not be inheritable.");
+	internal static void VerifyDiagnosticAnalyzerAttribute(this Type type)
+	{
+		var attribute = type.GetCustomAttribute<DiagnosticAnalyzerAttribute>();
 
-		internal static void VerifySharedAttribute(this Type type)
-		{
-			var attribute = type.GetCustomAttribute<SharedAttribute>();
+		Assert.False(attribute is null, "Missing 'DiagnosticAnalyzer' attribute.");
+		Assert.Equal(cSharp, attribute.Languages);
+	}
 
-			Assert.False(attribute is null, "Missing 'Shared' attribute.");
-			Assert.Null(attribute.SharingBoundary);
-		}
+	internal static void VerifyExportCodeFixProviderAttribute(this Type type)
+	{
+		var attribute = type.GetCustomAttribute<ExportCodeFixProviderAttribute>();
 
-		internal static void VerifyDiagnosticAnalyzerAttribute(this Type type)
-		{
-			var attribute = type.GetCustomAttribute<DiagnosticAnalyzerAttribute>();
+		Assert.False(attribute is null, "Missing 'ExportCodeFixProvider' attribute.");
+		Assert.Equal(type.Name, attribute.Name);
+		Assert.Equal(cSharp, attribute.Languages);
+	}
 
-			Assert.False(attribute is null, "Missing 'DiagnosticAnalyzer' attribute.");
-			Assert.Equal(cSharp, attribute.Languages);
-		}
+	internal static void VerifyExportCodeRefactoringProviderAttribute(this Type type)
+	{
+		var attribute = type.GetCustomAttribute<ExportCodeRefactoringProviderAttribute>();
 
-		internal static void VerifyExportCodeFixProviderAttribute(this Type type)
-		{
-			var attribute = type.GetCustomAttribute<ExportCodeFixProviderAttribute>();
-
-			Assert.False(attribute is null, "Missing 'ExportCodeFixProvider' attribute.");
-			Assert.Equal(type.Name, attribute.Name);
-			Assert.Equal(cSharp, attribute.Languages);
-		}
-
-		internal static void VerifyExportCodeRefactoringProviderAttribute(this Type type)
-		{
-			var attribute = type.GetCustomAttribute<ExportCodeRefactoringProviderAttribute>();
-
-			Assert.False(attribute is null, "Missing 'ExportCodeRefactoringProvider' attribute.");
-			Assert.Equal(type.Name, attribute.Name);
-			Assert.Equal(cSharp, attribute.Languages);
-		}
+		Assert.False(attribute is null, "Missing 'ExportCodeRefactoringProvider' attribute.");
+		Assert.Equal(type.Name, attribute.Name);
+		Assert.Equal(cSharp, attribute.Languages);
 	}
 }
