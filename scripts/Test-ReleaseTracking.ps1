@@ -14,7 +14,7 @@ $ReleaseTrackingDirectory = Join-Path -Path $RepositoryRootPath -ChildPath 'sour
 $ReleaseTrackingShippedFile = Join-Path -Path $ReleaseTrackingDirectory -ChildPath 'AnalyzerReleases.Shipped.md'
 $ReleaseTrackingUnshippedFile = Join-Path -Path $ReleaseTrackingDirectory -ChildPath 'AnalyzerReleases.Unshipped.md'
 
-$ShippedJob = Start-Job -Name 'Shipped' -ScriptBlock { param($Path)
+$ShippedJob = Start-ThreadJob -Name 'Shipped' -ScriptBlock { param($Path)
     $ReleaseTracking = Get-Content -Path $Path
 
     if ($ReleaseTracking -eq $null) {
@@ -22,7 +22,7 @@ $ShippedJob = Start-Job -Name 'Shipped' -ScriptBlock { param($Path)
     }
 } -ArgumentList $ReleaseTrackingShippedFile
 
-$UnshippedJob = Start-Job -Name 'Unshipped' -ScriptBlock { param($Path)
+$UnshippedJob = Start-ThreadJob -Name 'Unshipped' -ScriptBlock { param($Path)
     $ReleaseTracking = Select-String -Path $Path -Pattern '^; ' -NotMatch
 
     if ($ReleaseTracking -ne $null) {

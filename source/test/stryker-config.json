@@ -5,13 +5,14 @@
       "cleartext",
       "html"
     ],
-    "project-file": "F0.Analyzers.csproj",
-    "solution-path": "../../F0.Analyzers.sln",
-    "threshold-high": 80,
-    "threshold-low": 70,
-    "threshold-break": 60,
+    "project": "F0.Analyzers.csproj",
+    "thresholds": {
+      "high": 80,
+      "low": 70,
+      "break": 60
+    },
     "ignore-methods": [
-      "Assert",
+      "Debug.Assert",
       "ConfigureAwait"
     ]
   }

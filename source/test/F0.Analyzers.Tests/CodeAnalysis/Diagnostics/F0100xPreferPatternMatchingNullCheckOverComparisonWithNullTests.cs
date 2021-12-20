@@ -1,11 +1,6 @@
-using System;
 using System.ComponentModel;
-using System.Threading.Tasks;
 using F0.CodeAnalysis.Diagnostics;
 using F0.Testing.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.Testing;
-using Xunit;
 
 namespace F0.Tests.CodeAnalysis.Diagnostics
 {

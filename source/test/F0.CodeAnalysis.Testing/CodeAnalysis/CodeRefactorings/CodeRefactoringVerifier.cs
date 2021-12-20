@@ -1,9 +1,5 @@
-using System.Threading;
-using System.Threading.Tasks;
 using F0.Testing.Extensions;
 using Microsoft.CodeAnalysis.CodeRefactorings;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.Testing;
 
 namespace F0.Testing.CodeAnalysis.CodeRefactorings
 {

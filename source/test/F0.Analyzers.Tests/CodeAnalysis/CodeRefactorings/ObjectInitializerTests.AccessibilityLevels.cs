@@ -1,8 +1,4 @@
-using System;
-using System.Threading.Tasks;
 using F0.Testing.CodeAnalysis;
-using FluentAssertions;
-using Xunit;
 
 namespace F0.Tests.CodeAnalysis.CodeRefactorings
 {

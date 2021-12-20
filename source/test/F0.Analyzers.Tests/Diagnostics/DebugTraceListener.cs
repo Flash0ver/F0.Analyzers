@@ -1,5 +1,4 @@
 #if DEBUG && NETFRAMEWORK
-using System;
 using System.Diagnostics;
 
 namespace F0.Tests.Diagnostics

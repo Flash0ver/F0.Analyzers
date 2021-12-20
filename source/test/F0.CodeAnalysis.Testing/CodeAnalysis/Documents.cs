@@ -1,5 +1,3 @@
-using System;
-
 namespace F0.Testing.CodeAnalysis
 {
 	/// <summary>

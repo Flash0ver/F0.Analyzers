@@ -1,9 +1,5 @@
-using System.Threading.Tasks;
 using F0.CodeAnalysis.CodeRefactorings;
 using F0.Testing.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.Testing;
-using Xunit;
 
 namespace F0.Tests.CodeAnalysis.CodeRefactorings
 {

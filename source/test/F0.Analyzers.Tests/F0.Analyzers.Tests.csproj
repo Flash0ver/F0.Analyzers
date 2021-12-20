@@ -1,18 +1,18 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks Condition="'$(OS)'=='Windows_NT'">net5.0;net472</TargetFrameworks>
-    <TargetFramework Condition="'$(OS)'!='Windows_NT'">net5.0</TargetFramework>
+    <TargetFrameworks Condition="'$(OS)'=='Windows_NT'">net6.0;net472</TargetFrameworks>
+    <TargetFramework Condition="'$(OS)'!='Windows_NT'">net6.0</TargetFramework>
     <AssemblyName>F0.Analyzers.Tests</AssemblyName>
     <RootNamespace>F0.Tests</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="coverlet.collector" Version="3.0.3" PrivateAssets="all" />
+    <PackageReference Include="coverlet.collector" Version="3.1.0" PrivateAssets="all" />
     <PackageReference Include="FakeItEasy" Version="7.0.1" />
     <PackageReference Include="FakeItEasy.Analyzer.CSharp" Version="6.1.0" PrivateAssets="all" />
     <PackageReference Include="FluentAssertions" Version="5.10.3" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.8.3" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3" PrivateAssets="all" />
   </ItemGroup>
@@ -24,6 +24,15 @@
   <ItemGroup>
     <ProjectReference Include="..\..\production\F0.Analyzers\F0.Analyzers.csproj" />
     <ProjectReference Include="..\F0.CodeAnalysis.Testing\F0.CodeAnalysis.Testing.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(ImplicitUsings)' == 'true' Or '$(ImplicitUsings)' == 'enable'">
+    <Using Include="FakeItEasy" />
+    <Using Include="FluentAssertions" />
+    <Using Include="Microsoft.CodeAnalysis" />
+    <Using Include="Microsoft.CodeAnalysis.CSharp" />
+    <Using Include="Microsoft.CodeAnalysis.Testing" />
+    <Using Include="Xunit" />
   </ItemGroup>
 
 </Project>

@@ -40,7 +40,7 @@ jobs:
     inputs:
       command: 'custom'
       custom: 'tool'
-      arguments: 'run dotnet-stryker --config-file-path $(Stryker_Configuration_File) --language-version preview'
+      arguments: 'run dotnet-stryker --config-file $(Stryker_Configuration_File)'
       workingDirectory: '$(Test_Project_Directory)'
   # Publish
   - task: PublishMutationReport@0

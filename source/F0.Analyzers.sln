@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30011.22
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{ADD1708B-F926-4B7B-BFAD-194BB8BABBD1}"
 EndProject
@@ -39,7 +39,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "F0.Analyzers.Package", "pac
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "F0.Analyzers.Example.CSharp8", "example\F0.Analyzers.Example.CSharp8\F0.Analyzers.Example.CSharp8.csproj", "{0C22B8EE-947D-4962-BBB3-DC1381E96436}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "F0.Analyzers.Example.CSharp9", "example\F0.Analyzers.Example.CSharp9\F0.Analyzers.Example.CSharp9.csproj", "{BF6085B7-EF86-49A1-9FED-9308982A7A89}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "F0.Analyzers.Example.CSharp9", "example\F0.Analyzers.Example.CSharp9\F0.Analyzers.Example.CSharp9.csproj", "{BF6085B7-EF86-49A1-9FED-9308982A7A89}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

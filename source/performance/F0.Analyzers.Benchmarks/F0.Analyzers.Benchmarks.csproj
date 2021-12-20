@@ -2,14 +2,14 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFrameworks Condition="'$(OS)'=='Windows_NT'">net5.0;net472</TargetFrameworks>
-    <TargetFramework Condition="'$(OS)'!='Windows_NT'">net5.0</TargetFramework>
+    <TargetFrameworks Condition="'$(OS)'=='Windows_NT'">net6.0;net472</TargetFrameworks>
+    <TargetFramework Condition="'$(OS)'!='Windows_NT'">net6.0</TargetFramework>
     <AssemblyName>F0.Analyzers.Benchmarks</AssemblyName>
     <RootNamespace>F0.Benchmarks</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="BenchmarkDotNet" Version="0.12.1" />
+    <PackageReference Include="BenchmarkDotNet" Version="0.13.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -19,6 +19,11 @@
   <ItemGroup>
     <ProjectReference Include="..\..\production\F0.Analyzers\F0.Analyzers.csproj" />
     <ProjectReference Include="..\F0.CodeAnalysis.Benchmarking\F0.CodeAnalysis.Benchmarking.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(ImplicitUsings)' == 'true' Or '$(ImplicitUsings)' == 'enable'">
+    <Using Include="BenchmarkDotNet.Attributes" />
+    <Using Include="Microsoft.CodeAnalysis.CSharp" />
   </ItemGroup>
 
 </Project>
