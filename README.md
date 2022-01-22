@@ -12,7 +12,8 @@ Code refactorings and diagnostic analyzers with code fixes for C# projects, base
 [Visual Studio Extension](https://marketplace.visualstudio.com/items?itemName=Flash0Ware.F0-Analyzers-VS)
 
 ## API Browser / Package Viewer
-[fuget](https://www.fuget.org/packages/F0.Analyzers)\
+[NuGet Package Explorer](https://nuget.info/packages/F0.Analyzers)\
+[FuGet Package Explorer](https://www.fuget.org/packages/F0.Analyzers)\
 [DotNetApis](http://dotnetapis.com/pkg/F0.Analyzers)\
 [NuGet Must Haves](https://nugetmusthaves.com/Package/F0.Analyzers)\
 [NuGet Trends](https://nugettrends.com/packages?months=12&ids=F0.Analyzers)
