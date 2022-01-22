@@ -1,8 +1,7 @@
-namespace F0.CodeAnalysis
+namespace F0.CodeAnalysis;
+
+internal static class DiagnosticCategories
 {
-	internal static class DiagnosticCategories
-	{
-		internal const string CodeSmell = nameof(CodeSmell);
-		internal const string BestPractice = nameof(BestPractice);
-	}
+	internal const string CodeSmell = nameof(CodeSmell);
+	internal const string BestPractice = nameof(BestPractice);
 }

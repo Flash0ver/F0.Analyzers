@@ -3,21 +3,21 @@ using F0.CodeAnalysis.CodeFixes;
 using F0.CodeAnalysis.Diagnostics;
 using F0.Testing.CodeAnalysis;
 
-namespace F0.Tests.CodeAnalysis.CodeFixes
+namespace F0.Tests.CodeAnalysis.CodeFixes;
+
+public class UsePatternMatchingNullCheckInsteadOfComparisonWithNullTests
 {
-	public class UsePatternMatchingNullCheckInsteadOfComparisonWithNullTests
+	private const string EqualityComparisonMessage = "Prefer '{0}' pattern over calling the (potentially) {1} '{2}' {3} to check for {4}";
+	private const string IdentityComparisonMessage = "Prefer '{0}' pattern over calling the '{1}' {2} to check for {3}";
+
+	[Fact]
+	public void UsePatternMatchingNullCheckInsteadOfComparisonWithNull_CheckType()
+		=> Verify.CodeFix<UsePatternMatchingNullCheckInsteadOfComparisonWithNull>().Type();
+
+	[Fact]
+	public async Task RegisterCodeFixesAsync_PatternMatching_RegisterNoCodeFix()
 	{
-		private const string EqualityComparisonMessage = "Prefer '{0}' pattern over calling the (potentially) {1} '{2}' {3} to check for {4}";
-		private const string IdentityComparisonMessage = "Prefer '{0}' pattern over calling the '{1}' {2} to check for {3}";
-
-		[Fact]
-		public void UsePatternMatchingNullCheckInsteadOfComparisonWithNull_CheckType()
-			=> Verify.CodeFix<UsePatternMatchingNullCheckInsteadOfComparisonWithNull>().Type();
-
-		[Fact]
-		public async Task RegisterCodeFixesAsync_PatternMatching_RegisterNoCodeFix()
-		{
-			var code =
+		var code =
 @"using System;
 
 record Record();
@@ -31,13 +31,13 @@ class Test
 	}
 }";
 
-			await VerifyNoOpAsync(code);
-		}
+		await VerifyNoOpAsync(code);
+	}
 
-		[Fact]
-		public async Task RegisterCodeFixesAsync_EqualityOperator_FixIfNullCheck()
-		{
-			var code =
+	[Fact]
+	public async Task RegisterCodeFixesAsync_EqualityOperator_FixIfNullCheck()
+	{
+		var code =
 @"using System;
 
 record Record();
@@ -57,7 +57,7 @@ class Test
 	}
 }";
 
-			var fix =
+		var fix =
 @"using System;
 
 record Record();
@@ -77,8 +77,8 @@ class Test
 	}
 }";
 
-			var expected = new[]
-			{
+		var expected = new[]
+		{
 				CreateEqualityComparisonDiagnostic(0, "is", "overloaded", "==", "operator", "null"),
 				CreateEqualityComparisonDiagnostic(1, "is", "overloaded", "==", "operator", "null"),
 
@@ -86,13 +86,13 @@ class Test
 				CreateEqualityComparisonDiagnostic(3, "is", "overloaded", "==", "operator", "null"),
 			};
 
-			await VerifyAsync(code, expected, fix);
-		}
+		await VerifyAsync(code, expected, fix);
+	}
 
-		[Fact]
-		public async Task RegisterCodeFixesAsync_InequalityOperator_FixIfNullCheck()
-		{
-			var code =
+	[Fact]
+	public async Task RegisterCodeFixesAsync_InequalityOperator_FixIfNullCheck()
+	{
+		var code =
 @"using System;
 
 record Record();
@@ -112,7 +112,7 @@ class Test
 	}
 }";
 
-			var fix =
+		var fix =
 @"using System;
 
 record Record();
@@ -132,8 +132,8 @@ class Test
 	}
 }";
 
-			var expected = new[]
-			{
+		var expected = new[]
+		{
 				CreateEqualityComparisonDiagnostic(0, "is not", "overloaded", "!=", "operator", "non-null"),
 				CreateEqualityComparisonDiagnostic(1, "is not", "overloaded", "!=", "operator", "non-null"),
 
@@ -141,13 +141,13 @@ class Test
 				CreateEqualityComparisonDiagnostic(3, "is not", "overloaded", "!=", "operator", "non-null"),
 			};
 
-			await VerifyAsync(code, expected, fix);
-		}
+		await VerifyAsync(code, expected, fix);
+	}
 
-		[Fact]
-		public async Task RegisterCodeFixesAsync_Comparison_FixIfNullCheck()
-		{
-			var code =
+	[Fact]
+	public async Task RegisterCodeFixesAsync_Comparison_FixIfNullCheck()
+	{
+		var code =
 @"using System;
 
 record Record();
@@ -172,7 +172,7 @@ class Test
 	}
 }";
 
-			var fix =
+		var fix =
 @"using System;
 
 record Record();
@@ -197,8 +197,8 @@ class Test
 	}
 }";
 
-			var expected = new[]
-			{
+		var expected = new[]
+		{
 				CreateIdentityComparisonDiagnostic(0, "is", "==", "operator", "null"),
 				CreateIdentityComparisonDiagnostic(1, "is", "==", "operator", "null"),
 				CreateIdentityComparisonDiagnostic(2, "is", "==", "operator", "null"),
@@ -210,13 +210,13 @@ class Test
 				CreateIdentityComparisonDiagnostic(7, "is not", "!=", "operator", "non-null"),
 			};
 
-			await VerifyAsync(code, expected, fix);
-		}
+		await VerifyAsync(code, expected, fix);
+	}
 
-		[Fact]
-		public async Task RegisterCodeFixesAsync_ObjectEquals_FixIfNullCheck()
-		{
-			var code =
+	[Fact]
+	public async Task RegisterCodeFixesAsync_ObjectEquals_FixIfNullCheck()
+	{
+		var code =
 @"using System;
 
 record Record();
@@ -242,7 +242,7 @@ class Test
 	}
 }";
 
-			var fix =
+		var fix =
 @"using System;
 
 record Record();
@@ -268,8 +268,8 @@ class Test
 	}
 }";
 
-			var expected = new[]
-			{
+		var expected = new[]
+		{
 				CreateEqualityComparisonDiagnostic(0, "is", "overridden", "Equals", "method", "null"),
 				CreateEqualityComparisonDiagnostic(1, "is not", "overridden", "Equals", "method", "non-null"),
 				CreateEqualityComparisonDiagnostic(2, "is", "overridden", "Equals", "method", "null"),
@@ -278,13 +278,13 @@ class Test
 				CreateEqualityComparisonDiagnostic(5, "is not", "overridden", "Equals", "method", "non-null"),
 			};
 
-			await VerifyAsync(code, expected, fix);
-		}
+		await VerifyAsync(code, expected, fix);
+	}
 
-		[Fact]
-		public async Task RegisterCodeFixesAsync_StaticObjectEquals_FixIfNullCheck()
-		{
-			var code =
+	[Fact]
+	public async Task RegisterCodeFixesAsync_StaticObjectEquals_FixIfNullCheck()
+	{
+		var code =
 @"using System;
 
 record Record();
@@ -307,7 +307,7 @@ class Test
 	}
 }";
 
-			var fix =
+		var fix =
 @"using System;
 
 record Record();
@@ -330,21 +330,21 @@ class Test
 	}
 }";
 
-			var expected = new[]
-			{
+		var expected = new[]
+		{
 				CreateIdentityComparisonDiagnostic(0, "is", "Equals", "method", "null"),
 				CreateIdentityComparisonDiagnostic(1, "is not", "Equals", "method", "non-null"),
 				CreateIdentityComparisonDiagnostic(2, "is", "Equals", "method", "null"),
 				CreateIdentityComparisonDiagnostic(3, "is not", "Equals", "method", "non-null"),
 			};
 
-			await VerifyAsync(code, expected, fix);
-		}
+		await VerifyAsync(code, expected, fix);
+	}
 
-		[Fact]
-		public async Task RegisterCodeFixesAsync_ObjectReferenceEquals_FixIfNullCheck()
-		{
-			var code =
+	[Fact]
+	public async Task RegisterCodeFixesAsync_ObjectReferenceEquals_FixIfNullCheck()
+	{
+		var code =
 @"using System;
 
 record Record();
@@ -367,7 +367,7 @@ class Test
 	}
 }";
 
-			var fix =
+		var fix =
 @"using System;
 
 record Record();
@@ -390,21 +390,21 @@ class Test
 	}
 }";
 
-			var expected = new[]
-			{
+		var expected = new[]
+		{
 				CreateIdentityComparisonDiagnostic(0, "is", "ReferenceEquals", "method", "null"),
 				CreateIdentityComparisonDiagnostic(1, "is not", "ReferenceEquals", "method", "non-null"),
 				CreateIdentityComparisonDiagnostic(2, "is", "ReferenceEquals", "method", "null"),
 				CreateIdentityComparisonDiagnostic(3, "is not", "ReferenceEquals", "method", "non-null"),
 			};
 
-			await VerifyAsync(code, expected, fix);
-		}
+		await VerifyAsync(code, expected, fix);
+	}
 
-		[Fact]
-		public async Task RegisterCodeFixesAsync_EquatableEquals_FixIfNullCheck()
-		{
-			var code =
+	[Fact]
+	public async Task RegisterCodeFixesAsync_EquatableEquals_FixIfNullCheck()
+	{
+		var code =
 @"using System;
 
 record Record();
@@ -419,7 +419,7 @@ class Test
 	}
 }";
 
-			var fix =
+		var fix =
 @"using System;
 
 record Record();
@@ -434,19 +434,19 @@ class Test
 	}
 }";
 
-			var expected = new[]
-			{
+		var expected = new[]
+		{
 				CreateEqualityComparisonDiagnostic(0, "is", "overridden", "Equals", "method", "null"),
 				CreateEqualityComparisonDiagnostic(1, "is not", "overridden", "Equals", "method", "non-null"),
 			};
 
-			await VerifyAsync(code, expected, fix);
-		}
+		await VerifyAsync(code, expected, fix);
+	}
 
-		[Fact]
-		public async Task RegisterCodeFixesAsync_CastEquatable_FixIfNullCheck()
-		{
-			var code =
+	[Fact]
+	public async Task RegisterCodeFixesAsync_CastEquatable_FixIfNullCheck()
+	{
+		var code =
 @"using System;
 
 record Record();
@@ -461,7 +461,7 @@ class Test
 	}
 }";
 
-			var fix =
+		var fix =
 @"using System;
 
 record Record();
@@ -476,19 +476,19 @@ class Test
 	}
 }";
 
-			var expected = new[]
-			{
+		var expected = new[]
+		{
 				CreateEqualityComparisonDiagnostic(0, "is", "overridden", "Equals", "method", "null"),
 				CreateEqualityComparisonDiagnostic(1, "is not", "overridden", "Equals", "method", "non-null"),
 			};
 
-			await VerifyAsync(code, expected, fix);
-		}
+		await VerifyAsync(code, expected, fix);
+	}
 
-		[Fact]
-		public async Task RegisterCodeFixesAsync_EqualityComparerEquals_FixIfNullCheck()
-		{
-			var code =
+	[Fact]
+	public async Task RegisterCodeFixesAsync_EqualityComparerEquals_FixIfNullCheck()
+	{
+		var code =
 @"using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
@@ -534,7 +534,7 @@ class Test
 	}
 }";
 
-			var fix =
+		var fix =
 @"using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
@@ -580,8 +580,8 @@ class Test
 	}
 }";
 
-			var expected = new[]
-			{
+		var expected = new[]
+		{
 				CreateEqualityComparisonDiagnostic(00, "is", "overridden", "Equals", "method", "null"),
 				CreateEqualityComparisonDiagnostic(01, "is not", "overridden", "Equals", "method", "non-null"),
 				CreateEqualityComparisonDiagnostic(02, "is", "overridden", "Equals", "method", "null"),
@@ -598,13 +598,13 @@ class Test
 				CreateEqualityComparisonDiagnostic(11, "is not", "overridden", "Equals", "method", "non-null"),
 			};
 
-			await VerifyAsync(code, expected, fix, ReferenceAssemblies.NetStandard.NetStandard21);
-		}
+		await VerifyAsync(code, expected, fix, ReferenceAssemblies.NetStandard.NetStandard21);
+	}
 
-		[Fact]
-		public async Task RegisterCodeFixesAsync_ReferenceEqualityComparerEquals_FixIfNullCheck()
-		{
-			var code =
+	[Fact]
+	public async Task RegisterCodeFixesAsync_ReferenceEqualityComparerEquals_FixIfNullCheck()
+	{
+		var code =
 @"using System.Collections.Generic;
 
 record Record();
@@ -624,7 +624,7 @@ class Test
 	}
 }";
 
-			var fix =
+		var fix =
 @"using System.Collections.Generic;
 
 record Record();
@@ -644,21 +644,21 @@ class Test
 	}
 }";
 
-			var expected = new[]
-			{
+		var expected = new[]
+		{
 				CreateIdentityComparisonDiagnostic(0, "is", "Equals", "method", "null"),
 				CreateIdentityComparisonDiagnostic(1, "is not", "Equals", "method", "non-null"),
 				CreateIdentityComparisonDiagnostic(2, "is", "Equals", "method", "null"),
 				CreateIdentityComparisonDiagnostic(3, "is not", "Equals", "method", "non-null"),
 			};
 
-			await VerifyAsync(code, expected, fix, ReferenceAssemblies.Net.Net50);
-		}
+		await VerifyAsync(code, expected, fix, ReferenceAssemblies.Net.Net50);
+	}
 
-		[Fact]
-		public async Task RegisterCodeFixesAsync_CastEqualityComparer_FixIfNullCheck()
-		{
-			var code =
+	[Fact]
+	public async Task RegisterCodeFixesAsync_CastEqualityComparer_FixIfNullCheck()
+	{
+		var code =
 @"using System.Collections.Generic;
 
 record Record();
@@ -678,7 +678,7 @@ class Test
 	}
 }";
 
-			var fix =
+		var fix =
 @"using System.Collections.Generic;
 
 record Record();
@@ -698,21 +698,21 @@ class Test
 	}
 }";
 
-			var expected = new[]
-			{
+		var expected = new[]
+		{
 				CreateEqualityComparisonDiagnostic(0, "is", "overridden", "Equals", "method", "null"),
 				CreateEqualityComparisonDiagnostic(1, "is not", "overridden", "Equals", "method", "non-null"),
 				CreateEqualityComparisonDiagnostic(2, "is", "overridden", "Equals", "method", "null"),
 				CreateEqualityComparisonDiagnostic(3, "is not", "overridden", "Equals", "method", "non-null"),
 			};
 
-			await VerifyAsync(code, expected, fix, ReferenceAssemblies.Net.Net50);
-		}
+		await VerifyAsync(code, expected, fix, ReferenceAssemblies.Net.Net50);
+	}
 
-		[Fact]
-		public async Task RegisterCodeFixesAsync_Compatibility_FixIfNullCheck()
-		{
-			var code =
+	[Fact]
+	public async Task RegisterCodeFixesAsync_Compatibility_FixIfNullCheck()
+	{
+		var code =
 @"using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -735,7 +735,7 @@ class Test
 	}
 }";
 
-			var fix =
+		var fix =
 @"using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -758,8 +758,8 @@ class Test
 	}
 }";
 
-			var expected = new[]
-			{
+		var expected = new[]
+		{
 				CreateEqualityComparisonDiagnostic(0, "is", "overloaded", "==", "operator", "null"),
 				CreateEqualityComparisonDiagnostic(1, "is not", "overloaded", "!=", "operator", "non-null"),
 				CreateEqualityComparisonDiagnostic(2, "is", "overridden", "Equals", "method", "null"),
@@ -771,13 +771,13 @@ class Test
 				CreateEqualityComparisonDiagnostic(7, "is not", "overridden", "Equals", "method", "non-null"),
 			};
 
-			await VerifyAsync(code, expected, fix);
-		}
+		await VerifyAsync(code, expected, fix);
+	}
 
-		[Fact]
-		public async Task RegisterCodeFixesAsync_Other_FixIfNullCheck()
-		{
-			var code =
+	[Fact]
+	public async Task RegisterCodeFixesAsync_Other_FixIfNullCheck()
+	{
+		var code =
 @"using System;
 
 class Test
@@ -797,7 +797,7 @@ class Test
 	}
 }";
 
-			var fix =
+		var fix =
 @"using System;
 
 class Test
@@ -817,21 +817,21 @@ class Test
 	}
 }";
 
-			var expected = new[]
-			{
+		var expected = new[]
+		{
 				CreateEqualityComparisonDiagnostic(0, "is", "overloaded", "==", "operator", "null"),
 				CreateEqualityComparisonDiagnostic(1, "is", "overloaded", "==", "operator", "null"),
 
 				CreateEqualityComparisonDiagnostic(2, "is not", "overloaded", "!=", "operator", "non-null"),
 			};
 
-			await VerifyAsync(code, expected, fix);
-		}
+		await VerifyAsync(code, expected, fix);
+	}
 
-		[Fact]
-		public async Task RegisterCodeFixesAsync_ArgumentSyntax_FixIfNullCheck()
-		{
-			var code =
+	[Fact]
+	public async Task RegisterCodeFixesAsync_ArgumentSyntax_FixIfNullCheck()
+	{
+		var code =
 @"using System;
 using System.Diagnostics;
 
@@ -849,7 +849,7 @@ class Test
 	}
 }";
 
-			var fix =
+		var fix =
 @"using System;
 using System.Diagnostics;
 
@@ -867,8 +867,8 @@ class Test
 	}
 }";
 
-			var expected = new[]
-			{
+		var expected = new[]
+		{
 				CreateEqualityComparisonDiagnostic(0, "is", "overloaded", "==", "operator", "null"),
 				CreateEqualityComparisonDiagnostic(1, "is not", "overloaded", "!=", "operator", "non-null"),
 
@@ -876,30 +876,29 @@ class Test
 				CreateEqualityComparisonDiagnostic(3, "is not", "overridden", "Equals", "method", "non-null"),
 			};
 
-			await VerifyAsync(code, expected, fix);
-		}
-
-		private static DiagnosticResult CreateEqualityComparisonDiagnostic(int markupKey, string pattern, string modifier, string memberName, string memberKind, string test)
-			=> Verify.Diagnostic<F0100xPreferPatternMatchingNullCheckOverComparisonWithNull, UsePatternMatchingNullCheckInsteadOfComparisonWithNull>(DiagnosticIds.F01001)
-				.WithSeverity(DiagnosticSeverity.Warning)
-				.WithMessageFormat(EqualityComparisonMessage)
-				.WithArguments(new object[] { pattern, modifier, memberName, memberKind, test })
-				.WithLocation(markupKey);
-
-		private static DiagnosticResult CreateIdentityComparisonDiagnostic(int markupKey, string pattern, string memberName, string memberKind, string test)
-			=> Verify.Diagnostic<F0100xPreferPatternMatchingNullCheckOverComparisonWithNull, UsePatternMatchingNullCheckInsteadOfComparisonWithNull>(DiagnosticIds.F01002)
-				.WithSeverity(DiagnosticSeverity.Info)
-				.WithMessageFormat(IdentityComparisonMessage)
-				.WithArguments(new object[] { pattern, memberName, memberKind, test })
-				.WithLocation(markupKey);
-
-		private static Task VerifyAsync(string code, DiagnosticResult[] diagnostics, string fix)
-			=> Verify.CodeFix<F0100xPreferPatternMatchingNullCheckOverComparisonWithNull, UsePatternMatchingNullCheckInsteadOfComparisonWithNull>().CodeActionAsync(code, diagnostics, fix);
-
-		private static Task VerifyAsync(string code, DiagnosticResult[] diagnostics, string fix, ReferenceAssemblies referenceAssemblies)
-			=> Verify.CodeFix<F0100xPreferPatternMatchingNullCheckOverComparisonWithNull, UsePatternMatchingNullCheckInsteadOfComparisonWithNull>().CodeActionAsync(code, diagnostics, fix, referenceAssemblies);
-
-		private static Task VerifyNoOpAsync(string code)
-			=> Verify.CodeFix<F0100xPreferPatternMatchingNullCheckOverComparisonWithNull, UsePatternMatchingNullCheckInsteadOfComparisonWithNull>().NoOpAsync(code);
+		await VerifyAsync(code, expected, fix);
 	}
+
+	private static DiagnosticResult CreateEqualityComparisonDiagnostic(int markupKey, string pattern, string modifier, string memberName, string memberKind, string test)
+		=> Verify.Diagnostic<F0100xPreferPatternMatchingNullCheckOverComparisonWithNull, UsePatternMatchingNullCheckInsteadOfComparisonWithNull>(DiagnosticIds.F01001)
+			.WithSeverity(DiagnosticSeverity.Warning)
+			.WithMessageFormat(EqualityComparisonMessage)
+			.WithArguments(new object[] { pattern, modifier, memberName, memberKind, test })
+			.WithLocation(markupKey);
+
+	private static DiagnosticResult CreateIdentityComparisonDiagnostic(int markupKey, string pattern, string memberName, string memberKind, string test)
+		=> Verify.Diagnostic<F0100xPreferPatternMatchingNullCheckOverComparisonWithNull, UsePatternMatchingNullCheckInsteadOfComparisonWithNull>(DiagnosticIds.F01002)
+			.WithSeverity(DiagnosticSeverity.Info)
+			.WithMessageFormat(IdentityComparisonMessage)
+			.WithArguments(new object[] { pattern, memberName, memberKind, test })
+			.WithLocation(markupKey);
+
+	private static Task VerifyAsync(string code, DiagnosticResult[] diagnostics, string fix)
+		=> Verify.CodeFix<F0100xPreferPatternMatchingNullCheckOverComparisonWithNull, UsePatternMatchingNullCheckInsteadOfComparisonWithNull>().CodeActionAsync(code, diagnostics, fix);
+
+	private static Task VerifyAsync(string code, DiagnosticResult[] diagnostics, string fix, ReferenceAssemblies referenceAssemblies)
+		=> Verify.CodeFix<F0100xPreferPatternMatchingNullCheckOverComparisonWithNull, UsePatternMatchingNullCheckInsteadOfComparisonWithNull>().CodeActionAsync(code, diagnostics, fix, referenceAssemblies);
+
+	private static Task VerifyNoOpAsync(string code)
+		=> Verify.CodeFix<F0100xPreferPatternMatchingNullCheckOverComparisonWithNull, UsePatternMatchingNullCheckInsteadOfComparisonWithNull>().NoOpAsync(code);
 }

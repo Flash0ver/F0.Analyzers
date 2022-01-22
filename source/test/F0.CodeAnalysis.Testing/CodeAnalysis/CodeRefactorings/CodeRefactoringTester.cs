@@ -1,19 +1,18 @@
 using Microsoft.CodeAnalysis.CodeRefactorings;
 
-namespace F0.Testing.CodeAnalysis.CodeRefactorings
+namespace F0.Testing.CodeAnalysis.CodeRefactorings;
+
+internal class CodeRefactoringTester<TCodeRefactoring> : CSharpCodeRefactoringTest<TCodeRefactoring, XUnitVerifier>
+	where TCodeRefactoring : CodeRefactoringProvider, new()
 {
-	internal class CodeRefactoringTester<TCodeRefactoring> : CSharpCodeRefactoringTest<TCodeRefactoring, XUnitVerifier>
-		where TCodeRefactoring : CodeRefactoringProvider, new()
+	internal LanguageVersion? LanguageVersion { get; set; }
+
+	protected override ParseOptions CreateParseOptions()
 	{
-		internal LanguageVersion? LanguageVersion { get; set; }
+		var options = (CSharpParseOptions)base.CreateParseOptions();
 
-		protected override ParseOptions CreateParseOptions()
-		{
-			var options = (CSharpParseOptions)base.CreateParseOptions();
-
-			return LanguageVersion.HasValue
-				? options.WithLanguageVersion(LanguageVersion.Value)
-				: options;
-		}
+		return LanguageVersion.HasValue
+			? options.WithLanguageVersion(LanguageVersion.Value)
+			: options;
 	}
 }

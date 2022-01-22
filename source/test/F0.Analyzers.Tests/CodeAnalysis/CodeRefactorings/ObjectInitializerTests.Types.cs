@@ -1,12 +1,12 @@
-namespace F0.Tests.CodeAnalysis.CodeRefactorings
+namespace F0.Tests.CodeAnalysis.CodeRefactorings;
+
+public partial class ObjectInitializerTests
 {
-	public partial class ObjectInitializerTests
+	[Fact]
+	public async Task ComputeRefactoringsAsync_EmptyClass_EmptyInitializer()
 	{
-		[Fact]
-		public async Task ComputeRefactoringsAsync_EmptyClass_EmptyInitializer()
-		{
-			var initialCode =
-				@"using System;
+		var initialCode =
+			@"using System;
 
 				class Empty { }
 
@@ -18,8 +18,8 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			var expectedCode =
-				@"using System;
+		var expectedCode =
+			@"using System;
 
 				class Empty { }
 
@@ -31,14 +31,14 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await VerifyAsync(initialCode, expectedCode);
-		}
+		await VerifyAsync(initialCode, expectedCode);
+	}
 
-		[Fact]
-		public async Task ComputeRefactoringsAsync_GenericStructWithOneField_CreatesObjectInitializerWithOneField()
-		{
-			var initialCode =
-				@"using System;
+	[Fact]
+	public async Task ComputeRefactoringsAsync_GenericStructWithOneField_CreatesObjectInitializerWithOneField()
+	{
+		var initialCode =
+			@"using System;
 
 				class C
 				{
@@ -48,8 +48,8 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			var expectedCode =
-				@"using System;
+		var expectedCode =
+			@"using System;
 
 				class C
 				{
@@ -62,14 +62,14 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await VerifyAsync(initialCode, expectedCode);
-		}
+		await VerifyAsync(initialCode, expectedCode);
+	}
 
-		[Fact]
-		public async Task ComputeRefactoringsAsync_GenericStructWithMultipleField_CreatesObjectInitializerWithMultipleField()
-		{
-			var initialCode =
-				@"using System;
+	[Fact]
+	public async Task ComputeRefactoringsAsync_GenericStructWithMultipleField_CreatesObjectInitializerWithMultipleField()
+	{
+		var initialCode =
+			@"using System;
 
 				class C
 				{
@@ -79,8 +79,8 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			var expectedCode =
-				@"using System;
+		var expectedCode =
+			@"using System;
 
 				class C
 				{
@@ -95,14 +95,14 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await VerifyAsync(initialCode, expectedCode);
-		}
+		await VerifyAsync(initialCode, expectedCode);
+	}
 
-		[Fact]
-		public async Task ComputeRefactoringsAsync_ClassWithOneProperty_CreatesObjectInitializerWithOneProperty()
-		{
-			var initialCode =
-				@"using System;
+	[Fact]
+	public async Task ComputeRefactoringsAsync_ClassWithOneProperty_CreatesObjectInitializerWithOneProperty()
+	{
+		var initialCode =
+			@"using System;
 
 				class Model { public string Text { get; set; } }
 
@@ -114,8 +114,8 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			var expectedCode =
-				@"using System;
+		var expectedCode =
+			@"using System;
 
 				class Model { public string Text { get; set; } }
 
@@ -130,14 +130,14 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await VerifyAsync(initialCode, expectedCode);
-		}
+		await VerifyAsync(initialCode, expectedCode);
+	}
 
-		[Fact]
-		public async Task ComputeRefactoringsAsync_ClassWithMultipleProperties_CreatesObjectInitializerWithMultipleProperties()
-		{
-			var initialCode =
-				@"using System;
+	[Fact]
+	public async Task ComputeRefactoringsAsync_ClassWithMultipleProperties_CreatesObjectInitializerWithMultipleProperties()
+	{
+		var initialCode =
+			@"using System;
 
 				class Model { public string Text { get; set; } public int Number { get; set; } public bool Condition { get; set; } }
 
@@ -149,8 +149,8 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			var expectedCode =
-				@"using System;
+		var expectedCode =
+			@"using System;
 
 				class Model { public string Text { get; set; } public int Number { get; set; } public bool Condition { get; set; } }
 
@@ -167,14 +167,14 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await VerifyAsync(initialCode, expectedCode);
-		}
+		await VerifyAsync(initialCode, expectedCode);
+	}
 
-		[Fact]
-		public async Task ComputeRefactoringsAsync_ClassWithConstructor_CreatesObjectInitializerAndKeepsParameter()
-		{
-			var initialCode =
-				@"using System;
+	[Fact]
+	public async Task ComputeRefactoringsAsync_ClassWithConstructor_CreatesObjectInitializerAndKeepsParameter()
+	{
+		var initialCode =
+			@"using System;
 
 				class Model { public Model(int number){} public string Text { get; set; }}
 
@@ -186,8 +186,8 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			var expectedCode =
-				@"using System;
+		var expectedCode =
+			@"using System;
 
 				class Model { public Model(int number){} public string Text { get; set; }}
 
@@ -202,14 +202,14 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await VerifyAsync(initialCode, expectedCode);
-		}
+		await VerifyAsync(initialCode, expectedCode);
+	}
 
-		[Fact]
-		public async Task ComputeRefactoringsAsync_ClassWithImmutableMembers_CreatesObjectInitializerWithoutImmutableMembers()
-		{
-			var initialCode =
-				@"using System;
+	[Fact]
+	public async Task ComputeRefactoringsAsync_ClassWithImmutableMembers_CreatesObjectInitializerWithoutImmutableMembers()
+	{
+		var initialCode =
+			@"using System;
 
 				class Model { public string Text { get; set; } public int Number { get; } public readonly bool Condition; }
 
@@ -221,8 +221,8 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			var expectedCode =
-				@"using System;
+		var expectedCode =
+			@"using System;
 
 				class Model { public string Text { get; set; } public int Number { get; } public readonly bool Condition; }
 
@@ -237,14 +237,14 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await VerifyAsync(initialCode, expectedCode);
-		}
+		await VerifyAsync(initialCode, expectedCode);
+	}
 
-		[Fact]
-		public async Task ComputeRefactoringsAsync_ClassWithStaticMembers_CreatesObjectInitializerWithoutStaticMembers()
-		{
-			var initialCode =
-				@"using System;
+	[Fact]
+	public async Task ComputeRefactoringsAsync_ClassWithStaticMembers_CreatesObjectInitializerWithoutStaticMembers()
+	{
+		var initialCode =
+			@"using System;
 
 				class Model { public string Text { get; set; } public static int Number { get; set; } public static bool Condition; }
 
@@ -256,8 +256,8 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			var expectedCode =
-				@"using System;
+		var expectedCode =
+			@"using System;
 
 				class Model { public string Text { get; set; } public static int Number { get; set; } public static bool Condition; }
 
@@ -272,14 +272,14 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await VerifyAsync(initialCode, expectedCode);
-		}
+		await VerifyAsync(initialCode, expectedCode);
+	}
 
-		[Fact]
-		public async Task ComputeRefactoringsAsync_ExternalClassWithMultipleProperties_CreatesObjectInitializerWithMultipleProperties()
-		{
-			var initialCode =
-				@"using System;
+	[Fact]
+	public async Task ComputeRefactoringsAsync_ExternalClassWithMultipleProperties_CreatesObjectInitializerWithMultipleProperties()
+	{
+		var initialCode =
+			@"using System;
 				using F0.Tests.Shared;
 
 				class C
@@ -290,8 +290,8 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			var expectedCode =
-				@"using System;
+		var expectedCode =
+			@"using System;
 				using F0.Tests.Shared;
 
 				class C
@@ -307,8 +307,8 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			var externalCode =
-				@"namespace F0.Tests.Shared
+		var externalCode =
+			@"namespace F0.Tests.Shared
 				{
 					public class Model
 					{
@@ -318,14 +318,14 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await VerifyAsync(initialCode, expectedCode, new string[][] { new[] { externalCode } });
-		}
+		await VerifyAsync(initialCode, expectedCode, new string[][] { new[] { externalCode } });
+	}
 
-		[Fact]
-		public async Task ComputeRefactoringsAsync_PositionalRecordTypeWithPrimaryConstructor_CreatesObjectInitializerWithTheSynthesizedAutoPropertiesFromTheParameterList()
-		{
-			var initialCode =
-				@"using System;
+	[Fact]
+	public async Task ComputeRefactoringsAsync_PositionalRecordTypeWithPrimaryConstructor_CreatesObjectInitializerWithTheSynthesizedAutoPropertiesFromTheParameterList()
+	{
+		var initialCode =
+			@"using System;
 
 				record Model(string Text, int Number, bool Condition);
 
@@ -337,8 +337,8 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			var expectedCode =
-				@"using System;
+		var expectedCode =
+			@"using System;
 
 				record Model(string Text, int Number, bool Condition);
 
@@ -355,14 +355,14 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await VerifyAsync(initialCode, expectedCode, LanguageVersion.CSharp9, ReferenceAssemblies.Net.Net50);
-		}
+		await VerifyAsync(initialCode, expectedCode, LanguageVersion.CSharp9, ReferenceAssemblies.Net.Net50);
+	}
 
-		[Fact]
-		public async Task ComputeRefactoringsAsync_RecordTypeWithStandardPropertyAndFieldSyntax_CreatesObjectInitializerWithMembersFromTheRecordBody()
-		{
-			var initialCode =
-				@"using System;
+	[Fact]
+	public async Task ComputeRefactoringsAsync_RecordTypeWithStandardPropertyAndFieldSyntax_CreatesObjectInitializerWithMembersFromTheRecordBody()
+	{
+		var initialCode =
+			@"using System;
 
 				record Model { public string Text { get; init; } public int Number { get; set; } public bool Condition; }
 
@@ -374,8 +374,8 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			var expectedCode =
-				@"using System;
+		var expectedCode =
+			@"using System;
 
 				record Model { public string Text { get; init; } public int Number { get; set; } public bool Condition; }
 
@@ -392,14 +392,14 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await VerifyAsync(initialCode, expectedCode, LanguageVersion.CSharp9, ReferenceAssemblies.Net.Net50);
-		}
+		await VerifyAsync(initialCode, expectedCode, LanguageVersion.CSharp9, ReferenceAssemblies.Net.Net50);
+	}
 
-		[Fact]
-		public async Task ComputeRefactoringsAsync_RecordTypeWithSynthesizedAndDeclaredProperties_CreatesObjectInitializerWithAllProperties()
-		{
-			var initialCode =
-				@"using System;
+	[Fact]
+	public async Task ComputeRefactoringsAsync_RecordTypeWithSynthesizedAndDeclaredProperties_CreatesObjectInitializerWithAllProperties()
+	{
+		var initialCode =
+			@"using System;
 
 				record Model(string Text, int Number) { public int Number { get; init; } public bool Condition { get; init; } }
 
@@ -411,8 +411,8 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			var expectedCode =
-				@"using System;
+		var expectedCode =
+			@"using System;
 
 				record Model(string Text, int Number) { public int Number { get; init; } public bool Condition { get; init; } }
 
@@ -429,7 +429,6 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await VerifyAsync(initialCode, expectedCode, LanguageVersion.CSharp9, ReferenceAssemblies.Net.Net50);
-		}
+		await VerifyAsync(initialCode, expectedCode, LanguageVersion.CSharp9, ReferenceAssemblies.Net.Net50);
 	}
 }

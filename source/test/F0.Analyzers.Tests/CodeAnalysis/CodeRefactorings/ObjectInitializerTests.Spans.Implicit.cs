@@ -1,12 +1,12 @@
-namespace F0.Tests.CodeAnalysis.CodeRefactorings
+namespace F0.Tests.CodeAnalysis.CodeRefactorings;
+
+public partial class ObjectInitializerTests
 {
-	public partial class ObjectInitializerTests
+	[Fact]
+	public async Task ComputeRefactoringsAsync_Implicit_NotSupportedSelection_NoOp()
 	{
-		[Fact]
-		public async Task ComputeRefactoringsAsync_Implicit_NotSupportedSelection_NoOp()
-		{
-			var code =
-				@"using System;
+		var code =
+			@"using System;
 
 				class Empty { }
 
@@ -18,14 +18,14 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await VerifyNoOpAsync(code);
-		}
+		await VerifyNoOpAsync(code);
+	}
 
-		[Fact]
-		public async Task ComputeRefactoringsAsync_Implicit_CursorBeforeNewStatement_CreatesObjectInitializer()
-		{
-			var initialCode =
-				@"using System;
+	[Fact]
+	public async Task ComputeRefactoringsAsync_Implicit_CursorBeforeNewStatement_CreatesObjectInitializer()
+	{
+		var initialCode =
+			@"using System;
 
 				class Model { public string Text { get; set; } }
 
@@ -37,8 +37,8 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			var expectedCode =
-				@"using System;
+		var expectedCode =
+			@"using System;
 
 				class Model { public string Text { get; set; } }
 
@@ -53,14 +53,14 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await VerifyAsync(initialCode, expectedCode);
-		}
+		await VerifyAsync(initialCode, expectedCode);
+	}
 
-		[Fact]
-		public async Task ComputeRefactoringsAsync_Implicit_CursorBeforeArgumentList_CreatesObjectInitializer()
-		{
-			var initialCode =
-				@"using System;
+	[Fact]
+	public async Task ComputeRefactoringsAsync_Implicit_CursorBeforeArgumentList_CreatesObjectInitializer()
+	{
+		var initialCode =
+			@"using System;
 
 				class Model { public string Text { get; set; } }
 
@@ -72,8 +72,8 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			var expectedCode =
-				@"using System;
+		var expectedCode =
+			@"using System;
 
 				class Model { public string Text { get; set; } }
 
@@ -88,14 +88,14 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await VerifyAsync(initialCode, expectedCode);
-		}
+		await VerifyAsync(initialCode, expectedCode);
+	}
 
-		[Fact]
-		public async Task ComputeRefactoringsAsync_Implicit_CursorAfterArgumentList_NoAction()
-		{
-			var code =
-				@"using System;
+	[Fact]
+	public async Task ComputeRefactoringsAsync_Implicit_CursorAfterArgumentList_NoAction()
+	{
+		var code =
+			@"using System;
 
 				class Model { public string Text { get; set; } }
 
@@ -107,14 +107,14 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await VerifyNoOpAsync(code);
-		}
+		await VerifyNoOpAsync(code);
+	}
 
-		[Fact]
-		public async Task ComputeRefactoringsAsync_Implicit_ArgumentListIsSelected_CreatesObjectInitializer()
-		{
-			var initialCode =
-				@"using System;
+	[Fact]
+	public async Task ComputeRefactoringsAsync_Implicit_ArgumentListIsSelected_CreatesObjectInitializer()
+	{
+		var initialCode =
+			@"using System;
 
 				class Model { public string Text { get; set; } }
 
@@ -126,8 +126,8 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			var expectedCode =
-				@"using System;
+		var expectedCode =
+			@"using System;
 
 				class Model { public string Text { get; set; } }
 
@@ -142,14 +142,14 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await VerifyAsync(initialCode, expectedCode);
-		}
+		await VerifyAsync(initialCode, expectedCode);
+	}
 
-		[Fact]
-		public async Task ComputeRefactoringsAsync_Implicit_CursorInEmptyArgumentList_CreatesObjectInitializer()
-		{
-			var initialCode =
-				@"using System;
+	[Fact]
+	public async Task ComputeRefactoringsAsync_Implicit_CursorInEmptyArgumentList_CreatesObjectInitializer()
+	{
+		var initialCode =
+			@"using System;
 
 				class Model { public string Text { get; set; } }
 
@@ -161,8 +161,8 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			var expectedCode =
-				@"using System;
+		var expectedCode =
+			@"using System;
 
 				class Model { public string Text { get; set; } }
 
@@ -177,7 +177,6 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await VerifyAsync(initialCode, expectedCode);
-		}
+		await VerifyAsync(initialCode, expectedCode);
 	}
 }

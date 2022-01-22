@@ -2,22 +2,22 @@ using F0.Benchmarking.CodeAnalysis;
 using F0.Benchmarking.CodeAnalysis.CodeRefactorings;
 using F0.CodeAnalysis.CodeRefactorings;
 
-namespace F0.Benchmarks.CodeAnalysis.CodeRefactorings
+namespace F0.Benchmarks.CodeAnalysis.CodeRefactorings;
+
+public class ObjectInitializerBenchmarks
 {
-	public class ObjectInitializerBenchmarks
+	private readonly CodeRefactoringBenchmark<ObjectInitializer> benchmark;
+
+	public ObjectInitializerBenchmarks()
 	{
-		private readonly CodeRefactoringBenchmark<ObjectInitializer> benchmark;
+		benchmark = Measure.CodeRefactoring<ObjectInitializer>();
+	}
 
-		public ObjectInitializerBenchmarks()
-		{
-			benchmark = Measure.CodeRefactoring<ObjectInitializer>();
-		}
-
-		[GlobalSetup]
-		public void Setup()
-		{
-			var code =
-				@"using System;
+	[GlobalSetup]
+	public void Setup()
+	{
+		var code =
+			@"using System;
 
 				interface IInterface
 				{
@@ -68,18 +68,18 @@ namespace F0.Benchmarks.CodeAnalysis.CodeRefactorings
 					string Method() => String.Empty;
 				}";
 
-			benchmark.Initialize(code, LanguageVersion.Latest, 46, 37, 46, 54, true);
-		}
+		benchmark.Initialize(code, LanguageVersion.Latest, 46, 37, 46, 54, true);
+	}
 
-		[Benchmark]
-		public Task CreateObjectInitializer()
-			=> benchmark.InvokeAsync();
+	[Benchmark]
+	public Task CreateObjectInitializer()
+		=> benchmark.InvokeAsync();
 
-		[GlobalCleanup]
-		public void Cleanup()
-		{
-			var code =
-				@"using System;
+	[GlobalCleanup]
+	public void Cleanup()
+	{
+		var code =
+			@"using System;
 
 				interface IInterface
 				{
@@ -141,7 +141,6 @@ namespace F0.Benchmarks.CodeAnalysis.CodeRefactorings
 					string Method() => String.Empty;
 				}";
 
-			benchmark.Inspect(code);
-		}
+		benchmark.Inspect(code);
 	}
 }

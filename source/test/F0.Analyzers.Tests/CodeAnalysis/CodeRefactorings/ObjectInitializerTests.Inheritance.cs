@@ -1,14 +1,14 @@
 using F0.Testing.CodeAnalysis;
 
-namespace F0.Tests.CodeAnalysis.CodeRefactorings
+namespace F0.Tests.CodeAnalysis.CodeRefactorings;
+
+public partial class ObjectInitializerTests
 {
-	public partial class ObjectInitializerTests
+	[Fact]
+	public async Task ComputeRefactoringsAsync_ValueType_StructsDoNotSupportInheritanceButTheyCanImplementInterfaces()
 	{
-		[Fact]
-		public async Task ComputeRefactoringsAsync_ValueType_StructsDoNotSupportInheritanceButTheyCanImplementInterfaces()
-		{
-			var initialCode =
-				@"using System;
+		var initialCode =
+			@"using System;
 
 				interface Interface { int Property { get; set; } }
 				struct Struct : Interface { public int Property { get; set; } }
@@ -21,8 +21,8 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			var expectedCode =
-				@"using System;
+		var expectedCode =
+			@"using System;
 
 				interface Interface { int Property { get; set; } }
 				struct Struct : Interface { public int Property { get; set; } }
@@ -38,14 +38,14 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await VerifyAsync(initialCode, expectedCode);
-		}
+		await VerifyAsync(initialCode, expectedCode);
+	}
 
-		[Fact]
-		public async Task ComputeRefactoringsAsync_ClassImplementsInterfaceImplicitly_AssignsImplementedMembers()
-		{
-			var initialCode =
-				@"using System;
+	[Fact]
+	public async Task ComputeRefactoringsAsync_ClassImplementsInterfaceImplicitly_AssignsImplementedMembers()
+	{
+		var initialCode =
+			@"using System;
 
 				interface Interface { int Property { get; set; } }
 				class Class : Interface { public int Property { get; set; } }
@@ -58,8 +58,8 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			var expectedCode =
-				@"using System;
+		var expectedCode =
+			@"using System;
 
 				interface Interface { int Property { get; set; } }
 				class Class : Interface { public int Property { get; set; } }
@@ -75,14 +75,14 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await VerifyAsync(initialCode, expectedCode);
-		}
+		await VerifyAsync(initialCode, expectedCode);
+	}
 
-		[Fact]
-		public async Task ComputeRefactoringsAsync_ClassImplementsInterfaceExplicitly_AnExplicitlyImplementedMemberCannotBeAccessedThroughTheClassInstance()
-		{
-			var initialCode =
-				@"using System;
+	[Fact]
+	public async Task ComputeRefactoringsAsync_ClassImplementsInterfaceExplicitly_AnExplicitlyImplementedMemberCannotBeAccessedThroughTheClassInstance()
+	{
+		var initialCode =
+			@"using System;
 
 				interface Interface { int Property { get; set; } }
 				class Class : Interface { private int field; int Interface.Property { get => field; set => field = value; } }
@@ -95,8 +95,8 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			var expectedCode =
-				@"using System;
+		var expectedCode =
+			@"using System;
 
 				interface Interface { int Property { get; set; } }
 				class Class : Interface { private int field; int Interface.Property { get => field; set => field = value; } }
@@ -109,14 +109,14 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await VerifyAsync(initialCode, expectedCode);
-		}
+		await VerifyAsync(initialCode, expectedCode);
+	}
 
-		[Fact]
-		public async Task ComputeRefactoringsAsync_ClassImplementsInterfaceWithoutSetAccessor_InaccessibleMembersAreNotAssigned()
-		{
-			var initialCode =
-				@"using System;
+	[Fact]
+	public async Task ComputeRefactoringsAsync_ClassImplementsInterfaceWithoutSetAccessor_InaccessibleMembersAreNotAssigned()
+	{
+		var initialCode =
+			@"using System;
 
 				interface Interface { int Property { get; } }
 				class Class : Interface { public int Property { get; } }
@@ -129,8 +129,8 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			var expectedCode =
-				@"using System;
+		var expectedCode =
+			@"using System;
 
 				interface Interface { int Property { get; } }
 				class Class : Interface { public int Property { get; } }
@@ -143,14 +143,14 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await VerifyAsync(initialCode, expectedCode);
-		}
+		await VerifyAsync(initialCode, expectedCode);
+	}
 
-		[Fact]
-		public async Task ComputeRefactoringsAsync_ClassImplementsInterfaceWithSetAccessor_AccessibleMembersAreAssigned()
-		{
-			var initialCode =
-				@"using System;
+	[Fact]
+	public async Task ComputeRefactoringsAsync_ClassImplementsInterfaceWithSetAccessor_AccessibleMembersAreAssigned()
+	{
+		var initialCode =
+			@"using System;
 
 				interface Interface { int Property { get; } }
 				class Class : Interface { public int Property { get; set; } }
@@ -163,8 +163,8 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			var expectedCode =
-				@"using System;
+		var expectedCode =
+			@"using System;
 
 				interface Interface { int Property { get; } }
 				class Class : Interface { public int Property { get; set; } }
@@ -180,14 +180,14 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await VerifyAsync(initialCode, expectedCode);
-		}
+		await VerifyAsync(initialCode, expectedCode);
+	}
 
-		[Fact]
-		public async Task ComputeRefactoringsAsync_NoAccessibleMembersInherited_NoMemberAssignments()
-		{
-			var initialCode =
-				@"using System;
+	[Fact]
+	public async Task ComputeRefactoringsAsync_NoAccessibleMembersInherited_NoMemberAssignments()
+	{
+		var initialCode =
+			@"using System;
 
 				class Base { public int Property { get; } }
 				class Derived : Base { }
@@ -200,8 +200,8 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			var expectedCode =
-				@"using System;
+		var expectedCode =
+			@"using System;
 
 				class Base { public int Property { get; } }
 				class Derived : Base { }
@@ -214,14 +214,14 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await VerifyAsync(initialCode, expectedCode);
-		}
+		await VerifyAsync(initialCode, expectedCode);
+	}
 
-		[Fact]
-		public async Task ComputeRefactoringsAsync_AccessibleMembersInherited_MembersAreAssigned()
-		{
-			var initialCode =
-				@"using System;
+	[Fact]
+	public async Task ComputeRefactoringsAsync_AccessibleMembersInherited_MembersAreAssigned()
+	{
+		var initialCode =
+			@"using System;
 
 				class Base { public int Property { get; set; } }
 				class Derived : Base { }
@@ -234,8 +234,8 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			var expectedCode =
-				@"using System;
+		var expectedCode =
+			@"using System;
 
 				class Base { public int Property { get; set; } }
 				class Derived : Base { }
@@ -251,14 +251,14 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await VerifyAsync(initialCode, expectedCode);
-		}
+		await VerifyAsync(initialCode, expectedCode);
+	}
 
-		[Fact]
-		public async Task ComputeRefactoringsAsync_NoBaseMembersDeclared_AssignsOnlyDeclaredMembers()
-		{
-			var initialCode =
-				@"using System;
+	[Fact]
+	public async Task ComputeRefactoringsAsync_NoBaseMembersDeclared_AssignsOnlyDeclaredMembers()
+	{
+		var initialCode =
+			@"using System;
 
 				class Base { }
 				class Derived : Base { public int Property { get; set; } }
@@ -271,8 +271,8 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			var expectedCode =
-				@"using System;
+		var expectedCode =
+			@"using System;
 
 				class Base { }
 				class Derived : Base { public int Property { get; set; } }
@@ -288,14 +288,14 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await VerifyAsync(initialCode, expectedCode);
-		}
+		await VerifyAsync(initialCode, expectedCode);
+	}
 
-		[Fact]
-		public async Task ComputeRefactoringsAsync_InheritanceIsTransitive_AssignBaseMembersBeforeDerivedMembers()
-		{
-			var initialCode =
-				@"using System;
+	[Fact]
+	public async Task ComputeRefactoringsAsync_InheritanceIsTransitive_AssignBaseMembersBeforeDerivedMembers()
+	{
+		var initialCode =
+			@"using System;
 
 				class ClassA { public string Text { get; set; } }
 				class ClassB : ClassA { public int Number { get; set; } }
@@ -309,8 +309,8 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			var expectedCode =
-				@"using System;
+		var expectedCode =
+			@"using System;
 
 				class ClassA { public string Text { get; set; } }
 				class ClassB : ClassA { public int Number { get; set; } }
@@ -329,14 +329,14 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await VerifyAsync(initialCode, expectedCode);
-		}
+		await VerifyAsync(initialCode, expectedCode);
+	}
 
-		[Fact]
-		public async Task ComputeRefactoringsAsync_DoNotOverrideVirtualMember_AssignsMember()
-		{
-			var initialCode =
-				@"using System;
+	[Fact]
+	public async Task ComputeRefactoringsAsync_DoNotOverrideVirtualMember_AssignsMember()
+	{
+		var initialCode =
+			@"using System;
 
 				class Base { public virtual int Property { get; set; } }
 				class Derived : Base { }
@@ -349,8 +349,8 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			var expectedCode =
-				@"using System;
+		var expectedCode =
+			@"using System;
 
 				class Base { public virtual int Property { get; set; } }
 				class Derived : Base { }
@@ -366,14 +366,14 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await VerifyAsync(initialCode, expectedCode);
-		}
+		await VerifyAsync(initialCode, expectedCode);
+	}
 
-		[Fact]
-		public async Task ComputeRefactoringsAsync_OverrideVirtualMember_AssignsMember()
-		{
-			var initialCode =
-				@"using System;
+	[Fact]
+	public async Task ComputeRefactoringsAsync_OverrideVirtualMember_AssignsMember()
+	{
+		var initialCode =
+			@"using System;
 
 				class Base { public virtual int Property { get; set; } }
 				class Derived : Base { public override int Property { get => base.Property; set => base.Property = value; } }
@@ -386,8 +386,8 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			var expectedCode =
-				@"using System;
+		var expectedCode =
+			@"using System;
 
 				class Base { public virtual int Property { get; set; } }
 				class Derived : Base { public override int Property { get => base.Property; set => base.Property = value; } }
@@ -403,14 +403,14 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await VerifyAsync(initialCode, expectedCode);
-		}
+		await VerifyAsync(initialCode, expectedCode);
+	}
 
-		[Fact]
-		public async Task ComputeRefactoringsAsync_MustOverrideAbstractMember_AssignsMember()
-		{
-			var initialCode =
-				@"using System;
+	[Fact]
+	public async Task ComputeRefactoringsAsync_MustOverrideAbstractMember_AssignsMember()
+	{
+		var initialCode =
+			@"using System;
 
 				abstract class Base { public abstract int Property { get; set; } }
 				sealed class Derived : Base { public override int Property { get; set; } }
@@ -423,8 +423,8 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			var expectedCode =
-				@"using System;
+		var expectedCode =
+			@"using System;
 
 				abstract class Base { public abstract int Property { get; set; } }
 				sealed class Derived : Base { public override int Property { get; set; } }
@@ -440,14 +440,14 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await VerifyAsync(initialCode, expectedCode);
-		}
+		await VerifyAsync(initialCode, expectedCode);
+	}
 
-		[Fact]
-		public async Task ComputeRefactoringsAsync_HideInheritedMemberWithoutSetAccessor_InaccessibleMembersAreNotAssigned()
-		{
-			var initialCode =
-				@"using System;
+	[Fact]
+	public async Task ComputeRefactoringsAsync_HideInheritedMemberWithoutSetAccessor_InaccessibleMembersAreNotAssigned()
+	{
+		var initialCode =
+			@"using System;
 
 				class Base { public int Property { get; set; } }
 				class Derived : Base { public new int Property { get; } }
@@ -460,8 +460,8 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			var expectedCode =
-				@"using System;
+		var expectedCode =
+			@"using System;
 
 				class Base { public int Property { get; set; } }
 				class Derived : Base { public new int Property { get; } }
@@ -474,14 +474,14 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await VerifyAsync(initialCode, expectedCode);
-		}
+		await VerifyAsync(initialCode, expectedCode);
+	}
 
-		[Fact]
-		public async Task ComputeRefactoringsAsync_HideInheritedMemberWithSetAccessor_AccessibleMembersAreAssigned()
-		{
-			var initialCode =
-				@"using System;
+	[Fact]
+	public async Task ComputeRefactoringsAsync_HideInheritedMemberWithSetAccessor_AccessibleMembersAreAssigned()
+	{
+		var initialCode =
+			@"using System;
 
 				class Base { public int Property { get; } }
 				class Derived : Base { public new int Property { get; set; } }
@@ -494,8 +494,8 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			var expectedCode =
-				@"using System;
+		var expectedCode =
+			@"using System;
 
 				class Base { public int Property { get; } }
 				class Derived : Base { public new int Property { get; set; } }
@@ -511,14 +511,14 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await VerifyAsync(initialCode, expectedCode);
-		}
+		await VerifyAsync(initialCode, expectedCode);
+	}
 
-		[Fact]
-		public async Task ComputeRefactoringsAsync_Order_AssignDerivedMembersAfterBaseMembers()
-		{
-			var initialCode =
-				@"using System;
+	[Fact]
+	public async Task ComputeRefactoringsAsync_Order_AssignDerivedMembersAfterBaseMembers()
+	{
+		var initialCode =
+			@"using System;
 
 				interface Interface
 				{
@@ -553,8 +553,8 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			var expectedCode =
-				@"using System;
+		var expectedCode =
+			@"using System;
 
 				interface Interface
 				{
@@ -598,21 +598,21 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await VerifyAsync(initialCode, expectedCode);
-		}
+		await VerifyAsync(initialCode, expectedCode);
+	}
 
-		[Fact]
-		public async Task ComputeRefactoringsAsync_InternalBaseMembers_CannotBeReferencedOutsideTheAssemblyWithinWhichTheyWereDefined()
-		{
-			var externalCode =
-				@"public class Base
+	[Fact]
+	public async Task ComputeRefactoringsAsync_InternalBaseMembers_CannotBeReferencedOutsideTheAssemblyWithinWhichTheyWereDefined()
+	{
+		var externalCode =
+			@"public class Base
 				{
 					internal string BaseField;
 					internal int BaseProperty { get; set; }
 				}";
 
-			var initialCode =
-				@"using System;
+		var initialCode =
+			@"using System;
 
 				class Derived : Base
 				{
@@ -628,8 +628,8 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			var expectedCode =
-				@"using System;
+		var expectedCode =
+			@"using System;
 
 				class Derived : Base
 				{
@@ -649,14 +649,14 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await VerifyAsync(initialCode, expectedCode, new string[][] { new[] { externalCode } });
-		}
+		await VerifyAsync(initialCode, expectedCode, new string[][] { new[] { externalCode } });
+	}
 
-		[Fact]
-		public async Task ComputeRefactoringsAsync_InternalBaseMembers_AreVisibleToFriendAssemblies()
-		{
-			var externalCode =
-				$@"using System.Runtime.CompilerServices;
+	[Fact]
+	public async Task ComputeRefactoringsAsync_InternalBaseMembers_AreVisibleToFriendAssemblies()
+	{
+		var externalCode =
+			$@"using System.Runtime.CompilerServices;
 				[assembly: InternalsVisibleTo(""{Projects.AssemblyName}"")]
 
 				public class Base
@@ -665,8 +665,8 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					internal int BaseProperty {{ get; set; }}
 				}}";
 
-			var initialCode =
-				@"using System;
+		var initialCode =
+			@"using System;
 
 				class Derived : Base
 				{
@@ -682,8 +682,8 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			var expectedCode =
-				@"using System;
+		var expectedCode =
+			@"using System;
 
 				class Derived : Base
 				{
@@ -705,14 +705,14 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await VerifyAsync(initialCode, expectedCode, new string[][] { new[] { externalCode } });
-		}
+		await VerifyAsync(initialCode, expectedCode, new string[][] { new[] { externalCode } });
+	}
 
-		[Fact]
-		public async Task ComputeRefactoringsAsync_RecordType_AssignBaseMembersBeforeDerivedMembers()
-		{
-			var initialCode =
-				@"using System;
+	[Fact]
+	public async Task ComputeRefactoringsAsync_RecordType_AssignBaseMembersBeforeDerivedMembers()
+	{
+		var initialCode =
+			@"using System;
 
 				abstract record Base(string Text) { public int Number { get; init; } }
 				sealed record Derived(string Text, char Character) : Base(Text) { public bool Condition { get; init; } }
@@ -725,8 +725,8 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			var expectedCode =
-				@"using System;
+		var expectedCode =
+			@"using System;
 
 				abstract record Base(string Text) { public int Number { get; init; } }
 				sealed record Derived(string Text, char Character) : Base(Text) { public bool Condition { get; init; } }
@@ -745,7 +745,6 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await VerifyAsync(initialCode, expectedCode, LanguageVersion.CSharp9, ReferenceAssemblies.Net.Net50);
-		}
+		await VerifyAsync(initialCode, expectedCode, LanguageVersion.CSharp9, ReferenceAssemblies.Net.Net50);
 	}
 }

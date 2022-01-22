@@ -2,18 +2,18 @@ using System.ComponentModel;
 using F0.CodeAnalysis.Diagnostics;
 using F0.Testing.CodeAnalysis;
 
-namespace F0.Tests.CodeAnalysis.Diagnostics
-{
-	public class F0100xPreferPatternMatchingNullCheckOverComparisonWithNullTests
-	{
-		[Fact]
-		public void F0100xPreferPatternMatchingNullCheckOverComparisonWithNull_CheckType()
-			=> Verify.DiagnosticAnalyzer<F0100xPreferPatternMatchingNullCheckOverComparisonWithNull>().Type();
+namespace F0.Tests.CodeAnalysis.Diagnostics;
 
-		[Fact]
-		public async Task Initialize_CSharp8_ReportNoDiagnostics()
-		{
-			var code =
+public class F0100xPreferPatternMatchingNullCheckOverComparisonWithNullTests
+{
+	[Fact]
+	public void F0100xPreferPatternMatchingNullCheckOverComparisonWithNull_CheckType()
+		=> Verify.DiagnosticAnalyzer<F0100xPreferPatternMatchingNullCheckOverComparisonWithNull>().Type();
+
+	[Fact]
+	public async Task Initialize_CSharp8_ReportNoDiagnostics()
+	{
+		var code =
 @"using System;
 using System.Collections.Generic;
 
@@ -44,13 +44,13 @@ class Test
 	}
 }";
 
-			await VerifyNoOpAsync(code, LanguageVersion.CSharp8);
-		}
+		await VerifyNoOpAsync(code, LanguageVersion.CSharp8);
+	}
 
-		[Fact]
-		public async Task Initialize_NullTests_FlagIfNullCheck()
-		{
-			var type =
+	[Fact]
+	public async Task Initialize_NullTests_FlagIfNullCheck()
+	{
+		var type =
 @"using System;
 
 public class UserClass : IEquatable<UserClass>
@@ -63,7 +63,7 @@ public class UserClass : IEquatable<UserClass>
 	public override int GetHashCode() => throw null;
 }";
 
-			var comparer =
+		var comparer =
 @"using System.Collections.Generic;
 
 public class UserClassEqualityComparer : IEqualityComparer<UserClass>
@@ -73,7 +73,7 @@ public class UserClassEqualityComparer : IEqualityComparer<UserClass>
 	int IEqualityComparer<UserClass>.GetHashCode(UserClass obj) => throw null;
 }";
 
-			var code =
+		var code =
 @"using System;
 using System.Collections.Generic;
 
@@ -108,8 +108,8 @@ class Test
 	}
 }";
 
-			var expected = new[]
-			{
+		var expected = new[]
+		{
 				CreateDiagnostic(00, NullComparisonRule.Identity, ComparisonExpression.EqualityOperator),
 				CreateDiagnostic(01, NullComparisonRule.Identity, ComparisonExpression.InequalityOperator),
 				CreateDiagnostic(02, NullComparisonRule.Equality, ComparisonExpression.EqualityOperator),
@@ -134,20 +134,20 @@ class Test
 				CreateDiagnostic(21, NullComparisonRule.Equality, ComparisonExpression.NotEqualsMethod),
 			};
 
-			await VerifyAsync(code, expected, type, comparer);
-		}
+		await VerifyAsync(code, expected, type, comparer);
+	}
 
-		[Fact]
-		public async Task Initialize_PureNullTests_FlagIfNullCheck()
-		{
-			var type =
+	[Fact]
+	public async Task Initialize_PureNullTests_FlagIfNullCheck()
+	{
+		var type =
 @"using System;
 
 public class DefaultClass
 {
 }";
 
-			var code =
+		var code =
 @"using System;
 using System.Collections.Generic;
 
@@ -180,8 +180,8 @@ class Test
 	}
 }";
 
-			var expected = new[]
-			{
+		var expected = new[]
+		{
 				CreateDiagnostic(00, NullComparisonRule.Identity, ComparisonExpression.EqualityOperator),
 				CreateDiagnostic(01, NullComparisonRule.Identity, ComparisonExpression.InequalityOperator),
 				CreateDiagnostic(02, NullComparisonRule.Identity, ComparisonExpression.EqualityOperator),
@@ -204,13 +204,13 @@ class Test
 				CreateDiagnostic(19, NullComparisonRule.Equality, ComparisonExpression.NotEqualsMethod),
 			};
 
-			await VerifyAsync(code, expected, type);
-		}
+		await VerifyAsync(code, expected, type);
+	}
 
-		[Fact]
-		public async Task Initialize_NonNullTests_ReportNoDiagnostics()
-		{
-			var type =
+	[Fact]
+	public async Task Initialize_NonNullTests_ReportNoDiagnostics()
+	{
+		var type =
 @"using System;
 
 public interface IEquatable
@@ -237,7 +237,7 @@ public class Class : IEquatable, IInterface, IInterface<Class>
 	bool IInterface<Class>.Equals(Class? other) => throw null;
 }";
 
-			var extensions =
+		var extensions =
 @"using System;
 
 public static class Extensions
@@ -250,7 +250,7 @@ public static class Extensions
 	public static bool ReferenceEquals(this object instance, object other) => throw null;
 }";
 
-			var code =
+		var code =
 @"using System;
 using System.Collections.Generic;
 
@@ -281,19 +281,19 @@ class Test
 	}
 }";
 
-			var expected = new[]
-			{
+		var expected = new[]
+		{
 				CreateDiagnostic(0, NullComparisonRule.Equality, ComparisonExpression.EqualsMethod),
 				CreateDiagnostic(1, NullComparisonRule.Equality, ComparisonExpression.NotEqualsMethod),
 			};
 
-			await VerifyAsync(code, expected, type, extensions);
-		}
+		await VerifyAsync(code, expected, type, extensions);
+	}
 
-		[Fact]
-		public async Task Initialize_NullableValueType_FlagIfNullCheck()
-		{
-			var type =
+	[Fact]
+	public async Task Initialize_NullableValueType_FlagIfNullCheck()
+	{
+		var type =
 @"using System;
 
 public struct UserStruct : IEquatable<UserStruct>
@@ -306,7 +306,7 @@ public struct UserStruct : IEquatable<UserStruct>
 	public override int GetHashCode() => throw null;
 }";
 
-			var comparer =
+		var comparer =
 @"using System.Collections.Generic;
 
 public class UserStructEqualityComparer : IEqualityComparer<UserStruct?>
@@ -316,7 +316,7 @@ public class UserStructEqualityComparer : IEqualityComparer<UserStruct?>
 	int IEqualityComparer<UserStruct?>.GetHashCode(UserStruct? obj) => throw null;
 }";
 
-			var code =
+		var code =
 @"using System;
 using System.Collections.Generic;
 
@@ -351,8 +351,8 @@ class Test
 	}
 }";
 
-			var expected = new[]
-			{
+		var expected = new[]
+		{
 				CreateDiagnostic(00, NullComparisonRule.Identity, ComparisonExpression.EqualityOperator),
 				CreateDiagnostic(01, NullComparisonRule.Identity, ComparisonExpression.InequalityOperator),
 				CreateDiagnostic(02, NullComparisonRule.Identity, ComparisonExpression.EqualityOperator),
@@ -377,13 +377,13 @@ class Test
 				CreateDiagnostic(21, NullComparisonRule.Equality, ComparisonExpression.NotEqualsMethod),
 			};
 
-			await VerifyAsync(code, expected, type, comparer);
-		}
+		await VerifyAsync(code, expected, type, comparer);
+	}
 
-		[Fact]
-		public async Task Initialize_NonNullableValueType_ReportNoDiagnostics()
-		{
-			var type =
+	[Fact]
+	public async Task Initialize_NonNullableValueType_ReportNoDiagnostics()
+	{
+		var type =
 @"using System;
 
 public struct DefaultStruct : IEquatable<DefaultStruct>
@@ -391,7 +391,7 @@ public struct DefaultStruct : IEquatable<DefaultStruct>
 	public bool Equals(DefaultStruct other) => throw null;
 }";
 
-			var code =
+		var code =
 @"using System;
 using System.Collections.Generic;
 
@@ -422,13 +422,13 @@ class Test
 	}
 }";
 
-			await VerifyAsync(code, Array.Empty<DiagnosticResult>(), type);
-		}
+		await VerifyAsync(code, Array.Empty<DiagnosticResult>(), type);
+	}
 
-		[Fact]
-		public async Task Initialize_IsOperator_ReportNoDiagnostics()
-		{
-			var code =
+	[Fact]
+	public async Task Initialize_IsOperator_ReportNoDiagnostics()
+	{
+		var code =
 @"using System;
 
 class Test
@@ -458,13 +458,13 @@ class Test
 	}
 }";
 
-			await VerifyNoOpAsync(code);
-		}
+		await VerifyNoOpAsync(code);
+	}
 
-		[Fact]
-		public async Task Initialize_Other_ReportNoDiagnostics()
-		{
-			var code =
+	[Fact]
+	public async Task Initialize_Other_ReportNoDiagnostics()
+	{
+		var code =
 @"using System;
 
 class Test
@@ -484,90 +484,89 @@ class Test
 	}
 }";
 
-			await VerifyNoOpAsync(code);
-		}
+		await VerifyNoOpAsync(code);
+	}
 
-		private static DiagnosticResult CreateDiagnostic(int markupKey, NullComparisonRule rule, ComparisonExpression expression)
+	private static DiagnosticResult CreateDiagnostic(int markupKey, NullComparisonRule rule, ComparisonExpression expression)
+	{
+		var descriptor = rule switch
 		{
-			var descriptor = rule switch
-			{
-				NullComparisonRule.Equality => F0100xPreferPatternMatchingNullCheckOverComparisonWithNull.EqualityComparisonRule,
-				NullComparisonRule.Identity => F0100xPreferPatternMatchingNullCheckOverComparisonWithNull.IdentityComparisonRule,
-				_ => throw new InvalidEnumArgumentException(nameof(rule), (int)rule, typeof(NullComparisonRule)),
-			};
+			NullComparisonRule.Equality => F0100xPreferPatternMatchingNullCheckOverComparisonWithNull.EqualityComparisonRule,
+			NullComparisonRule.Identity => F0100xPreferPatternMatchingNullCheckOverComparisonWithNull.IdentityComparisonRule,
+			_ => throw new InvalidEnumArgumentException(nameof(rule), (int)rule, typeof(NullComparisonRule)),
+		};
 
-			var pattern = expression switch
-			{
-				ComparisonExpression.EqualityOperator or ComparisonExpression.EqualsMethod or ComparisonExpression.ReferenceEqualsMethod => "is",
-				ComparisonExpression.InequalityOperator or ComparisonExpression.NotEqualsMethod or ComparisonExpression.NotReferenceEqualsMethod => "is not",
-				_ => throw new InvalidEnumArgumentException(nameof(expression), (int)expression, typeof(ComparisonExpression)),
-			};
-
-			var modifier = expression switch
-			{
-				ComparisonExpression.EqualityOperator or ComparisonExpression.InequalityOperator => "overloaded",
-				ComparisonExpression.EqualsMethod or ComparisonExpression.NotEqualsMethod or ComparisonExpression.ReferenceEqualsMethod or ComparisonExpression.NotReferenceEqualsMethod => "overridden",
-				_ => throw new InvalidEnumArgumentException(nameof(expression), (int)expression, typeof(ComparisonExpression)),
-			};
-
-			var memberName = expression switch
-			{
-				ComparisonExpression.EqualityOperator => "==",
-				ComparisonExpression.InequalityOperator => "!=",
-				ComparisonExpression.EqualsMethod or ComparisonExpression.NotEqualsMethod => "Equals",
-				ComparisonExpression.ReferenceEqualsMethod or ComparisonExpression.NotReferenceEqualsMethod => "ReferenceEquals",
-				_ => throw new InvalidEnumArgumentException(nameof(expression), (int)expression, typeof(ComparisonExpression)),
-			};
-
-			var memberKind = expression switch
-			{
-				ComparisonExpression.EqualityOperator or ComparisonExpression.InequalityOperator => "operator",
-				ComparisonExpression.EqualsMethod or ComparisonExpression.NotEqualsMethod or ComparisonExpression.ReferenceEqualsMethod or ComparisonExpression.NotReferenceEqualsMethod => "method",
-				_ => throw new InvalidEnumArgumentException(nameof(expression), (int)expression, typeof(ComparisonExpression)),
-			};
-
-			var test = expression switch
-			{
-				ComparisonExpression.EqualityOperator or ComparisonExpression.EqualsMethod or ComparisonExpression.ReferenceEqualsMethod => "null",
-				ComparisonExpression.InequalityOperator or ComparisonExpression.NotEqualsMethod or ComparisonExpression.NotReferenceEqualsMethod => "non-null",
-				_ => throw new InvalidEnumArgumentException(nameof(expression), (int)expression, typeof(ComparisonExpression)),
-			};
-
-			var arguments = rule switch
-			{
-				NullComparisonRule.Equality => new object[] { pattern, modifier, memberName, memberKind, test },
-				NullComparisonRule.Identity => new object[] { pattern, memberName, memberKind, test },
-				_ => throw new InvalidEnumArgumentException(nameof(rule), (int)rule, typeof(NullComparisonRule)),
-			};
-
-			return Verify.Diagnostic<F0100xPreferPatternMatchingNullCheckOverComparisonWithNull>(descriptor)
-				.WithLocation(markupKey)
-				.WithArguments(arguments);
-		}
-
-		private static Task VerifyAsync(string code, DiagnosticResult[] diagnostics, params string[] additionalDocuments)
-			=> Verify.DiagnosticAnalyzer<F0100xPreferPatternMatchingNullCheckOverComparisonWithNull>().DiagnosticAsync(code, diagnostics, new string[][] { additionalDocuments }, ReferenceAssemblies.Net.Net50, LanguageVersion.Latest);
-
-		private static Task VerifyNoOpAsync(string code)
-			=> Verify.DiagnosticAnalyzer<F0100xPreferPatternMatchingNullCheckOverComparisonWithNull>().NoOpAsync(code);
-
-		private static Task VerifyNoOpAsync(string code, LanguageVersion languageVersion)
-			=> Verify.DiagnosticAnalyzer<F0100xPreferPatternMatchingNullCheckOverComparisonWithNull>().NoOpAsync(code, ReferenceAssemblies.Net.Net50, languageVersion);
-
-		private enum NullComparisonRule
+		var pattern = expression switch
 		{
-			Equality,
-			Identity,
-		}
+			ComparisonExpression.EqualityOperator or ComparisonExpression.EqualsMethod or ComparisonExpression.ReferenceEqualsMethod => "is",
+			ComparisonExpression.InequalityOperator or ComparisonExpression.NotEqualsMethod or ComparisonExpression.NotReferenceEqualsMethod => "is not",
+			_ => throw new InvalidEnumArgumentException(nameof(expression), (int)expression, typeof(ComparisonExpression)),
+		};
 
-		private enum ComparisonExpression
+		var modifier = expression switch
 		{
-			EqualityOperator,
-			InequalityOperator,
-			EqualsMethod,
-			NotEqualsMethod,
-			ReferenceEqualsMethod,
-			NotReferenceEqualsMethod,
-		}
+			ComparisonExpression.EqualityOperator or ComparisonExpression.InequalityOperator => "overloaded",
+			ComparisonExpression.EqualsMethod or ComparisonExpression.NotEqualsMethod or ComparisonExpression.ReferenceEqualsMethod or ComparisonExpression.NotReferenceEqualsMethod => "overridden",
+			_ => throw new InvalidEnumArgumentException(nameof(expression), (int)expression, typeof(ComparisonExpression)),
+		};
+
+		var memberName = expression switch
+		{
+			ComparisonExpression.EqualityOperator => "==",
+			ComparisonExpression.InequalityOperator => "!=",
+			ComparisonExpression.EqualsMethod or ComparisonExpression.NotEqualsMethod => "Equals",
+			ComparisonExpression.ReferenceEqualsMethod or ComparisonExpression.NotReferenceEqualsMethod => "ReferenceEquals",
+			_ => throw new InvalidEnumArgumentException(nameof(expression), (int)expression, typeof(ComparisonExpression)),
+		};
+
+		var memberKind = expression switch
+		{
+			ComparisonExpression.EqualityOperator or ComparisonExpression.InequalityOperator => "operator",
+			ComparisonExpression.EqualsMethod or ComparisonExpression.NotEqualsMethod or ComparisonExpression.ReferenceEqualsMethod or ComparisonExpression.NotReferenceEqualsMethod => "method",
+			_ => throw new InvalidEnumArgumentException(nameof(expression), (int)expression, typeof(ComparisonExpression)),
+		};
+
+		var test = expression switch
+		{
+			ComparisonExpression.EqualityOperator or ComparisonExpression.EqualsMethod or ComparisonExpression.ReferenceEqualsMethod => "null",
+			ComparisonExpression.InequalityOperator or ComparisonExpression.NotEqualsMethod or ComparisonExpression.NotReferenceEqualsMethod => "non-null",
+			_ => throw new InvalidEnumArgumentException(nameof(expression), (int)expression, typeof(ComparisonExpression)),
+		};
+
+		var arguments = rule switch
+		{
+			NullComparisonRule.Equality => new object[] { pattern, modifier, memberName, memberKind, test },
+			NullComparisonRule.Identity => new object[] { pattern, memberName, memberKind, test },
+			_ => throw new InvalidEnumArgumentException(nameof(rule), (int)rule, typeof(NullComparisonRule)),
+		};
+
+		return Verify.Diagnostic<F0100xPreferPatternMatchingNullCheckOverComparisonWithNull>(descriptor)
+			.WithLocation(markupKey)
+			.WithArguments(arguments);
+	}
+
+	private static Task VerifyAsync(string code, DiagnosticResult[] diagnostics, params string[] additionalDocuments)
+		=> Verify.DiagnosticAnalyzer<F0100xPreferPatternMatchingNullCheckOverComparisonWithNull>().DiagnosticAsync(code, diagnostics, new string[][] { additionalDocuments }, ReferenceAssemblies.Net.Net50, LanguageVersion.Latest);
+
+	private static Task VerifyNoOpAsync(string code)
+		=> Verify.DiagnosticAnalyzer<F0100xPreferPatternMatchingNullCheckOverComparisonWithNull>().NoOpAsync(code);
+
+	private static Task VerifyNoOpAsync(string code, LanguageVersion languageVersion)
+		=> Verify.DiagnosticAnalyzer<F0100xPreferPatternMatchingNullCheckOverComparisonWithNull>().NoOpAsync(code, ReferenceAssemblies.Net.Net50, languageVersion);
+
+	private enum NullComparisonRule
+	{
+		Equality,
+		Identity,
+	}
+
+	private enum ComparisonExpression
+	{
+		EqualityOperator,
+		InequalityOperator,
+		EqualsMethod,
+		NotEqualsMethod,
+		ReferenceEqualsMethod,
+		NotReferenceEqualsMethod,
 	}
 }

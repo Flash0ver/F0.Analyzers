@@ -6,6 +6,7 @@
 *.csproj text
 *.css text diff=css
 *.editorconfig text
+*.globalconfig text
 *.htm text diff=html
 *.html text diff=html
 *.json text

@@ -1,52 +1,51 @@
-namespace F0.Extensions
+namespace F0.Extensions;
+
+internal static class EnumerableExtensions
 {
-	internal static class EnumerableExtensions
+	internal static T? SoleOrDefault<T>(this IEnumerable<T> source)
+		where T : class
 	{
-		internal static T? SoleOrDefault<T>(this IEnumerable<T> source)
-			where T : class
+		T? result = null;
+
+		foreach (var element in source)
 		{
-			T? result = null;
-
-			foreach (var element in source)
+			if (result is null)
 			{
-				if (result is null)
-				{
-					result = element;
-				}
-				else
-				{
-					result = null;
-					break;
-				}
+				result = element;
 			}
-
-			return result;
+			else
+			{
+				result = null;
+				break;
+			}
 		}
 
-		internal static T? SoleOrDefault<T>(this IEnumerable<T> source, Func<T, bool> predicate)
-			where T : class
+		return result;
+	}
+
+	internal static T? SoleOrDefault<T>(this IEnumerable<T> source, Func<T, bool> predicate)
+		where T : class
+	{
+		T? result = null;
+
+		foreach (var element in source)
 		{
-			T? result = null;
-
-			foreach (var element in source)
+			if (!predicate(element))
 			{
-				if (!predicate(element))
-				{
-					continue;
-				}
-
-				if (result is null)
-				{
-					result = element;
-				}
-				else
-				{
-					result = null;
-					break;
-				}
+				continue;
 			}
 
-			return result;
+			if (result is null)
+			{
+				result = element;
+			}
+			else
+			{
+				result = null;
+				break;
+			}
 		}
+
+		return result;
 	}
 }

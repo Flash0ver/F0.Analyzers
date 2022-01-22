@@ -1,42 +1,41 @@
 using Microsoft.CodeAnalysis.Diagnostics;
 
-namespace F0.CodeAnalysis.Diagnostics
+namespace F0.CodeAnalysis.Diagnostics;
+
+[DiagnosticAnalyzer(LanguageNames.CSharp)]
+internal sealed class F00001GoToStatementConsideredHarmful : DiagnosticAnalyzer
 {
-	[DiagnosticAnalyzer(LanguageNames.CSharp)]
-	internal sealed class F00001GoToStatementConsideredHarmful : DiagnosticAnalyzer
+	private static readonly DiagnosticDescriptor Rule = new(
+		DiagnosticIds.F00001,
+		"GotoConsideredHarmful",
+		"Don't use goto statements: '{0}'",
+		DiagnosticCategories.CodeSmell,
+		DiagnosticSeverity.Warning,
+		true,
+		"GOTO Statement Considered Harmful",
+		DiagnosticHelpLinkUris.F00001
+	);
+
+	public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
+
+	public override void Initialize(AnalysisContext context)
 	{
-		private static readonly DiagnosticDescriptor Rule = new(
-			DiagnosticIds.F00001,
-			"GotoConsideredHarmful",
-			"Don't use goto statements: '{0}'",
-			DiagnosticCategories.CodeSmell,
-			DiagnosticSeverity.Warning,
-			true,
-			"GOTO Statement Considered Harmful",
-			DiagnosticHelpLinkUris.F00001
-		);
+		context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
+		context.EnableConcurrentExecution();
 
-		public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
+		context.RegisterSyntaxNodeAction(SyntaxNodeAction, GotoStatementSyntaxKinds);
+	}
 
-		public override void Initialize(AnalysisContext context)
-		{
-			context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
-			context.EnableConcurrentExecution();
+	private static readonly ImmutableArray<SyntaxKind> GotoStatementSyntaxKinds = ImmutableArray.Create(
+		SyntaxKind.GotoStatement,
+		SyntaxKind.GotoCaseStatement,
+		SyntaxKind.GotoDefaultStatement
+	);
 
-			context.RegisterSyntaxNodeAction(SyntaxNodeAction, GotoStatementSyntaxKinds);
-		}
-
-		private static readonly ImmutableArray<SyntaxKind> GotoStatementSyntaxKinds = ImmutableArray.Create(
-			SyntaxKind.GotoStatement,
-			SyntaxKind.GotoCaseStatement,
-			SyntaxKind.GotoDefaultStatement
-		);
-
-		private static void SyntaxNodeAction(SyntaxNodeAnalysisContext syntaxNodeContext)
-		{
-			var diagnostic = Diagnostic.Create(Rule, syntaxNodeContext.Node.GetLocation(),
-				syntaxNodeContext.Node.ToString());
-			syntaxNodeContext.ReportDiagnostic(diagnostic);
-		}
+	private static void SyntaxNodeAction(SyntaxNodeAnalysisContext syntaxNodeContext)
+	{
+		var diagnostic = Diagnostic.Create(Rule, syntaxNodeContext.Node.GetLocation(),
+			syntaxNodeContext.Node.ToString());
+		syntaxNodeContext.ReportDiagnostic(diagnostic);
 	}
 }

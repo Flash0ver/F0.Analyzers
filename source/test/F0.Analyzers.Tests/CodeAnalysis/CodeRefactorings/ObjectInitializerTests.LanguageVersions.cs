@@ -1,12 +1,12 @@
-namespace F0.Tests.CodeAnalysis.CodeRefactorings
+namespace F0.Tests.CodeAnalysis.CodeRefactorings;
+
+public partial class ObjectInitializerTests
 {
-	public partial class ObjectInitializerTests
+	[Fact]
+	public async Task ComputeRefactoringsAsync_CSharp2_ObjectInitializerIsNotAvailable()
 	{
-		[Fact]
-		public async Task ComputeRefactoringsAsync_CSharp2_ObjectInitializerIsNotAvailable()
-		{
-			var code =
-				@"using System;
+		var code =
+			@"using System;
 
 				class Model { public int Field; private int backingField; public int Property { get { return backingField; } set { backingField = value; } } }
 
@@ -18,14 +18,14 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await VerifyNoOpAsync(code, LanguageVersion.CSharp2);
-		}
+		await VerifyNoOpAsync(code, LanguageVersion.CSharp2);
+	}
 
-		[Fact]
-		public async Task ComputeRefactoringsAsync_CSharp3_ObjectInitializerIsAvailable()
-		{
-			var initialCode =
-				@"using System;
+	[Fact]
+	public async Task ComputeRefactoringsAsync_CSharp3_ObjectInitializerIsAvailable()
+	{
+		var initialCode =
+			@"using System;
 
 				class Model { public int Field; private int backingField; public int Property { get { return backingField; } set { backingField = value; } } }
 
@@ -37,8 +37,8 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			var expectedCode =
-				@"using System;
+		var expectedCode =
+			@"using System;
 
 				class Model { public int Field; private int backingField; public int Property { get { return backingField; } set { backingField = value; } } }
 
@@ -54,14 +54,14 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await VerifyAsync(initialCode, expectedCode, LanguageVersion.CSharp3);
-		}
+		await VerifyAsync(initialCode, expectedCode, LanguageVersion.CSharp3);
+	}
 
-		[Fact]
-		public async Task ComputeRefactoringsAsync_CSharp7_DefaultOperator()
-		{
-			var initialCode =
-				@"using System;
+	[Fact]
+	public async Task ComputeRefactoringsAsync_CSharp7_DefaultOperator()
+	{
+		var initialCode =
+			@"using System;
 
 				class GlobalType { }
 
@@ -83,8 +83,8 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			var expectedCode =
-				@"using System;
+		var expectedCode =
+			@"using System;
 
 				class GlobalType { }
 
@@ -111,14 +111,14 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await VerifyAsync(initialCode, expectedCode, LanguageVersion.CSharp7);
-		}
+		await VerifyAsync(initialCode, expectedCode, LanguageVersion.CSharp7);
+	}
 
-		[Fact]
-		public async Task ComputeRefactoringsAsync_CSharp7_1_DefaultLiteral()
-		{
-			var initialCode =
-				@"using System;
+	[Fact]
+	public async Task ComputeRefactoringsAsync_CSharp7_1_DefaultLiteral()
+	{
+		var initialCode =
+			@"using System;
 
 				class GlobalType { }
 
@@ -140,8 +140,8 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			var expectedCode =
-				@"using System;
+		var expectedCode =
+			@"using System;
 
 				class GlobalType { }
 
@@ -168,14 +168,14 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await VerifyAsync(initialCode, expectedCode, LanguageVersion.CSharp7_1);
-		}
+		await VerifyAsync(initialCode, expectedCode, LanguageVersion.CSharp7_1);
+	}
 
-		[Fact]
-		public async Task ComputeRefactoringsAsync_CSharp9_InitAccessor()
-		{
-			var initialCode =
-				@"using System;
+	[Fact]
+	public async Task ComputeRefactoringsAsync_CSharp9_InitAccessor()
+	{
+		var initialCode =
+			@"using System;
 
 				class GlobalType { }
 
@@ -197,8 +197,8 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			var expectedCode =
-				@"using System;
+		var expectedCode =
+			@"using System;
 
 				class GlobalType { }
 
@@ -225,14 +225,14 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await VerifyAsync(initialCode, expectedCode, LanguageVersion.CSharp9, ReferenceAssemblies.Net.Net50);
-		}
+		await VerifyAsync(initialCode, expectedCode, LanguageVersion.CSharp9, ReferenceAssemblies.Net.Net50);
+	}
 
-		[Fact]
-		public async Task ComputeRefactoringsAsync_CSharp9_TargetTypedNewExpression()
-		{
-			var initialCode =
-				@"using System;
+	[Fact]
+	public async Task ComputeRefactoringsAsync_CSharp9_TargetTypedNewExpression()
+	{
+		var initialCode =
+			@"using System;
 
 				class GlobalType { }
 
@@ -254,8 +254,8 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			var expectedCode =
-				@"using System;
+		var expectedCode =
+			@"using System;
 
 				class GlobalType { }
 
@@ -282,7 +282,6 @@ namespace F0.Tests.CodeAnalysis.CodeRefactorings
 					}
 				}";
 
-			await VerifyAsync(initialCode, expectedCode, LanguageVersion.CSharp9);
-		}
+		await VerifyAsync(initialCode, expectedCode, LanguageVersion.CSharp9);
 	}
 }
