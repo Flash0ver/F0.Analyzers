@@ -30,19 +30,19 @@ _Issues_ that result in changes to the repository are closed via [pull requests]
 ## Branching Workflow
 Based on the [GitHub flow](https://guides.github.com/introduction/flow/).
 
-The [master](https://github.com/Flash0ver/F0.Analyzers) branch is the _default_ branch.
+The [main](https://github.com/Flash0ver/F0.Analyzers) branch is the _default_ branch.
 It includes all verified changes being published in the next release.
-New _topic branches_ are created off of `master`.
-Tags target the `master` branch.
+New _topic branches_ are created off of `main`.
+Tags target the `main` branch.
 
 The [publish](https://github.com/Flash0ver/F0.Analyzers/tree/publish) branch is the second long-running branch.
 It represents the state of the _latest release_.
-On each release published, the `publish` branch is updated from `master` and pushed to.
+On each release published, the `publish` branch is updated from `main` and pushed to.
 
 Every change to the repository is committed to short-lived _topic branches_.
-New _topic branches_ are based on `master`.
+New _topic branches_ are based on `main`.
 Their work in progress is status checked, reviewed and discussed through _pull requests_.
-When approved, the _topic branch_ may be merged into the `master` branch while maintaining a linear history.
+When approved, the _topic branch_ may be merged into the `main` branch while maintaining a linear history.
 After a successful merge, the topic branch should be deleted.
 
 Topic branch naming conventions:
@@ -115,13 +115,13 @@ The ultimate requisite for each release is that all tests pass and the productio
   - [NuGet package](./source/package/F0.Analyzers.Package/F0.Analyzers.Package.csproj): `/Project/PropertyGroup/PackageReleaseNotes`
 - ensure that the [Documentation](./documentation/) is updated
 - commit changes
-  - merge into `master` branch
-  - update `publish` branch from `master` branch
+  - merge into `main` branch
+  - update `publish` branch from `main` branch
 - publish the release
   - upload to [NuGet.org](https://www.nuget.org/)
   - publish to [Visual Studio Marketplace](https://marketplace.visualstudio.com/)
   - create [GitHub Release](https://github.com/Flash0ver/F0.Analyzers/releases)
-    - with new _tag_ @ `master` (prefix with the letter `v`)
+    - with new _tag_ @ `main` (prefix with the letter `v`)
     - with _release title_ `F0.Analyzers {Version}` (without `v` prefix)
     - with description
 - finish the [milestone](https://github.com/Flash0ver/F0.Analyzers/milestones)
