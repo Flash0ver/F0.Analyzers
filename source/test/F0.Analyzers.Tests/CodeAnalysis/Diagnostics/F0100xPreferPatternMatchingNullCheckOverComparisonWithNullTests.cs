@@ -250,6 +250,19 @@ public static class Extensions
 	public static bool ReferenceEquals(this object instance, object other) => throw null;
 }";
 
+		var bad =
+@"using System;
+
+public class Bad
+{
+	public static new bool Equals(object? obj) => throw null;
+	public static bool Equals(Bad? obj) => throw null;
+	public static new bool ReferenceEquals(object? objA, object? objB) => throw null;
+
+	public void Equals() => throw null;
+	public static void ReferenceEquals(object? obj) => throw null;
+}";
+
 		var code =
 @"using System;
 using System.Collections.Generic;
@@ -278,6 +291,13 @@ class Test
 		_ = !Extensions.Equals(null, instance);
 		_ = {|#0:((object)instance).Equals(null)|};
 		_ = {|#1:!((object)instance).Equals(null)|};
+
+		_ = Bad.Equals(null);
+		_ = Bad.Equals((object?)null);
+		_ = Bad.Equals((Bad?)null);
+		_ = Bad.ReferenceEquals(instance, null);
+		new Bad().Equals();
+		Bad.ReferenceEquals(null);
 	}
 }";
 
@@ -287,7 +307,7 @@ class Test
 				CreateDiagnostic(1, NullComparisonRule.Equality, ComparisonExpression.NotEqualsMethod),
 			};
 
-		await VerifyAsync(code, expected, type, extensions);
+		await VerifyAsync(code, expected, type, extensions, bad);
 	}
 
 	[Fact]

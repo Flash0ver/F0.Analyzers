@@ -2,6 +2,9 @@
 CHANGELOG
 
 ## vNext
+### Analyzers
+- Fixed `PreferPatternMatchingNullCheckOverComparisonWithNull` diagnostic analyzer, throwing `System.NullReferenceException` on invocations of `bool`-returning `static` methods named `Equals` with a single `null` argument.
+
 ### NuGet package
 - Added support for `.NET SDK 6.0`.
 - Removed support for `.NET SDK 5.0`.

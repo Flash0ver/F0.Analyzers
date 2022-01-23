@@ -177,10 +177,13 @@ internal sealed class F0100xPreferPatternMatchingNullCheckOverComparisonWithNull
 		{
 			Debug.Assert(method.Parameters.Length is 1);
 
-			if (HasNonNullableValueTypeMemberAccess(operation.Instance, context.Compilation, context.Operation.SemanticModel, context.CancellationToken))
+			if (operation.Instance is null ||
+				HasNonNullableValueTypeMemberAccess(operation.Instance, context.Compilation, context.Operation.SemanticModel, context.CancellationToken))
 			{
 				return;
 			}
+
+			Debug.Assert(!method.IsStatic, $"Method '{operation.TargetMethod}' is static.");
 
 			var isObject = method.ContainingType.SpecialType is SpecialType.System_Object;
 			if (isObject)
