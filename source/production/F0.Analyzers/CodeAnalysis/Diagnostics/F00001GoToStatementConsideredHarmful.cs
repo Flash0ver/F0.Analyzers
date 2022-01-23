@@ -12,7 +12,7 @@ internal sealed class F00001GoToStatementConsideredHarmful : DiagnosticAnalyzer
 		DiagnosticCategories.CodeSmell,
 		DiagnosticSeverity.Warning,
 		true,
-		"GOTO Statement Considered Harmful",
+		"GOTO Statement Considered Harmful.",
 		DiagnosticHelpLinkUris.F00001
 	);
 

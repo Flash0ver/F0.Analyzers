@@ -99,6 +99,7 @@ internal sealed class ObjectInitializer : CodeRefactoringProvider
 		return documentEditor.GetChangedDocument();
 	}
 
+	[SuppressMessage("MicrosoftCodeAnalysisCorrectness", "RS1024:Symbols should be compared for equality", Justification = "https://github.com/dotnet/roslyn-analyzers/issues/5715")]
 	private static IEnumerable<ISymbol> GetMutableMembers(in TypeInfo typeInfo, Compilation compilation)
 	{
 		var members = new HashSet<ISymbol>(SymbolNameComparer.Instance);

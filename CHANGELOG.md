@@ -2,6 +2,13 @@
 CHANGELOG
 
 ## vNext
+### NuGet package
+- Added support for `.NET SDK 6.0`.
+- Removed support for `.NET SDK 5.0`.
+
+### Visual Studio Extension
+- Added support for `Visual Studio 2022`.
+- Removed support for `Visual Studio 2017` and `Visual Studio 2019`.
 
 ## v0.8.0 (2021-10-13)
 ### Analyzers

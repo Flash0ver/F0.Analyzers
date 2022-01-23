@@ -32,12 +32,12 @@ See [CHANGELOG.md](./CHANGELOG.md).
 See [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 ## Compatibility
-requires _Roslyn v3.8.0_ or later (see [packages of the .NET Compiler Platform](https://github.com/dotnet/roslyn/blob/main/docs/wiki/NuGet-packages.md))
-### .NET 5.0
-supports [SDK 5.0.100](https://github.com/dotnet/core/blob/main/release-notes/5.0/5.0.0/5.0.0.md) and later
-### Visual Studio 2019
-supports [16.8.0](https://docs.microsoft.com/en-us/visualstudio/releases/2019/release-notes-v16.8) and later
+requires _Roslyn v4.0.1_ or later (see [packages of the .NET Compiler Platform](https://github.com/dotnet/roslyn/blob/main/docs/wiki/NuGet-packages.md))
+### .NET 6.0
+supports [SDK 6.0.100](https://github.com/dotnet/core/blob/main/release-notes/6.0/6.0.0/6.0.0.md) and later
+### Visual Studio 2022
+supports [17.0.0](https://docs.microsoft.com/en-us/visualstudio/releases/2022/release-notes#17.0.0) and later
 ### Rider
-supports [2020.3](https://www.jetbrains.com/rider/whatsnew/2020-3/) and later
+supports [2021.3](https://www.jetbrains.com/rider/whatsnew/2021-3/) and later
 ### Visual Studio Code
-supports _OmniSharp (C#)_ [1.23.7](https://github.com/OmniSharp/omnisharp-vscode/releases/tag/v1.23.7) and later
+supports _OmniSharp (C#)_ [1.24.0](https://github.com/OmniSharp/omnisharp-vscode/releases/tag/v1.24.0) and later
