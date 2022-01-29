@@ -79,12 +79,12 @@ class Test
 
 		var expected = new[]
 		{
-				CreateEqualityComparisonDiagnostic(0, "is", "overloaded", "==", "operator", "null"),
-				CreateEqualityComparisonDiagnostic(1, "is", "overloaded", "==", "operator", "null"),
+			CreateEqualityComparisonDiagnostic(0, "is", "overloaded", "==", "operator", "null"),
+			CreateEqualityComparisonDiagnostic(1, "is", "overloaded", "==", "operator", "null"),
 
-				CreateEqualityComparisonDiagnostic(2, "is", "overloaded", "==", "operator", "null"),
-				CreateEqualityComparisonDiagnostic(3, "is", "overloaded", "==", "operator", "null"),
-			};
+			CreateEqualityComparisonDiagnostic(2, "is", "overloaded", "==", "operator", "null"),
+			CreateEqualityComparisonDiagnostic(3, "is", "overloaded", "==", "operator", "null"),
+		};
 
 		await VerifyAsync(code, expected, fix);
 	}
@@ -134,12 +134,12 @@ class Test
 
 		var expected = new[]
 		{
-				CreateEqualityComparisonDiagnostic(0, "is not", "overloaded", "!=", "operator", "non-null"),
-				CreateEqualityComparisonDiagnostic(1, "is not", "overloaded", "!=", "operator", "non-null"),
+			CreateEqualityComparisonDiagnostic(0, "is not", "overloaded", "!=", "operator", "non-null"),
+			CreateEqualityComparisonDiagnostic(1, "is not", "overloaded", "!=", "operator", "non-null"),
 
-				CreateEqualityComparisonDiagnostic(2, "is not", "overloaded", "!=", "operator", "non-null"),
-				CreateEqualityComparisonDiagnostic(3, "is not", "overloaded", "!=", "operator", "non-null"),
-			};
+			CreateEqualityComparisonDiagnostic(2, "is not", "overloaded", "!=", "operator", "non-null"),
+			CreateEqualityComparisonDiagnostic(3, "is not", "overloaded", "!=", "operator", "non-null"),
+		};
 
 		await VerifyAsync(code, expected, fix);
 	}
@@ -199,16 +199,16 @@ class Test
 
 		var expected = new[]
 		{
-				CreateIdentityComparisonDiagnostic(0, "is", "==", "operator", "null"),
-				CreateIdentityComparisonDiagnostic(1, "is", "==", "operator", "null"),
-				CreateIdentityComparisonDiagnostic(2, "is", "==", "operator", "null"),
-				CreateIdentityComparisonDiagnostic(3, "is", "==", "operator", "null"),
+			CreateIdentityComparisonDiagnostic(0, "is", "==", "operator", "null"),
+			CreateIdentityComparisonDiagnostic(1, "is", "==", "operator", "null"),
+			CreateIdentityComparisonDiagnostic(2, "is", "==", "operator", "null"),
+			CreateIdentityComparisonDiagnostic(3, "is", "==", "operator", "null"),
 
-				CreateIdentityComparisonDiagnostic(4, "is not", "!=", "operator", "non-null"),
-				CreateIdentityComparisonDiagnostic(5, "is not", "!=", "operator", "non-null"),
-				CreateIdentityComparisonDiagnostic(6, "is not", "!=", "operator", "non-null"),
-				CreateIdentityComparisonDiagnostic(7, "is not", "!=", "operator", "non-null"),
-			};
+			CreateIdentityComparisonDiagnostic(4, "is not", "!=", "operator", "non-null"),
+			CreateIdentityComparisonDiagnostic(5, "is not", "!=", "operator", "non-null"),
+			CreateIdentityComparisonDiagnostic(6, "is not", "!=", "operator", "non-null"),
+			CreateIdentityComparisonDiagnostic(7, "is not", "!=", "operator", "non-null"),
+		};
 
 		await VerifyAsync(code, expected, fix);
 	}
@@ -270,13 +270,13 @@ class Test
 
 		var expected = new[]
 		{
-				CreateEqualityComparisonDiagnostic(0, "is", "overridden", "Equals", "method", "null"),
-				CreateEqualityComparisonDiagnostic(1, "is not", "overridden", "Equals", "method", "non-null"),
-				CreateEqualityComparisonDiagnostic(2, "is", "overridden", "Equals", "method", "null"),
-				CreateEqualityComparisonDiagnostic(3, "is not", "overridden", "Equals", "method", "non-null"),
-				CreateEqualityComparisonDiagnostic(4, "is", "overridden", "Equals", "method", "null"),
-				CreateEqualityComparisonDiagnostic(5, "is not", "overridden", "Equals", "method", "non-null"),
-			};
+			CreateEqualityComparisonDiagnostic(0, "is", "overridden", "Equals", "method", "null"),
+			CreateEqualityComparisonDiagnostic(1, "is not", "overridden", "Equals", "method", "non-null"),
+			CreateEqualityComparisonDiagnostic(2, "is", "overridden", "Equals", "method", "null"),
+			CreateEqualityComparisonDiagnostic(3, "is not", "overridden", "Equals", "method", "non-null"),
+			CreateEqualityComparisonDiagnostic(4, "is", "overridden", "Equals", "method", "null"),
+			CreateEqualityComparisonDiagnostic(5, "is not", "overridden", "Equals", "method", "non-null"),
+		};
 
 		await VerifyAsync(code, expected, fix);
 	}
@@ -332,11 +332,11 @@ class Test
 
 		var expected = new[]
 		{
-				CreateIdentityComparisonDiagnostic(0, "is", "Equals", "method", "null"),
-				CreateIdentityComparisonDiagnostic(1, "is not", "Equals", "method", "non-null"),
-				CreateIdentityComparisonDiagnostic(2, "is", "Equals", "method", "null"),
-				CreateIdentityComparisonDiagnostic(3, "is not", "Equals", "method", "non-null"),
-			};
+			CreateIdentityComparisonDiagnostic(0, "is", "Equals", "method", "null"),
+			CreateIdentityComparisonDiagnostic(1, "is not", "Equals", "method", "non-null"),
+			CreateIdentityComparisonDiagnostic(2, "is", "Equals", "method", "null"),
+			CreateIdentityComparisonDiagnostic(3, "is not", "Equals", "method", "non-null"),
+		};
 
 		await VerifyAsync(code, expected, fix);
 	}
@@ -392,11 +392,11 @@ class Test
 
 		var expected = new[]
 		{
-				CreateIdentityComparisonDiagnostic(0, "is", "ReferenceEquals", "method", "null"),
-				CreateIdentityComparisonDiagnostic(1, "is not", "ReferenceEquals", "method", "non-null"),
-				CreateIdentityComparisonDiagnostic(2, "is", "ReferenceEquals", "method", "null"),
-				CreateIdentityComparisonDiagnostic(3, "is not", "ReferenceEquals", "method", "non-null"),
-			};
+			CreateIdentityComparisonDiagnostic(0, "is", "ReferenceEquals", "method", "null"),
+			CreateIdentityComparisonDiagnostic(1, "is not", "ReferenceEquals", "method", "non-null"),
+			CreateIdentityComparisonDiagnostic(2, "is", "ReferenceEquals", "method", "null"),
+			CreateIdentityComparisonDiagnostic(3, "is not", "ReferenceEquals", "method", "non-null"),
+		};
 
 		await VerifyAsync(code, expected, fix);
 	}
@@ -436,9 +436,9 @@ class Test
 
 		var expected = new[]
 		{
-				CreateEqualityComparisonDiagnostic(0, "is", "overridden", "Equals", "method", "null"),
-				CreateEqualityComparisonDiagnostic(1, "is not", "overridden", "Equals", "method", "non-null"),
-			};
+			CreateEqualityComparisonDiagnostic(0, "is", "overridden", "Equals", "method", "null"),
+			CreateEqualityComparisonDiagnostic(1, "is not", "overridden", "Equals", "method", "non-null"),
+		};
 
 		await VerifyAsync(code, expected, fix);
 	}
@@ -478,9 +478,9 @@ class Test
 
 		var expected = new[]
 		{
-				CreateEqualityComparisonDiagnostic(0, "is", "overridden", "Equals", "method", "null"),
-				CreateEqualityComparisonDiagnostic(1, "is not", "overridden", "Equals", "method", "non-null"),
-			};
+			CreateEqualityComparisonDiagnostic(0, "is", "overridden", "Equals", "method", "null"),
+			CreateEqualityComparisonDiagnostic(1, "is not", "overridden", "Equals", "method", "non-null"),
+		};
 
 		await VerifyAsync(code, expected, fix);
 	}
@@ -582,21 +582,21 @@ class Test
 
 		var expected = new[]
 		{
-				CreateEqualityComparisonDiagnostic(00, "is", "overridden", "Equals", "method", "null"),
-				CreateEqualityComparisonDiagnostic(01, "is not", "overridden", "Equals", "method", "non-null"),
-				CreateEqualityComparisonDiagnostic(02, "is", "overridden", "Equals", "method", "null"),
-				CreateEqualityComparisonDiagnostic(03, "is not", "overridden", "Equals", "method", "non-null"),
+			CreateEqualityComparisonDiagnostic(00, "is", "overridden", "Equals", "method", "null"),
+			CreateEqualityComparisonDiagnostic(01, "is not", "overridden", "Equals", "method", "non-null"),
+			CreateEqualityComparisonDiagnostic(02, "is", "overridden", "Equals", "method", "null"),
+			CreateEqualityComparisonDiagnostic(03, "is not", "overridden", "Equals", "method", "non-null"),
 
-				CreateEqualityComparisonDiagnostic(04, "is", "overridden", "Equals", "method", "null"),
-				CreateEqualityComparisonDiagnostic(05, "is not", "overridden", "Equals", "method", "non-null"),
-				CreateEqualityComparisonDiagnostic(06, "is", "overridden", "Equals", "method", "null"),
-				CreateEqualityComparisonDiagnostic(07, "is not", "overridden", "Equals", "method", "non-null"),
+			CreateEqualityComparisonDiagnostic(04, "is", "overridden", "Equals", "method", "null"),
+			CreateEqualityComparisonDiagnostic(05, "is not", "overridden", "Equals", "method", "non-null"),
+			CreateEqualityComparisonDiagnostic(06, "is", "overridden", "Equals", "method", "null"),
+			CreateEqualityComparisonDiagnostic(07, "is not", "overridden", "Equals", "method", "non-null"),
 
-				CreateEqualityComparisonDiagnostic(08, "is", "overridden", "Equals", "method", "null"),
-				CreateEqualityComparisonDiagnostic(09, "is not", "overridden", "Equals", "method", "non-null"),
-				CreateEqualityComparisonDiagnostic(10, "is", "overridden", "Equals", "method", "null"),
-				CreateEqualityComparisonDiagnostic(11, "is not", "overridden", "Equals", "method", "non-null"),
-			};
+			CreateEqualityComparisonDiagnostic(08, "is", "overridden", "Equals", "method", "null"),
+			CreateEqualityComparisonDiagnostic(09, "is not", "overridden", "Equals", "method", "non-null"),
+			CreateEqualityComparisonDiagnostic(10, "is", "overridden", "Equals", "method", "null"),
+			CreateEqualityComparisonDiagnostic(11, "is not", "overridden", "Equals", "method", "non-null"),
+		};
 
 		await VerifyAsync(code, expected, fix, ReferenceAssemblies.NetStandard.NetStandard21);
 	}
@@ -646,11 +646,11 @@ class Test
 
 		var expected = new[]
 		{
-				CreateIdentityComparisonDiagnostic(0, "is", "Equals", "method", "null"),
-				CreateIdentityComparisonDiagnostic(1, "is not", "Equals", "method", "non-null"),
-				CreateIdentityComparisonDiagnostic(2, "is", "Equals", "method", "null"),
-				CreateIdentityComparisonDiagnostic(3, "is not", "Equals", "method", "non-null"),
-			};
+			CreateIdentityComparisonDiagnostic(0, "is", "Equals", "method", "null"),
+			CreateIdentityComparisonDiagnostic(1, "is not", "Equals", "method", "non-null"),
+			CreateIdentityComparisonDiagnostic(2, "is", "Equals", "method", "null"),
+			CreateIdentityComparisonDiagnostic(3, "is not", "Equals", "method", "non-null"),
+		};
 
 		await VerifyAsync(code, expected, fix, ReferenceAssemblies.Net.Net50);
 	}
@@ -700,11 +700,11 @@ class Test
 
 		var expected = new[]
 		{
-				CreateEqualityComparisonDiagnostic(0, "is", "overridden", "Equals", "method", "null"),
-				CreateEqualityComparisonDiagnostic(1, "is not", "overridden", "Equals", "method", "non-null"),
-				CreateEqualityComparisonDiagnostic(2, "is", "overridden", "Equals", "method", "null"),
-				CreateEqualityComparisonDiagnostic(3, "is not", "overridden", "Equals", "method", "non-null"),
-			};
+			CreateEqualityComparisonDiagnostic(0, "is", "overridden", "Equals", "method", "null"),
+			CreateEqualityComparisonDiagnostic(1, "is not", "overridden", "Equals", "method", "non-null"),
+			CreateEqualityComparisonDiagnostic(2, "is", "overridden", "Equals", "method", "null"),
+			CreateEqualityComparisonDiagnostic(3, "is not", "overridden", "Equals", "method", "non-null"),
+		};
 
 		await VerifyAsync(code, expected, fix, ReferenceAssemblies.Net.Net50);
 	}
@@ -760,16 +760,16 @@ class Test
 
 		var expected = new[]
 		{
-				CreateEqualityComparisonDiagnostic(0, "is", "overloaded", "==", "operator", "null"),
-				CreateEqualityComparisonDiagnostic(1, "is not", "overloaded", "!=", "operator", "non-null"),
-				CreateEqualityComparisonDiagnostic(2, "is", "overridden", "Equals", "method", "null"),
-				CreateEqualityComparisonDiagnostic(3, "is not", "overridden", "Equals", "method", "non-null"),
+			CreateEqualityComparisonDiagnostic(0, "is", "overloaded", "==", "operator", "null"),
+			CreateEqualityComparisonDiagnostic(1, "is not", "overloaded", "!=", "operator", "non-null"),
+			CreateEqualityComparisonDiagnostic(2, "is", "overridden", "Equals", "method", "null"),
+			CreateEqualityComparisonDiagnostic(3, "is not", "overridden", "Equals", "method", "non-null"),
 
-				CreateEqualityComparisonDiagnostic(4, "is", "overloaded", "==", "operator", "null"),
-				CreateEqualityComparisonDiagnostic(5, "is not", "overloaded", "!=", "operator", "non-null"),
-				CreateEqualityComparisonDiagnostic(6, "is", "overridden", "Equals", "method", "null"),
-				CreateEqualityComparisonDiagnostic(7, "is not", "overridden", "Equals", "method", "non-null"),
-			};
+			CreateEqualityComparisonDiagnostic(4, "is", "overloaded", "==", "operator", "null"),
+			CreateEqualityComparisonDiagnostic(5, "is not", "overloaded", "!=", "operator", "non-null"),
+			CreateEqualityComparisonDiagnostic(6, "is", "overridden", "Equals", "method", "null"),
+			CreateEqualityComparisonDiagnostic(7, "is not", "overridden", "Equals", "method", "non-null"),
+		};
 
 		await VerifyAsync(code, expected, fix);
 	}
@@ -819,11 +819,11 @@ class Test
 
 		var expected = new[]
 		{
-				CreateEqualityComparisonDiagnostic(0, "is", "overloaded", "==", "operator", "null"),
-				CreateEqualityComparisonDiagnostic(1, "is", "overloaded", "==", "operator", "null"),
+			CreateEqualityComparisonDiagnostic(0, "is", "overloaded", "==", "operator", "null"),
+			CreateEqualityComparisonDiagnostic(1, "is", "overloaded", "==", "operator", "null"),
 
-				CreateEqualityComparisonDiagnostic(2, "is not", "overloaded", "!=", "operator", "non-null"),
-			};
+			CreateEqualityComparisonDiagnostic(2, "is not", "overloaded", "!=", "operator", "non-null"),
+		};
 
 		await VerifyAsync(code, expected, fix);
 	}
@@ -869,12 +869,12 @@ class Test
 
 		var expected = new[]
 		{
-				CreateEqualityComparisonDiagnostic(0, "is", "overloaded", "==", "operator", "null"),
-				CreateEqualityComparisonDiagnostic(1, "is not", "overloaded", "!=", "operator", "non-null"),
+			CreateEqualityComparisonDiagnostic(0, "is", "overloaded", "==", "operator", "null"),
+			CreateEqualityComparisonDiagnostic(1, "is not", "overloaded", "!=", "operator", "non-null"),
 
-				CreateEqualityComparisonDiagnostic(2, "is", "overridden", "Equals", "method", "null"),
-				CreateEqualityComparisonDiagnostic(3, "is not", "overridden", "Equals", "method", "non-null"),
-			};
+			CreateEqualityComparisonDiagnostic(2, "is", "overridden", "Equals", "method", "null"),
+			CreateEqualityComparisonDiagnostic(3, "is not", "overridden", "Equals", "method", "non-null"),
+		};
 
 		await VerifyAsync(code, expected, fix);
 	}

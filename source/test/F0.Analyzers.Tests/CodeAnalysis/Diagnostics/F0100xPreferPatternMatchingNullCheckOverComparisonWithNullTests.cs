@@ -110,29 +110,29 @@ class Test
 
 		var expected = new[]
 		{
-				CreateDiagnostic(00, NullComparisonRule.Identity, ComparisonExpression.EqualityOperator),
-				CreateDiagnostic(01, NullComparisonRule.Identity, ComparisonExpression.InequalityOperator),
-				CreateDiagnostic(02, NullComparisonRule.Equality, ComparisonExpression.EqualityOperator),
-				CreateDiagnostic(03, NullComparisonRule.Equality, ComparisonExpression.InequalityOperator),
-				CreateDiagnostic(04, NullComparisonRule.Identity, ComparisonExpression.EqualsMethod),
-				CreateDiagnostic(05, NullComparisonRule.Identity, ComparisonExpression.NotEqualsMethod),
-				CreateDiagnostic(06, NullComparisonRule.Identity, ComparisonExpression.ReferenceEqualsMethod),
-				CreateDiagnostic(07, NullComparisonRule.Identity, ComparisonExpression.NotReferenceEqualsMethod),
-				CreateDiagnostic(08, NullComparisonRule.Equality, ComparisonExpression.EqualsMethod),
-				CreateDiagnostic(09, NullComparisonRule.Equality, ComparisonExpression.NotEqualsMethod),
-				CreateDiagnostic(10, NullComparisonRule.Equality, ComparisonExpression.EqualsMethod),
-				CreateDiagnostic(11, NullComparisonRule.Equality, ComparisonExpression.NotEqualsMethod),
-				CreateDiagnostic(12, NullComparisonRule.Equality, ComparisonExpression.EqualsMethod),
-				CreateDiagnostic(13, NullComparisonRule.Equality, ComparisonExpression.NotEqualsMethod),
-				CreateDiagnostic(14, NullComparisonRule.Equality, ComparisonExpression.EqualsMethod),
-				CreateDiagnostic(15, NullComparisonRule.Equality, ComparisonExpression.NotEqualsMethod),
-				CreateDiagnostic(16, NullComparisonRule.Identity, ComparisonExpression.EqualsMethod),
-				CreateDiagnostic(17, NullComparisonRule.Identity, ComparisonExpression.NotEqualsMethod),
-				CreateDiagnostic(18, NullComparisonRule.Equality, ComparisonExpression.EqualsMethod),
-				CreateDiagnostic(19, NullComparisonRule.Equality, ComparisonExpression.NotEqualsMethod),
-				CreateDiagnostic(20, NullComparisonRule.Equality, ComparisonExpression.EqualsMethod),
-				CreateDiagnostic(21, NullComparisonRule.Equality, ComparisonExpression.NotEqualsMethod),
-			};
+			CreateDiagnostic(00, NullComparisonRule.Identity, ComparisonExpression.EqualityOperator),
+			CreateDiagnostic(01, NullComparisonRule.Identity, ComparisonExpression.InequalityOperator),
+			CreateDiagnostic(02, NullComparisonRule.Equality, ComparisonExpression.EqualityOperator),
+			CreateDiagnostic(03, NullComparisonRule.Equality, ComparisonExpression.InequalityOperator),
+			CreateDiagnostic(04, NullComparisonRule.Identity, ComparisonExpression.EqualsMethod),
+			CreateDiagnostic(05, NullComparisonRule.Identity, ComparisonExpression.NotEqualsMethod),
+			CreateDiagnostic(06, NullComparisonRule.Identity, ComparisonExpression.ReferenceEqualsMethod),
+			CreateDiagnostic(07, NullComparisonRule.Identity, ComparisonExpression.NotReferenceEqualsMethod),
+			CreateDiagnostic(08, NullComparisonRule.Equality, ComparisonExpression.EqualsMethod),
+			CreateDiagnostic(09, NullComparisonRule.Equality, ComparisonExpression.NotEqualsMethod),
+			CreateDiagnostic(10, NullComparisonRule.Equality, ComparisonExpression.EqualsMethod),
+			CreateDiagnostic(11, NullComparisonRule.Equality, ComparisonExpression.NotEqualsMethod),
+			CreateDiagnostic(12, NullComparisonRule.Equality, ComparisonExpression.EqualsMethod),
+			CreateDiagnostic(13, NullComparisonRule.Equality, ComparisonExpression.NotEqualsMethod),
+			CreateDiagnostic(14, NullComparisonRule.Equality, ComparisonExpression.EqualsMethod),
+			CreateDiagnostic(15, NullComparisonRule.Equality, ComparisonExpression.NotEqualsMethod),
+			CreateDiagnostic(16, NullComparisonRule.Identity, ComparisonExpression.EqualsMethod),
+			CreateDiagnostic(17, NullComparisonRule.Identity, ComparisonExpression.NotEqualsMethod),
+			CreateDiagnostic(18, NullComparisonRule.Equality, ComparisonExpression.EqualsMethod),
+			CreateDiagnostic(19, NullComparisonRule.Equality, ComparisonExpression.NotEqualsMethod),
+			CreateDiagnostic(20, NullComparisonRule.Equality, ComparisonExpression.EqualsMethod),
+			CreateDiagnostic(21, NullComparisonRule.Equality, ComparisonExpression.NotEqualsMethod),
+		};
 
 		await VerifyAsync(code, expected, type, comparer);
 	}
@@ -182,27 +182,27 @@ class Test
 
 		var expected = new[]
 		{
-				CreateDiagnostic(00, NullComparisonRule.Identity, ComparisonExpression.EqualityOperator),
-				CreateDiagnostic(01, NullComparisonRule.Identity, ComparisonExpression.InequalityOperator),
-				CreateDiagnostic(02, NullComparisonRule.Identity, ComparisonExpression.EqualityOperator),
-				CreateDiagnostic(03, NullComparisonRule.Identity, ComparisonExpression.InequalityOperator),
-				CreateDiagnostic(04, NullComparisonRule.Identity, ComparisonExpression.EqualsMethod),
-				CreateDiagnostic(05, NullComparisonRule.Identity, ComparisonExpression.NotEqualsMethod),
-				CreateDiagnostic(06, NullComparisonRule.Identity, ComparisonExpression.ReferenceEqualsMethod),
-				CreateDiagnostic(07, NullComparisonRule.Identity, ComparisonExpression.NotReferenceEqualsMethod),
-				CreateDiagnostic(08, NullComparisonRule.Equality, ComparisonExpression.EqualsMethod),
-				CreateDiagnostic(09, NullComparisonRule.Equality, ComparisonExpression.NotEqualsMethod),
-				CreateDiagnostic(10, NullComparisonRule.Equality, ComparisonExpression.EqualsMethod),
-				CreateDiagnostic(11, NullComparisonRule.Equality, ComparisonExpression.NotEqualsMethod),
-				CreateDiagnostic(12, NullComparisonRule.Equality, ComparisonExpression.EqualsMethod),
-				CreateDiagnostic(13, NullComparisonRule.Equality, ComparisonExpression.NotEqualsMethod),
-				CreateDiagnostic(14, NullComparisonRule.Equality, ComparisonExpression.EqualsMethod),
-				CreateDiagnostic(15, NullComparisonRule.Equality, ComparisonExpression.NotEqualsMethod),
-				CreateDiagnostic(16, NullComparisonRule.Identity, ComparisonExpression.EqualsMethod),
-				CreateDiagnostic(17, NullComparisonRule.Identity, ComparisonExpression.NotEqualsMethod),
-				CreateDiagnostic(18, NullComparisonRule.Equality, ComparisonExpression.EqualsMethod),
-				CreateDiagnostic(19, NullComparisonRule.Equality, ComparisonExpression.NotEqualsMethod),
-			};
+			CreateDiagnostic(00, NullComparisonRule.Identity, ComparisonExpression.EqualityOperator),
+			CreateDiagnostic(01, NullComparisonRule.Identity, ComparisonExpression.InequalityOperator),
+			CreateDiagnostic(02, NullComparisonRule.Identity, ComparisonExpression.EqualityOperator),
+			CreateDiagnostic(03, NullComparisonRule.Identity, ComparisonExpression.InequalityOperator),
+			CreateDiagnostic(04, NullComparisonRule.Identity, ComparisonExpression.EqualsMethod),
+			CreateDiagnostic(05, NullComparisonRule.Identity, ComparisonExpression.NotEqualsMethod),
+			CreateDiagnostic(06, NullComparisonRule.Identity, ComparisonExpression.ReferenceEqualsMethod),
+			CreateDiagnostic(07, NullComparisonRule.Identity, ComparisonExpression.NotReferenceEqualsMethod),
+			CreateDiagnostic(08, NullComparisonRule.Equality, ComparisonExpression.EqualsMethod),
+			CreateDiagnostic(09, NullComparisonRule.Equality, ComparisonExpression.NotEqualsMethod),
+			CreateDiagnostic(10, NullComparisonRule.Equality, ComparisonExpression.EqualsMethod),
+			CreateDiagnostic(11, NullComparisonRule.Equality, ComparisonExpression.NotEqualsMethod),
+			CreateDiagnostic(12, NullComparisonRule.Equality, ComparisonExpression.EqualsMethod),
+			CreateDiagnostic(13, NullComparisonRule.Equality, ComparisonExpression.NotEqualsMethod),
+			CreateDiagnostic(14, NullComparisonRule.Equality, ComparisonExpression.EqualsMethod),
+			CreateDiagnostic(15, NullComparisonRule.Equality, ComparisonExpression.NotEqualsMethod),
+			CreateDiagnostic(16, NullComparisonRule.Identity, ComparisonExpression.EqualsMethod),
+			CreateDiagnostic(17, NullComparisonRule.Identity, ComparisonExpression.NotEqualsMethod),
+			CreateDiagnostic(18, NullComparisonRule.Equality, ComparisonExpression.EqualsMethod),
+			CreateDiagnostic(19, NullComparisonRule.Equality, ComparisonExpression.NotEqualsMethod),
+		};
 
 		await VerifyAsync(code, expected, type);
 	}
@@ -303,9 +303,9 @@ class Test
 
 		var expected = new[]
 		{
-				CreateDiagnostic(0, NullComparisonRule.Equality, ComparisonExpression.EqualsMethod),
-				CreateDiagnostic(1, NullComparisonRule.Equality, ComparisonExpression.NotEqualsMethod),
-			};
+			CreateDiagnostic(0, NullComparisonRule.Equality, ComparisonExpression.EqualsMethod),
+			CreateDiagnostic(1, NullComparisonRule.Equality, ComparisonExpression.NotEqualsMethod),
+		};
 
 		await VerifyAsync(code, expected, type, extensions, bad);
 	}
@@ -373,29 +373,29 @@ class Test
 
 		var expected = new[]
 		{
-				CreateDiagnostic(00, NullComparisonRule.Identity, ComparisonExpression.EqualityOperator),
-				CreateDiagnostic(01, NullComparisonRule.Identity, ComparisonExpression.InequalityOperator),
-				CreateDiagnostic(02, NullComparisonRule.Identity, ComparisonExpression.EqualityOperator),
-				CreateDiagnostic(03, NullComparisonRule.Identity, ComparisonExpression.InequalityOperator),
-				CreateDiagnostic(04, NullComparisonRule.Identity, ComparisonExpression.EqualsMethod),
-				CreateDiagnostic(05, NullComparisonRule.Identity, ComparisonExpression.NotEqualsMethod),
-				CreateDiagnostic(06, NullComparisonRule.Identity, ComparisonExpression.ReferenceEqualsMethod),
-				CreateDiagnostic(07, NullComparisonRule.Identity, ComparisonExpression.NotReferenceEqualsMethod),
-				CreateDiagnostic(08, NullComparisonRule.Equality, ComparisonExpression.EqualsMethod),
-				CreateDiagnostic(09, NullComparisonRule.Equality, ComparisonExpression.NotEqualsMethod),
-				CreateDiagnostic(10, NullComparisonRule.Equality, ComparisonExpression.EqualsMethod),
-				CreateDiagnostic(11, NullComparisonRule.Equality, ComparisonExpression.NotEqualsMethod),
-				CreateDiagnostic(12, NullComparisonRule.Identity, ComparisonExpression.EqualsMethod),
-				CreateDiagnostic(13, NullComparisonRule.Identity, ComparisonExpression.NotEqualsMethod),
-				CreateDiagnostic(14, NullComparisonRule.Equality, ComparisonExpression.EqualsMethod),
-				CreateDiagnostic(15, NullComparisonRule.Equality, ComparisonExpression.NotEqualsMethod),
-				CreateDiagnostic(16, NullComparisonRule.Identity, ComparisonExpression.EqualsMethod),
-				CreateDiagnostic(17, NullComparisonRule.Identity, ComparisonExpression.NotEqualsMethod),
-				CreateDiagnostic(18, NullComparisonRule.Equality, ComparisonExpression.EqualsMethod),
-				CreateDiagnostic(19, NullComparisonRule.Equality, ComparisonExpression.NotEqualsMethod),
-				CreateDiagnostic(20, NullComparisonRule.Equality, ComparisonExpression.EqualsMethod),
-				CreateDiagnostic(21, NullComparisonRule.Equality, ComparisonExpression.NotEqualsMethod),
-			};
+			CreateDiagnostic(00, NullComparisonRule.Identity, ComparisonExpression.EqualityOperator),
+			CreateDiagnostic(01, NullComparisonRule.Identity, ComparisonExpression.InequalityOperator),
+			CreateDiagnostic(02, NullComparisonRule.Identity, ComparisonExpression.EqualityOperator),
+			CreateDiagnostic(03, NullComparisonRule.Identity, ComparisonExpression.InequalityOperator),
+			CreateDiagnostic(04, NullComparisonRule.Identity, ComparisonExpression.EqualsMethod),
+			CreateDiagnostic(05, NullComparisonRule.Identity, ComparisonExpression.NotEqualsMethod),
+			CreateDiagnostic(06, NullComparisonRule.Identity, ComparisonExpression.ReferenceEqualsMethod),
+			CreateDiagnostic(07, NullComparisonRule.Identity, ComparisonExpression.NotReferenceEqualsMethod),
+			CreateDiagnostic(08, NullComparisonRule.Equality, ComparisonExpression.EqualsMethod),
+			CreateDiagnostic(09, NullComparisonRule.Equality, ComparisonExpression.NotEqualsMethod),
+			CreateDiagnostic(10, NullComparisonRule.Equality, ComparisonExpression.EqualsMethod),
+			CreateDiagnostic(11, NullComparisonRule.Equality, ComparisonExpression.NotEqualsMethod),
+			CreateDiagnostic(12, NullComparisonRule.Identity, ComparisonExpression.EqualsMethod),
+			CreateDiagnostic(13, NullComparisonRule.Identity, ComparisonExpression.NotEqualsMethod),
+			CreateDiagnostic(14, NullComparisonRule.Equality, ComparisonExpression.EqualsMethod),
+			CreateDiagnostic(15, NullComparisonRule.Equality, ComparisonExpression.NotEqualsMethod),
+			CreateDiagnostic(16, NullComparisonRule.Identity, ComparisonExpression.EqualsMethod),
+			CreateDiagnostic(17, NullComparisonRule.Identity, ComparisonExpression.NotEqualsMethod),
+			CreateDiagnostic(18, NullComparisonRule.Equality, ComparisonExpression.EqualsMethod),
+			CreateDiagnostic(19, NullComparisonRule.Equality, ComparisonExpression.NotEqualsMethod),
+			CreateDiagnostic(20, NullComparisonRule.Equality, ComparisonExpression.EqualsMethod),
+			CreateDiagnostic(21, NullComparisonRule.Equality, ComparisonExpression.NotEqualsMethod),
+		};
 
 		await VerifyAsync(code, expected, type, comparer);
 	}
