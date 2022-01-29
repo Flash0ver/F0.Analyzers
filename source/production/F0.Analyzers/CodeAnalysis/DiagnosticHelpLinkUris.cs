@@ -10,4 +10,6 @@ internal static class DiagnosticHelpLinkUris
 
 	internal const string F01001 = BaseAddress + "F0100x" + MarkdownExtension + Anchor + nameof(F01001);
 	internal const string F01002 = BaseAddress + "F0100x" + MarkdownExtension + Anchor + nameof(F01002);
+
+	internal const string F02001 = BaseAddress + nameof(F02001) + MarkdownExtension;
 }

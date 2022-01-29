@@ -6,4 +6,6 @@ internal static class DiagnosticIds
 
 	internal const string F01001 = nameof(F01001);
 	internal const string F01002 = nameof(F01002);
+
+	internal const string F02001 = nameof(F02001);
 }

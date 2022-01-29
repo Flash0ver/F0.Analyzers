@@ -3,6 +3,7 @@ CHANGELOG
 
 ## vNext
 ### Analyzers
+- Added `ImplicitRecordClassDeclaration` diagnostic analyzer, reporting _Warning F02001_ for `record` declarations without the `class` or `struct` keyword.
 - Fixed `PreferPatternMatchingNullCheckOverComparisonWithNull` diagnostic analyzer, throwing `System.NullReferenceException` on invocations of `bool`-returning `static` methods named `Equals` with a single `null` argument.
 
 ### NuGet package
