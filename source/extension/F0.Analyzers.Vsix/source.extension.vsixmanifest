@@ -6,8 +6,8 @@
     <Description xml:space="preserve">C# code refactorings and diagnostic analyzers with code fixes, based on the .NET Compiler Platform (Roslyn).</Description>
     <MoreInfo>https://github.com/Flash0ver/F0.Analyzers</MoreInfo>
     <License>Resources\License.txt</License>
-    <GettingStartedGuide>https://github.com/Flash0ver/F0.Analyzers/blob/master/documentation/F0.Analyzers.md</GettingStartedGuide>
-    <ReleaseNotes>https://github.com/Flash0ver/F0.Analyzers/blob/master/CHANGELOG.md</ReleaseNotes>
+    <GettingStartedGuide>https://github.com/Flash0ver/F0.Analyzers/blob/main/documentation/F0.Analyzers.md</GettingStartedGuide>
+    <ReleaseNotes>https://github.com/Flash0ver/F0.Analyzers/blob/main/CHANGELOG.md</ReleaseNotes>
     <Icon>Resources\Icon.png</Icon>
     <PreviewImage>Resources\Icon.png</PreviewImage>
     <Tags>f[0]; f0; analyzers; roslyn; csharp</Tags>

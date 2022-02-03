@@ -2,7 +2,7 @@ namespace F0.CodeAnalysis;
 
 internal static class DiagnosticHelpLinkUris
 {
-	private const string BaseAddress = "https://github.com/Flash0ver/F0.Analyzers/blob/master/documentation/diagnostics/";
+	private const string BaseAddress = "https://github.com/Flash0ver/F0.Analyzers/blob/main/documentation/diagnostics/";
 	private const string MarkdownExtension = ".md";
 	private const string Anchor = "#";
 
