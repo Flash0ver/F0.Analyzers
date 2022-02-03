@@ -8,7 +8,7 @@ namespace F0.CodeAnalysis.Diagnostics;
 internal sealed class F0100xPreferPatternMatchingNullCheckOverComparisonWithNull : DiagnosticAnalyzer
 {
 	private const string Title = "Prefer is pattern to check for null";
-	private const string Description = "When an expression is matched against the 'null' literal, the compiler guarantees that neither an overloaded operator nor an overridden method is invoked";
+	private const string Description = "When an expression is matched against the 'null' literal, the compiler guarantees that neither an overloaded operator nor an overridden method is invoked.";
 
 	internal static readonly DiagnosticDescriptor EqualityComparisonRule = new(
 		DiagnosticIds.F01001,
@@ -155,6 +155,7 @@ internal sealed class F0100xPreferPatternMatchingNullCheckOverComparisonWithNull
 		}
 
 		var operation = (IInvocationOperation)context.Operation;
+		Debug.Assert(operation.Type is not null, $"The {operation.Kind} operation '{operation.Syntax}' does not produce a result.");
 
 		if (operation.Type.SpecialType is not SpecialType.System_Boolean)
 		{
@@ -163,6 +164,7 @@ internal sealed class F0100xPreferPatternMatchingNullCheckOverComparisonWithNull
 
 		var method = operation.TargetMethod;
 		Debug.Assert(method.ReturnType.SpecialType is SpecialType.System_Boolean);
+		Debug.Assert(context.Operation.SemanticModel is not null, $"{nameof(SemanticModel)} is not available for {context.Operation.Kind} operation '{context.Operation.Syntax}'.");
 
 		while (method.OverriddenMethod is not null && method.ContainingType.SpecialType is not SpecialType.System_ValueType)
 		{
@@ -175,10 +177,13 @@ internal sealed class F0100xPreferPatternMatchingNullCheckOverComparisonWithNull
 		{
 			Debug.Assert(method.Parameters.Length is 1);
 
-			if (HasNonNullableValueTypeMemberAccess(operation.Instance, context.Compilation, context.Operation.SemanticModel, context.CancellationToken))
+			if (operation.Instance is null ||
+				HasNonNullableValueTypeMemberAccess(operation.Instance, context.Compilation, context.Operation.SemanticModel, context.CancellationToken))
 			{
 				return;
 			}
+
+			Debug.Assert(!method.IsStatic, $"Method '{operation.TargetMethod}' is static.");
 
 			var isObject = method.ContainingType.SpecialType is SpecialType.System_Object;
 			if (isObject)
@@ -362,6 +367,8 @@ internal sealed class F0100xPreferPatternMatchingNullCheckOverComparisonWithNull
 
 	private static void ReportNullCheck(OperationAnalysisContext context, IInvocationOperation operation, bool isOverridden)
 	{
+		Debug.Assert(operation.Parent is not null, $"{operation.Kind} operation '{operation.TargetMethod}' is the root.");
+
 		if (operation.Parent.Kind is OperationKind.Unary)
 		{
 			var not = (IUnaryOperation)operation.Parent;

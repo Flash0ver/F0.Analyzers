@@ -2,6 +2,18 @@
 CHANGELOG
 
 ## vNext
+### Analyzers
+- Added `ImplicitRecordClassDeclaration` diagnostic analyzer, reporting _Warning F02001_ for `record` declarations without the `class` or `struct` keyword.
+- Added `DeclareRecordClassExplicitly` code fix provider, adding the optional `class` keyword to `record` declarations that are _reference types_.
+- Fixed `PreferPatternMatchingNullCheckOverComparisonWithNull` diagnostic analyzer, throwing `System.NullReferenceException` on invocations of `bool`-returning `static` methods named `Equals` with a single `null` argument.
+
+### NuGet package
+- Added support for `.NET SDK 6.0`.
+- Removed support for `.NET SDK 5.0`.
+
+### Visual Studio Extension
+- Added support for `Visual Studio 2022`.
+- Removed support for `Visual Studio 2017` and `Visual Studio 2019`.
 
 ## v0.8.0 (2021-10-13)
 ### Analyzers

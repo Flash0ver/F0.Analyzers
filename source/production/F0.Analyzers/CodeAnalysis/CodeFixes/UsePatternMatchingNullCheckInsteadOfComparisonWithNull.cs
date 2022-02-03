@@ -10,7 +10,7 @@ internal sealed class UsePatternMatchingNullCheckInsteadOfComparisonWithNull : C
 	private const string Title = "Use constant 'null' pattern";
 
 	public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(DiagnosticIds.F01001, DiagnosticIds.F01002);
-	public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
+	public override FixAllProvider? GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
 	public override async Task RegisterCodeFixesAsync(CodeFixContext context)
 	{

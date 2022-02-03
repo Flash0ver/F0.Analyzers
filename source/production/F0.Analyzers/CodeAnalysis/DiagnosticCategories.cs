@@ -4,4 +4,5 @@ internal static class DiagnosticCategories
 {
 	internal const string CodeSmell = nameof(CodeSmell);
 	internal const string BestPractice = nameof(BestPractice);
+	internal const string CleanCode = nameof(CleanCode);
 }

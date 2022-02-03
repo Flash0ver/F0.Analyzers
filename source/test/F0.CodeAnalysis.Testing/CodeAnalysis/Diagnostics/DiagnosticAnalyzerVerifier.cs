@@ -51,6 +51,15 @@ public class DiagnosticAnalyzerVerifier<TDiagnosticAnalyzer>
 		return tester.RunAsync(CancellationToken.None);
 	}
 
+	public Task DiagnosticAsync(string code, IEnumerable<DiagnosticResult> diagnostics, ReferenceAssemblies referenceAssemblies, LanguageVersion languageVersion)
+	{
+		var tester = CreateTester(code, languageVersion, referenceAssemblies);
+
+		tester.ExpectedDiagnostics.AddRange(diagnostics);
+
+		return tester.RunAsync(CancellationToken.None);
+	}
+
 	public Task DiagnosticAsync(string code, IEnumerable<DiagnosticResult> diagnostics, string[][] additionalProjects, ReferenceAssemblies referenceAssemblies, LanguageVersion languageVersion)
 	{
 		var tester = CreateTester(code, languageVersion, referenceAssemblies, additionalProjects);

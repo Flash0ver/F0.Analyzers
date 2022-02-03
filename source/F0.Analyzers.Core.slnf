@@ -2,8 +2,11 @@
   "solution": {
     "path": "F0.Analyzers.sln",
     "projects": [
+      "example\\F0.Analyzers.Example.CSharp10\\F0.Analyzers.Example.CSharp10.csproj",
       "example\\F0.Analyzers.Example.CSharp2\\F0.Analyzers.Example.CSharp2.csproj",
       "example\\F0.Analyzers.Example.CSharp7\\F0.Analyzers.Example.CSharp7.csproj",
+      "example\\F0.Analyzers.Example.CSharp8\\F0.Analyzers.Example.CSharp8.csproj",
+      "example\\F0.Analyzers.Example.CSharp9\\F0.Analyzers.Example.CSharp9.csproj",
       "example\\F0.Analyzers.Example.Dependencies\\F0.Analyzers.Example.Dependencies.csproj",
       "example\\F0.Analyzers.Example\\F0.Analyzers.Example.csproj",
       "package\\F0.Analyzers.Package\\F0.Analyzers.Package.csproj",

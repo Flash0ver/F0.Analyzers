@@ -78,17 +78,17 @@ class Class
 
 		var expected = new[]
 		{
-				CreateDiagnostic()
-					.WithMessageFormat("Don't use goto statements: '{0}'")
-					.WithArguments("goto case 2;")
-					.WithSeverity(DiagnosticSeverity.Warning)
-					.WithLocation(0),
-				CreateDiagnostic()
-					.WithMessageFormat("Don't use goto statements: '{0}'")
-					.WithArguments("goto case 1;")
-					.WithSeverity(DiagnosticSeverity.Warning)
-					.WithLocation(1)
-			};
+			CreateDiagnostic()
+				.WithMessageFormat("Don't use goto statements: '{0}'")
+				.WithArguments("goto case 2;")
+				.WithSeverity(DiagnosticSeverity.Warning)
+				.WithLocation(0),
+			CreateDiagnostic()
+				.WithMessageFormat("Don't use goto statements: '{0}'")
+				.WithArguments("goto case 1;")
+				.WithSeverity(DiagnosticSeverity.Warning)
+				.WithLocation(1)
+		};
 
 		await VerifyAsync(code, expected);
 	}
