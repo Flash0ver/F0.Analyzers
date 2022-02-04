@@ -2,6 +2,8 @@
 CHANGELOG
 
 ## vNext
+
+## v0.9.0 (2022-02-04)
 ### Analyzers
 - Added `ImplicitRecordClassDeclaration` diagnostic analyzer, reporting _Warning F02001_ for `record` declarations without the `class` or `struct` keyword.
 - Added `DeclareRecordClassExplicitly` code fix provider, adding the optional `class` keyword to `record` declarations that are _reference types_.

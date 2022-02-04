@@ -1,8 +1,9 @@
 <Project>
 
   <PropertyGroup>
-    <F0Version>0.8.0</F0Version>
-    <F0ReleaseNotes>Changed the object initializer code refactoring to also support C# 9 target-typed new expressions (implicit object creation expressions).</F0ReleaseNotes>
+    <F0Version>0.9.0</F0Version>
+    <F0ReleaseNotes>- Added explicit record class declaration analyzer diagnostic (Warning F02001) and code fix to add the optional class keyword to record declarations without the class or struct keyword.
+- Fixed null check analyzer diagnostics throwing on invocations of static bool-returning methods named Equals with a single null argument.</F0ReleaseNotes>
   </PropertyGroup>
 
 </Project>

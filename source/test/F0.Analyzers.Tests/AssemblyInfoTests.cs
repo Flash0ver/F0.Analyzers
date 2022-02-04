@@ -8,7 +8,7 @@ namespace F0.Tests;
 
 public class AssemblyInfoTests
 {
-	private static readonly Version version = new(0, 8, 0, 0);
+	private static readonly Version version = new(0, 9, 0, 0);
 
 	static AssemblyInfoTests()
 	{

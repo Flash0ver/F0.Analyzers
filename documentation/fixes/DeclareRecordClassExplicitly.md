@@ -7,7 +7,7 @@ CodeFixProvider: [DeclareRecordClassExplicitly.cs](../../source/production/F0.An
 | Title      | Explicitly add class keyword to reference record declaration |
 | Fixes      | [F02001][F02001]                                             |
 | Language   | C# 10.0 or greater                                           |
-| Applies to | `[vNext,)`                                                   |
+| Applies to | `[0.9.0,)`                                                   |
 
 ## Summary
 
@@ -36,7 +36,7 @@ public record class Record(int Number, string Text);
 
 ## History
 
-- [vNext](../../CHANGELOG.md#vNext)
+- [0.9.0](../../CHANGELOG.md#v090-2022-02-04)
 
 
 [F02001]: ../diagnostics/F02001.md
