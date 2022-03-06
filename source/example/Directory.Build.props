@@ -11,4 +11,8 @@
     <ImplicitUsings>disable</ImplicitUsings>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <AnalysisMode>Default</AnalysisMode>
+  </PropertyGroup>
+
 </Project>

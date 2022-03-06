@@ -41,7 +41,7 @@ public class AssemblyInfoTests
 		var displayName = $"F0.Analyzers, Version={version}, Culture=neutral, PublicKeyToken=null";
 
 		var assemblies = AppDomain.CurrentDomain.GetAssemblies();
-		var assembly = assemblies.Single(a => a.FullName.Equals(displayName, StringComparison.InvariantCulture));
+		var assembly = assemblies.Single(a => a.FullName.Equals(displayName, StringComparison.Ordinal));
 
 		return assembly;
 	}

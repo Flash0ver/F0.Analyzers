@@ -1,0 +1,13 @@
+is_global = true
+
+# CA1307: Specify StringComparison for clarity
+dotnet_diagnostic.CA1307.severity = none
+
+# CA1310: Specify StringComparison for correctness
+dotnet_diagnostic.CA1310.severity = none
+
+# RS1007: Provide localizable arguments to diagnostic descriptor constructor
+dotnet_diagnostic.RS1007.severity = none
+
+# RS1028: Provide non-null 'customTags' value to diagnostic descriptor constructor
+dotnet_diagnostic.RS1028.severity = none
