@@ -1,14 +1,16 @@
 using System.Collections.Immutable;
+using F0.Benchmarking.CodeAnalysis.Diagnostics;
 using F0.Benchmarking.Extensions;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Text;
 
-namespace F0.Benchmarking.CodeAnalysis.Diagnostics;
+namespace F0.Benchmarking.CodeAnalysis.Suppressors;
 
-public sealed class DiagnosticAnalyzerBenchmark<TDiagnosticAnalyzer> : AnalyzerBenchmark
-	where TDiagnosticAnalyzer : DiagnosticAnalyzer, new()
+public sealed class DiagnosticSuppressorBenchmark<TDiagnosticSuppressor> : AnalyzerBenchmark
+	where TDiagnosticSuppressor : DiagnosticSuppressor, new()
 {
-	private readonly DiagnosticAnalyzer analyzer;
+	private readonly DiagnosticReporter analyzer;
+	private readonly DiagnosticSuppressor suppressor;
 	private readonly ImmutableArray<DiagnosticAnalyzer> analyzers;
 
 	private SourceText source;
@@ -16,29 +18,39 @@ public sealed class DiagnosticAnalyzerBenchmark<TDiagnosticAnalyzer> : AnalyzerB
 	private SyntaxTree syntaxTree;
 	private ImmutableArray<Diagnostic> actualDiagnostics;
 
-	internal DiagnosticAnalyzerBenchmark()
+	internal DiagnosticSuppressorBenchmark()
 	{
-		analyzer = new TDiagnosticAnalyzer();
-		analyzers = ImmutableArray.Create(analyzer);
+		analyzer = new DiagnosticReporter();
+		suppressor = new TDiagnosticSuppressor();
+		analyzers = ImmutableArray.Create<DiagnosticAnalyzer>(analyzer, suppressor);
 
 		source = null!;
 		compilation = null!;
 		syntaxTree = null!;
 	}
 
-	public void Initialize(string code, LanguageVersion languageVersion)
-		=> InitializeAsync(code, languageVersion).GetAwaiter().GetResult();
+	public void Initialize(string code, string? assemblyName, LanguageVersion languageVersion, ImmutableArray<Action<LocationBuilder>> locations)
+		=> InitializeAsync(code, assemblyName, languageVersion, locations).GetAwaiter().GetResult();
 
-	public async Task InitializeAsync(string code, LanguageVersion languageVersion)
+	public async Task InitializeAsync(string code, string? assemblyName, LanguageVersion languageVersion, ImmutableArray<Action<LocationBuilder>> locations)
 	{
 		var text = code.Untabify();
 		source = SourceText.From(text);
 
 		var document = CreateDocument(source, languageVersion);
 
-		compilation = await document.Project.GetCompilationAsync(CancellationToken.None).ConfigureAwait(false);
+		var project = document.Project;
+		if (assemblyName is not null)
+		{
+			project = project.WithAssemblyName(assemblyName);
+		}
+
+		compilation = await project.GetCompilationAsync(CancellationToken.None).ConfigureAwait(false);
 
 		syntaxTree = compilation.SyntaxTrees.Single();
+
+		var locationFactories = CreateLocationFactories(source, locations);
+		analyzer.SetSupportedDiagnostics(suppressor, locationFactories);
 	}
 
 	public void Invoke()
@@ -72,12 +84,11 @@ public sealed class DiagnosticAnalyzerBenchmark<TDiagnosticAnalyzer> : AnalyzerB
 		return Task.CompletedTask;
 	}
 
-	public Diagnostic CreateDiagnostic(Action<DiagnosticBuilder> build)
-	{
-		var descriptor = analyzer.SupportedDiagnostics.Single();
-		var diagnostic = CreateDiagnostic(descriptor, build);
-		return diagnostic;
-	}
+	public ImmutableArray<Action<LocationBuilder>> CreateLocations(Action<LocationBuilder> build)
+		=> ImmutableArray.Create(build);
+
+	public ImmutableArray<Action<LocationBuilder>> CreateLocations(params Action<LocationBuilder>[] builds)
+		=> ImmutableArray.Create(builds);
 
 	public ImmutableArray<Diagnostic> CreateDiagnostics(params Action<DiagnosticBuilder>[] builds)
 	{
@@ -92,24 +103,26 @@ public sealed class DiagnosticAnalyzerBenchmark<TDiagnosticAnalyzer> : AnalyzerB
 		return diagnostics.ToImmutable();
 	}
 
-	public ImmutableArray<Diagnostic> CreateDiagnostics(params (string Id, Action<DiagnosticBuilder> Builder)[] builds)
-	{
-		var diagnostics = ImmutableArray.CreateBuilder<Diagnostic>();
-		foreach (var (id, builder) in builds)
-		{
-			var descriptor = analyzer.SupportedDiagnostics.Single(d => d.Id.Equals(id, StringComparison.Ordinal));
-			var diagnostic = CreateDiagnostic(descriptor, builder);
-			diagnostics.Add(diagnostic);
-		}
-
-		return diagnostics.ToImmutable();
-	}
-
 	private Diagnostic CreateDiagnostic(DiagnosticDescriptor descriptor, Action<DiagnosticBuilder> build)
 	{
 		var builder = new DiagnosticBuilder(source, syntaxTree);
 		build(builder);
 		var diagnostic = builder.Build(descriptor);
 		return diagnostic;
+	}
+
+	private static ImmutableArray<LocationFactory> CreateLocationFactories(SourceText source, ImmutableArray<Action<LocationBuilder>> locations)
+	{
+		return locations.Select(location =>
+		{
+			return new LocationFactory(CreateLocation);
+
+			Location CreateLocation(SyntaxTree syntaxTree)
+			{
+				var builder = new LocationBuilder(source);
+				location.Invoke(builder);
+				return builder.Build(syntaxTree);
+			}
+		}).ToImmutableArray();
 	}
 }

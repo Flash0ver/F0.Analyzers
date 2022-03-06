@@ -8,6 +8,7 @@
       "example\\F0.Analyzers.Example.CSharp8\\F0.Analyzers.Example.CSharp8.csproj",
       "example\\F0.Analyzers.Example.CSharp9\\F0.Analyzers.Example.CSharp9.csproj",
       "example\\F0.Analyzers.Example.Dependencies\\F0.Analyzers.Example.Dependencies.csproj",
+      "example\\F0.Analyzers.Example.Tests\\F0.Analyzers.Example.Tests.csproj",
       "example\\F0.Analyzers.Example\\F0.Analyzers.Example.csproj",
       "package\\F0.Analyzers.Package\\F0.Analyzers.Package.csproj",
       "performance\\F0.Analyzers.Benchmarks\\F0.Analyzers.Benchmarks.csproj",

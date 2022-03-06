@@ -2,6 +2,8 @@
 CHANGELOG
 
 ## vNext
+### Analyzers
+- Added `IdentifiersShouldNotContainUnderscores` diagnostic suppressor, suppressing _Warning CA1707_ for _MSTest_, _NUnit_ and _xUnit.net_ test methods.
 
 ## v0.9.0 (2022-02-04)
 ### Analyzers
