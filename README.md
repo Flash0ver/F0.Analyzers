@@ -40,4 +40,4 @@ supports [17.0.0](https://docs.microsoft.com/en-us/visualstudio/releases/2022/re
 ### Rider
 supports [2021.3](https://www.jetbrains.com/rider/whatsnew/2021-3/) and later
 ### Visual Studio Code
-supports _OmniSharp (C#)_ [1.24.0](https://github.com/OmniSharp/omnisharp-vscode/releases/tag/v1.24.0) and later
+supports _OmniSharp (C#)_ [1.24.1](https://github.com/OmniSharp/omnisharp-vscode/releases/tag/v1.24.1) and later

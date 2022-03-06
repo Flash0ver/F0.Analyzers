@@ -27,7 +27,7 @@ record Record;
 	}
 
 	[Benchmark]
-	public Task UseConstantNullPattern()
+	public Task DeclareRecordClassExplicitly()
 		=> benchmark.InvokeAsync();
 
 	[GlobalCleanup]
