@@ -5,9 +5,9 @@ namespace F0.Testing.CodeAnalysis;
 /// </summary>
 public static class Projects
 {
-	public static readonly string AssemblyName = "TestProject";
+	public const string AssemblyName = "TestProject";
 
-	internal static readonly string Extension = ".csproj";
+	internal const string Extension = ".csproj";
 
 	public static string CreateProjectName(int projectIndex)
 		=> AssemblyName + projectIndex;
