@@ -76,7 +76,7 @@ public class CodeRefactoringVerifier<TCodeRefactoring>
 		var tester = new CodeRefactoringTester<TCodeRefactoring>
 		{
 			TestCode = normalizedInitialCode,
-			FixedCode = expectedCode is null ? normalizedInitialCode : expectedCode.Untabify()
+			FixedCode = expectedCode is null ? normalizedInitialCode : expectedCode.Untabify(),
 		};
 
 		if (languageVersion.HasValue)

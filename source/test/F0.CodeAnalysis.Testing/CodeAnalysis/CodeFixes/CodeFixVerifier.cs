@@ -89,7 +89,7 @@ public class CodeFixVerifier<TDiagnosticAnalyzer, TCodeFix>
 		var tester = new CodeFixTester<TDiagnosticAnalyzer, TCodeFix>
 		{
 			TestCode = normalizedInitialCode,
-			FixedCode = expectedCode is null ? normalizedInitialCode : expectedCode.Untabify()
+			FixedCode = expectedCode is null ? normalizedInitialCode : expectedCode.Untabify(),
 		};
 
 		if (referenceAssemblies is not null)

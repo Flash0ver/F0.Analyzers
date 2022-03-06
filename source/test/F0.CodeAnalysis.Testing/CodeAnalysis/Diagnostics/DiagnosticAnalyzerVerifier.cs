@@ -73,7 +73,7 @@ public class DiagnosticAnalyzerVerifier<TDiagnosticAnalyzer>
 	{
 		var tester = new DiagnosticAnalyzerTester<TDiagnosticAnalyzer>
 		{
-			TestCode = code.Untabify()
+			TestCode = code.Untabify(),
 		};
 
 		if (languageVersion.HasValue)

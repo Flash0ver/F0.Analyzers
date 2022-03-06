@@ -1,2 +1,1 @@
-
 [assembly: CollectionBehavior(CollectionBehavior.CollectionPerClass)]
