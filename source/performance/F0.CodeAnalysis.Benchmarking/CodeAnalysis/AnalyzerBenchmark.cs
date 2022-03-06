@@ -17,7 +17,7 @@ public abstract class AnalyzerBenchmark
 	{
 	}
 
-	protected TextSpan GetSpan(string code, LinePositionSpan span, bool isVerbatimStringLiteral)
+	protected static TextSpan GetSpan(string code, LinePositionSpan span, bool isVerbatimStringLiteral)
 	{
 		var zeroBasedSpan = new LinePositionSpan(new LinePosition(span.Start.Line - 1, span.Start.Character - 1), new LinePosition(span.End.Line - 1, span.End.Character - 1));
 
@@ -49,10 +49,10 @@ public abstract class AnalyzerBenchmark
 		return new TextSpan(start, length);
 	}
 
-	protected Document CreateDocument(string code, LanguageVersion languageVersion)
+	protected static Document CreateDocument(string code, LanguageVersion languageVersion)
 		=> CreateDocument(SourceText.From(code), languageVersion);
 
-	protected Document CreateDocument(SourceText code, LanguageVersion languageVersion)
+	protected static Document CreateDocument(SourceText code, LanguageVersion languageVersion)
 	{
 		var projectId = CreateProjectId();
 		var documentId = CreateDocumentId(projectId);
@@ -62,10 +62,10 @@ public abstract class AnalyzerBenchmark
 		return solution.GetDocument(documentId);
 	}
 
-	protected Project CreateProject(string code, LanguageVersion languageVersion)
+	protected static Project CreateProject(string code, LanguageVersion languageVersion)
 		=> CreateProject(SourceText.From(code), languageVersion);
 
-	protected Project CreateProject(SourceText code, LanguageVersion languageVersion)
+	protected static Project CreateProject(SourceText code, LanguageVersion languageVersion)
 	{
 		var projectId = CreateProjectId();
 		var documentId = CreateDocumentId(projectId);
