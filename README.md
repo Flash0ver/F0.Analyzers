@@ -36,7 +36,7 @@ requires _Roslyn v4.0.1_ or later (see [packages of the .NET Compiler Platform](
 ### .NET 6.0
 supports [SDK 6.0.100](https://github.com/dotnet/core/blob/main/release-notes/6.0/6.0.0/6.0.0.md) and later
 ### Visual Studio 2022
-supports [17.0.0](https://docs.microsoft.com/en-us/visualstudio/releases/2022/release-notes#17.0.0) and later
+supports [17.0.0](https://docs.microsoft.com/en-us/visualstudio/releases/2022/release-notes-v17.0) and later
 ### Rider
 supports [2021.3](https://www.jetbrains.com/rider/whatsnew/2021-3/) and later
 ### Visual Studio Code
