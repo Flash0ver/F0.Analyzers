@@ -67,14 +67,14 @@ internal static class DiagnosticAssert
 		{
 			var message = $"- Unexpected {nameof(DiagnosticDescriptor)}:";
 			errors.AppendLine(message);
-			errors.AppendLine($"\t- {nameof(DiagnosticDescriptor.Category)}: {expectedDiagnostic.Descriptor.Category} | {actualDiagnostic.Descriptor.Category}");
-			errors.AppendLine($"\t- {nameof(DiagnosticDescriptor.DefaultSeverity)}: {expectedDiagnostic.Descriptor.DefaultSeverity} | {actualDiagnostic.Descriptor.DefaultSeverity}");
-			errors.AppendLine($"\t- {nameof(DiagnosticDescriptor.Description)}: {expectedDiagnostic.Descriptor.Description} | {actualDiagnostic.Descriptor.Description}");
-			errors.AppendLine($"\t- {nameof(DiagnosticDescriptor.HelpLinkUri)}: {expectedDiagnostic.Descriptor.HelpLinkUri} | {actualDiagnostic.Descriptor.HelpLinkUri}");
-			errors.AppendLine($"\t- {nameof(DiagnosticDescriptor.Id)}: {expectedDiagnostic.Descriptor.Id} | {actualDiagnostic.Descriptor.Id}");
-			errors.AppendLine($"\t- {nameof(DiagnosticDescriptor.IsEnabledByDefault)}: {expectedDiagnostic.Descriptor.IsEnabledByDefault} | {actualDiagnostic.Descriptor.IsEnabledByDefault}");
-			errors.AppendLine($"\t- {nameof(DiagnosticDescriptor.MessageFormat)}: {expectedDiagnostic.Descriptor.MessageFormat} | {actualDiagnostic.Descriptor.MessageFormat}");
-			errors.AppendLine($"\t- {nameof(DiagnosticDescriptor.Title)}: {expectedDiagnostic.Descriptor.Title} | {actualDiagnostic.Descriptor.Title}");
+			errors.AppendLine(nameof(DiagnosticDescriptor.Category), expectedDiagnostic.Descriptor.Category, actualDiagnostic.Descriptor.Category);
+			errors.AppendLine(nameof(DiagnosticDescriptor.DefaultSeverity), expectedDiagnostic.Descriptor.DefaultSeverity, actualDiagnostic.Descriptor.DefaultSeverity);
+			errors.AppendLine(nameof(DiagnosticDescriptor.Description), expectedDiagnostic.Descriptor.Description, actualDiagnostic.Descriptor.Description);
+			errors.AppendLine(nameof(DiagnosticDescriptor.HelpLinkUri), expectedDiagnostic.Descriptor.HelpLinkUri, actualDiagnostic.Descriptor.HelpLinkUri);
+			errors.AppendLine(nameof(DiagnosticDescriptor.Id), expectedDiagnostic.Descriptor.Id, actualDiagnostic.Descriptor.Id);
+			errors.AppendLine(nameof(DiagnosticDescriptor.IsEnabledByDefault), expectedDiagnostic.Descriptor.IsEnabledByDefault, actualDiagnostic.Descriptor.IsEnabledByDefault);
+			errors.AppendLine(nameof(DiagnosticDescriptor.MessageFormat), expectedDiagnostic.Descriptor.MessageFormat, actualDiagnostic.Descriptor.MessageFormat);
+			errors.AppendLine(nameof(DiagnosticDescriptor.Title), expectedDiagnostic.Descriptor.Title, actualDiagnostic.Descriptor.Title);
 		}
 
 		if (expectedDiagnostic.GetMessage() != actualDiagnostic.GetMessage())
@@ -107,4 +107,7 @@ internal static class DiagnosticAssert
 			errors.AppendLine(message);
 		}
 	}
+
+	private static void AppendLine<T>(this StringBuilder errors, string memberName, T expected, T actual)
+		=> _ = errors.AppendLine($"\t- {memberName}: {expected} | {actual}");
 }

@@ -1,9 +1,10 @@
 using System.Collections.Immutable;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace F0.Benchmarking.CodeAnalysis.Diagnostics;
 
-[System.Diagnostics.CodeAnalysis.SuppressMessage("MicrosoftCodeAnalysisCorrectness", "RS1001:Missing diagnostic analyzer attribute.", Justification = "Benchmarking")]
+[SuppressMessage("MicrosoftCodeAnalysisCorrectness", "RS1001:Missing diagnostic analyzer attribute.", Justification = "Benchmarking")]
 internal sealed class DiagnosticReporter : DiagnosticAnalyzer
 {
 	private ImmutableArray<DiagnosticDescriptor> supportedDiagnostics;

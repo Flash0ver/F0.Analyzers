@@ -40,7 +40,7 @@ public sealed class DiagnosticBuilder
 		return this;
 	}
 
-	public object WithIsSuppressed(bool isSuppressed)
+	public DiagnosticBuilder WithIsSuppressed(bool isSuppressed)
 	{
 		this.isSuppressed = isSuppressed;
 
