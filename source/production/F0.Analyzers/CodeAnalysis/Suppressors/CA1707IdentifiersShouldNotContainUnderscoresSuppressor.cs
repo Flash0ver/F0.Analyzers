@@ -1,3 +1,4 @@
+using F0.Extensions;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace F0.CodeAnalysis.Suppressors;
@@ -5,7 +6,7 @@ namespace F0.CodeAnalysis.Suppressors;
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
 internal sealed class CA1707IdentifiersShouldNotContainUnderscoresSuppressor : DiagnosticSuppressor
 {
-	private static readonly SuppressionDescriptor Rule = new SuppressionDescriptor(
+	private static readonly SuppressionDescriptor Rule = new(
 		"F0CA1707",
 		"CA1707",
 		"Suppress CA1707 on test methods to allow the best practices naming standard for tests."
@@ -101,9 +102,9 @@ internal sealed class CA1707IdentifiersShouldNotContainUnderscoresSuppressor : D
 
 			var display = attribute.AttributeClass.ToDisplayString(format);
 
-			if ((display.Equals("Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute", StringComparison.Ordinal)
-				|| display.Equals("Microsoft.VisualStudio.TestTools.UnitTesting.DataTestMethodAttribute", StringComparison.Ordinal))
-				&& attribute.AttributeClass.ContainingAssembly.Identity.Name.StartsWith("Microsoft.VisualStudio", StringComparison.Ordinal))
+			if ((display.EqualsOrdinal("Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute")
+				|| display.EqualsOrdinal("Microsoft.VisualStudio.TestTools.UnitTesting.DataTestMethodAttribute"))
+				&& attribute.AttributeClass.ContainingAssembly.Identity.Name.StartsWithOrdinal("Microsoft.VisualStudio"))
 			{
 				hasTestMethodAttribute = true;
 				break;
@@ -122,8 +123,8 @@ internal sealed class CA1707IdentifiersShouldNotContainUnderscoresSuppressor : D
 
 			var display = attribute.AttributeClass.ToDisplayString(format);
 
-			if (display.Equals("Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute", StringComparison.Ordinal)
-				&& attribute.AttributeClass.ContainingAssembly.Identity.Name.StartsWith("Microsoft.VisualStudio", StringComparison.Ordinal))
+			if (display.EqualsOrdinal("Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute")
+				&& attribute.AttributeClass.ContainingAssembly.Identity.Name.StartsWithOrdinal("Microsoft.VisualStudio"))
 			{
 				hasTestClassAttribute = true;
 				break;
@@ -138,14 +139,14 @@ internal sealed class CA1707IdentifiersShouldNotContainUnderscoresSuppressor : D
 		var display = attributeType.ToString();
 		Debug.Assert(display is not null, $"Type '{attributeType}' has no display name.");
 
-		return attributeType.ContainingAssembly.Identity.Name.StartsWith("nunit")
-			&& (display.Equals("NUnit.Framework.TestAttribute", StringComparison.Ordinal)
-			|| display.Equals("NUnit.Framework.TestCaseAttribute", StringComparison.Ordinal)
-			|| display.Equals("NUnit.Framework.TestCaseSourceAttribute", StringComparison.Ordinal)
-			|| display.Equals("NUnit.Framework.CombinatorialAttribute", StringComparison.Ordinal)
-			|| display.Equals("NUnit.Framework.PairwiseAttribute", StringComparison.Ordinal)
-			|| display.Equals("NUnit.Framework.SequentialAttribute", StringComparison.Ordinal)
-			|| display.Equals("NUnit.Framework.TheoryAttribute", StringComparison.Ordinal));
+		return attributeType.ContainingAssembly.Identity.Name.StartsWithOrdinal("nunit")
+			&& (display.EqualsOrdinal("NUnit.Framework.TestAttribute")
+			|| display.EqualsOrdinal("NUnit.Framework.TestCaseAttribute")
+			|| display.EqualsOrdinal("NUnit.Framework.TestCaseSourceAttribute")
+			|| display.EqualsOrdinal("NUnit.Framework.CombinatorialAttribute")
+			|| display.EqualsOrdinal("NUnit.Framework.PairwiseAttribute")
+			|| display.EqualsOrdinal("NUnit.Framework.SequentialAttribute")
+			|| display.EqualsOrdinal("NUnit.Framework.TheoryAttribute"));
 	}
 
 	private static bool IsXunit(ITypeSymbol attributeType)
@@ -153,8 +154,8 @@ internal sealed class CA1707IdentifiersShouldNotContainUnderscoresSuppressor : D
 		var display = attributeType.ToString();
 		Debug.Assert(display is not null, $"Type '{attributeType}' has no display name.");
 
-		return attributeType.ContainingAssembly.Identity.Name.StartsWith("xunit")
-			&& (display.Equals("Xunit.FactAttribute", StringComparison.Ordinal)
-			|| display.Equals("Xunit.TheoryAttribute", StringComparison.Ordinal));
+		return attributeType.ContainingAssembly.Identity.Name.StartsWithOrdinal("xunit")
+			&& (display.EqualsOrdinal("Xunit.FactAttribute")
+			|| display.EqualsOrdinal("Xunit.TheoryAttribute"));
 	}
 }
