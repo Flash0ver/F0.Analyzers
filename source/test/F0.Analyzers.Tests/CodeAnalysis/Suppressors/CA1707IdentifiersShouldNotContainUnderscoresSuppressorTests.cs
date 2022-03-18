@@ -517,10 +517,14 @@ public class MyClass<{|#15:Type_TypeParameter|}>
 	public int {|#16:My_Property|} { get; set; }
 
 	public void MyMethod<{|#17:Method_TypeParameter|}>() => throw null;
-}";
+}
+
+public delegate void Action<in T>(T {|#18:delegate_parameter|});
+";
 
 		var expected = new[]
 		{
+			CA1707.WithLocation(1, 1).WithIsSuppressed(false).WithArguments("My_Assembly"),
 			CA1707.WithLocation(0).WithIsSuppressed(false),
 			CA1707.WithLocation(1).WithIsSuppressed(false),
 			CA1707.WithLocation(2).WithIsSuppressed(false),
@@ -539,7 +543,7 @@ public class MyClass<{|#15:Type_TypeParameter|}>
 			CA1707.WithLocation(15).WithIsSuppressed(false),
 			CA1707.WithLocation(16).WithIsSuppressed(false),
 			CA1707.WithLocation(17).WithIsSuppressed(false),
-			CA1707.WithLocation(1, 1).WithIsSuppressed(false).WithArguments("My_Assembly"),
+			CA1707.WithLocation(18).WithIsSuppressed(false),
 		};
 
 		await VerifyAsync(code, "My_Assembly", expected, typeof(Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute), typeof(NUnit.Framework.TestAttribute), typeof(FactAttribute));
