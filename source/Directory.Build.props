@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <PropertyGroup>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <AnalysisLevel>6.0</AnalysisLevel>
+    <AnalysisMode>All</AnalysisMode>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+  </PropertyGroup>
+
+  <PropertyGroup>
     <NoWarn />
     <WarningsAsErrors />
     <WarningsNotAsErrors />
@@ -14,10 +21,20 @@
 
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <CodeAnalysisTreatWarningsAsErrors>false</CodeAnalysisTreatWarningsAsErrors>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <CodeAnalysisTreatWarningsAsErrors>true</CodeAnalysisTreatWarningsAsErrors>
   </PropertyGroup>
+
+  <ItemGroup>
+    <AssemblyAttribute Include="System.CLSCompliantAttribute">
+      <_Parameter1>false</_Parameter1>
+      <_Parameter1_TypeName>System.Boolean</_Parameter1_TypeName>
+      <_Parameter1_IsLiteral>false</_Parameter1_IsLiteral>
+    </AssemblyAttribute>
+  </ItemGroup>
 
 </Project>

@@ -2,12 +2,13 @@ using Microsoft.CodeAnalysis.Text;
 
 namespace F0.Benchmarking.CodeAnalysis;
 
-public class DiagnosticBuilder
+public sealed class DiagnosticBuilder
 {
 	private readonly SourceText source;
 	private readonly SyntaxTree syntaxTree;
 	private TextSpan span;
 	private string[]? messageArguments;
+	private bool isSuppressed;
 
 	internal DiagnosticBuilder(SourceText source, SyntaxTree syntaxTree)
 	{
@@ -39,9 +40,25 @@ public class DiagnosticBuilder
 		return this;
 	}
 
+	public DiagnosticBuilder WithIsSuppressed(bool isSuppressed)
+	{
+		this.isSuppressed = isSuppressed;
+
+		return this;
+	}
+
 	internal Diagnostic Build(DiagnosticDescriptor descriptor)
 	{
 		var location = BuildLocation();
+
+		if (isSuppressed)
+		{
+			var warningLevel = descriptor.DefaultSeverity == DiagnosticSeverity.Warning
+				? 1
+				: 0;
+			return Diagnostic.Create(descriptor.Id, descriptor.Category, descriptor.MessageFormat, descriptor.DefaultSeverity, descriptor.DefaultSeverity, descriptor.IsEnabledByDefault, warningLevel, isSuppressed, descriptor.Title, descriptor.Description, descriptor.HelpLinkUri, location, null, descriptor.CustomTags, null);
+		}
+
 		var diagnostic = messageArguments is null
 			? Diagnostic.Create(descriptor, location)
 			: Diagnostic.Create(descriptor, location, messageArguments);

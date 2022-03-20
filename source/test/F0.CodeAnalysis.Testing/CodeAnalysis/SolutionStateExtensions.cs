@@ -15,6 +15,7 @@ internal static class SolutionStateExtensions
 			{
 				OutputKind = OutputKind.DynamicallyLinkedLibrary,
 				DocumentationMode = DocumentationMode.Diagnose,
+				ReferenceAssemblies = solution.ReferenceAssemblies,
 			};
 
 			for (var documentIndex = 0; documentIndex < additionalDocuments.Length; documentIndex++)

@@ -1,0 +1,13 @@
+is_global = true
+
+# CA1305: Specify IFormatProvider
+dotnet_diagnostic.CA1305.severity = none
+
+# CA1307: Specify StringComparison for clarity
+dotnet_diagnostic.CA1307.severity = none
+
+# CA1707: Identifiers should not contain underscores
+dotnet_diagnostic.CA1707.severity = none
+
+# CA2007: Consider calling ConfigureAwait on the awaited task
+dotnet_diagnostic.CA2007.severity = none

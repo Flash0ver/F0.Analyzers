@@ -1,6 +1,7 @@
 using F0.Testing.CodeAnalysis.CodeFixes;
 using F0.Testing.CodeAnalysis.CodeRefactorings;
 using F0.Testing.CodeAnalysis.Diagnostics;
+using F0.Testing.CodeAnalysis.Suppressors;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CodeRefactorings;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -25,6 +26,15 @@ public static class Verify
 	public static CodeRefactoringVerifier<TCodeRefactoring> CodeRefactoring<TCodeRefactoring>()
 		where TCodeRefactoring : CodeRefactoringProvider, new()
 		=> new CodeRefactoringVerifier<TCodeRefactoring>();
+
+	public static DiagnosticSuppressorVerifier<TDiagnosticSuppressor> DiagnosticSuppressor<TDiagnosticSuppressor>()
+		where TDiagnosticSuppressor : DiagnosticSuppressor, new()
+		=> new DiagnosticSuppressorVerifier<TDiagnosticSuppressor>();
+
+	public static DiagnosticSuppressorVerifier<TDiagnosticSuppressor, TDiagnosticAnalyzer> DiagnosticSuppressor<TDiagnosticSuppressor, TDiagnosticAnalyzer>()
+		where TDiagnosticSuppressor : DiagnosticSuppressor, new()
+		where TDiagnosticAnalyzer : DiagnosticAnalyzer, new()
+		=> new DiagnosticSuppressorVerifier<TDiagnosticSuppressor, TDiagnosticAnalyzer>();
 
 	public static DiagnosticResult Diagnostic<TDiagnosticAnalyzer>(string diagnosticId)
 		where TDiagnosticAnalyzer : DiagnosticAnalyzer, new()

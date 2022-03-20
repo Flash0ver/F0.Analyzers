@@ -1,6 +1,7 @@
 using F0.Benchmarking.CodeAnalysis.CodeFixes;
 using F0.Benchmarking.CodeAnalysis.CodeRefactorings;
 using F0.Benchmarking.CodeAnalysis.Diagnostics;
+using F0.Benchmarking.CodeAnalysis.Suppressors;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CodeRefactorings;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -21,4 +22,8 @@ public static class Measure
 	public static CodeRefactoringBenchmark<TCodeRefactoring> CodeRefactoring<TCodeRefactoring>()
 		where TCodeRefactoring : CodeRefactoringProvider, new()
 		=> new CodeRefactoringBenchmark<TCodeRefactoring>();
+
+	public static DiagnosticSuppressorBenchmark<TDiagnosticSuppressor> DiagnosticSuppressor<TDiagnosticSuppressor>()
+		where TDiagnosticSuppressor : DiagnosticSuppressor, new()
+		=> new DiagnosticSuppressorBenchmark<TDiagnosticSuppressor>();
 }

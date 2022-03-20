@@ -10,7 +10,8 @@ internal sealed class F0100xPreferPatternMatchingNullCheckOverComparisonWithNull
 	private const string Title = "Prefer is pattern to check for null";
 	private const string Description = "When an expression is matched against the 'null' literal, the compiler guarantees that neither an overloaded operator nor an overridden method is invoked.";
 
-	internal static readonly DiagnosticDescriptor EqualityComparisonRule = new(
+	[SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "https://github.com/dotnet/roslyn-analyzers/issues/5828")]
+	internal static readonly DiagnosticDescriptor EqualityComparisonRule = new DiagnosticDescriptor(
 		DiagnosticIds.F01001,
 		Title,
 		"Prefer '{0}' pattern over calling the (potentially) {1} '{2}' {3} to check for {4}",
@@ -21,7 +22,8 @@ internal sealed class F0100xPreferPatternMatchingNullCheckOverComparisonWithNull
 		DiagnosticHelpLinkUris.F01001
 	);
 
-	internal static readonly DiagnosticDescriptor IdentityComparisonRule = new(
+	[SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "https://github.com/dotnet/roslyn-analyzers/issues/5828")]
+	internal static readonly DiagnosticDescriptor IdentityComparisonRule = new DiagnosticDescriptor(
 		DiagnosticIds.F01002,
 		Title,
 		"Prefer '{0}' pattern over calling the '{1}' {2} to check for {3}",
