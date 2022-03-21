@@ -1,5 +1,5 @@
 # F0.Analyzers
-Code refactorings and diagnostic analyzers with code fixes for C# projects, based on the .NET Compiler Platform ("Roslyn") Code Analysis.
+Code refactorings, diagnostic suppressors and diagnostic analyzers with code fixes for C# projects, based on the .NET Compiler Platform ("Roslyn") Code Analysis.
 
 ![F0.Analyzers](https://raw.githubusercontent.com/Flash0ver/F0/master/Branding/GitHub/F0.Analyzers.png)
 

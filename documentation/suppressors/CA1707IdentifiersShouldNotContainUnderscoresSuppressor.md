@@ -6,7 +6,7 @@ DiagnosticSuppressor: [CA1707IdentifiersShouldNotContainUnderscoresSuppressor.cs
 |------------|------------------|
 | ID         | F0CA1707         |
 | Suppresses | [CA1707][ca1707] |
-| Applies to | `[vNext,)`       |
+| Applies to | `[0.10.0,)`       |
 
 ## Summary
 
@@ -95,7 +95,7 @@ public class My_Tests // Remove the underscores from type name My_Namespace.My_T
 
 ## History
 
-- [vNext](../../CHANGELOG.md#vNext)
+- [0.10.0](../../CHANGELOG.md#v0100-2022-03-21)
 
 
   [ca1707]: https://docs.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1707
