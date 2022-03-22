@@ -6,6 +6,7 @@
         <Configuration>
           <Format>cobertura</Format>
           <Exclude>[F0.CodeAnalysis.Testing]*</Exclude>
+          <ExcludeByFile>**/F0.Analyzers/Resources.Designer.cs</ExcludeByFile>
         </Configuration>
       </DataCollector>
     </DataCollectors>
