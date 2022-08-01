@@ -12,7 +12,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="coverlet.collector" Version="3.1.0" PrivateAssets="all" />
+    <PackageReference Include="coverlet.collector" Version="3.1.2" PrivateAssets="all" />
     <PackageReference Include="FakeItEasy" Version="7.0.1" />
     <PackageReference Include="FakeItEasy.Analyzer.CSharp" Version="6.1.0" PrivateAssets="all" />
     <PackageReference Include="FluentAssertions" Version="5.10.3" />
