@@ -6,7 +6,7 @@ DiagnosticSuppressor: [CA1707IdentifiersShouldNotContainUnderscoresSuppressor.cs
 |------------|------------------|
 | ID         | F0CA1707         |
 | Suppresses | [CA1707][ca1707] |
-| Applies to | `[0.10.0,)`       |
+| Applies to | `[0.10.0,)`      |
 
 ## Summary
 

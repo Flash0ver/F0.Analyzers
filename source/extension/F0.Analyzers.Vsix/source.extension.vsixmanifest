@@ -3,7 +3,7 @@
   <Metadata>
     <Identity Id="F0.Analyzers.Vsix" Version="0.10.0" Language="en-US" Publisher="Flash0Ware" />
     <DisplayName>F0.Analyzers</DisplayName>
-    <Description xml:space="preserve">C# code refactorings and diagnostic analyzers with code fixes, based on the .NET Compiler Platform (Roslyn).</Description>
+    <Description xml:space="preserve">C# code refactorings, diagnostic suppressors and diagnostic analyzers with code fixes, based on the .NET Compiler Platform (Roslyn).</Description>
     <MoreInfo>https://github.com/Flash0ver/F0.Analyzers</MoreInfo>
     <License>Resources\License.txt</License>
     <GettingStartedGuide>https://github.com/Flash0ver/F0.Analyzers/blob/main/documentation/F0.Analyzers.md</GettingStartedGuide>

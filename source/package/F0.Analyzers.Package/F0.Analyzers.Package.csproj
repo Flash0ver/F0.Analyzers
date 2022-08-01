@@ -19,7 +19,7 @@
     <Authors>dani.rabl; Flash0ver</Authors>
     <Company>f[0]</Company>
     <Product>F0.Analyzers</Product>
-    <Description>C# code refactorings and diagnostic analyzers with code fixes, based on the .NET Compiler Platform (Roslyn).</Description>
+    <Description>C# code refactorings, diagnostic suppressors and diagnostic analyzers with code fixes, based on the .NET Compiler Platform (Roslyn).</Description>
     <Copyright>© f[0]</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/Flash0ver/F0.Analyzers</PackageProjectUrl>
