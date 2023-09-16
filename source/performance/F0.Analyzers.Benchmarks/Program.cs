@@ -23,7 +23,7 @@ internal static class Program
 		static IConfig CreateBenchmarkConfiguration()
 			=> DefaultConfig.Instance
 				.AddJob(Job.InProcess.WithRuntime(ClrRuntime.Net472))
-				.AddJob(Job.InProcess.WithRuntime(CoreRuntime.Core60))
+				.AddJob(Job.InProcess.WithRuntime(CoreRuntime.Core70))
 				.AddColumn(StatisticColumn.Min, StatisticColumn.Max, StatisticColumn.Median)
 				.AddDiagnoser(MemoryDiagnoser.Default)
 				.AddExporter(DefaultExporters.AsciiDoc)
