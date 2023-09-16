@@ -1,10 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks Condition="'$(OS)'=='Windows_NT'">net6.0;net472</TargetFrameworks>
-    <TargetFramework Condition="'$(OS)'!='Windows_NT'">net6.0</TargetFramework>
+    <TargetFrameworks Condition="'$(OS)'=='Windows_NT'">net7.0;net472</TargetFrameworks>
+    <TargetFramework Condition="'$(OS)'!='Windows_NT'">net7.0</TargetFramework>
     <AssemblyName>F0.Analyzers.Tests</AssemblyName>
     <RootNamespace>F0.Tests</RootNamespace>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <IsTestProject>true</IsTestProject>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -17,7 +21,7 @@
     <PackageReference Include="FakeItEasy.Analyzer.CSharp" Version="6.1.0" PrivateAssets="all" />
     <PackageReference Include="FluentAssertions" Version="6.7.0" />
     <PackageReference Include="FluentAssertions.Analyzers" Version="0.17.2" PrivateAssets="all" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.4.0" />
     <PackageReference Include="xunit" Version="2.4.2" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5" PrivateAssets="all" />
   </ItemGroup>
@@ -35,7 +39,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="6.0.0" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="7.0.0" PrivateAssets="all" />
     <Reference Include="$(PkgMicrosoft_CodeAnalysis_NetAnalyzers)\analyzers\dotnet\cs\Microsoft.CodeAnalysis.NetAnalyzers.dll" />
   </ItemGroup>
 
