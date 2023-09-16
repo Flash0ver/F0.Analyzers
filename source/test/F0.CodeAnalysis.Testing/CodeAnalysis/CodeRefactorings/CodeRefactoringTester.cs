@@ -2,7 +2,7 @@ using Microsoft.CodeAnalysis.CodeRefactorings;
 
 namespace F0.Testing.CodeAnalysis.CodeRefactorings;
 
-internal class CodeRefactoringTester<TCodeRefactoring> : CSharpCodeRefactoringTest<TCodeRefactoring, XUnitVerifier>
+internal sealed class CodeRefactoringTester<TCodeRefactoring> : CSharpCodeRefactoringTest<TCodeRefactoring, XUnitVerifier>
 	where TCodeRefactoring : CodeRefactoringProvider, new()
 {
 	internal LanguageVersion? LanguageVersion { get; set; }

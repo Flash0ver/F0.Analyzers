@@ -3,7 +3,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace F0.Testing.CodeAnalysis.Suppressors;
 
-internal class DiagnosticSuppressorTester<TDiagnosticSuppressor, TDiagnosticAnalyzer> : CSharpAnalyzerTest<TDiagnosticSuppressor, XUnitVerifier>
+internal sealed class DiagnosticSuppressorTester<TDiagnosticSuppressor, TDiagnosticAnalyzer> : CSharpAnalyzerTest<TDiagnosticSuppressor, XUnitVerifier>
 	where TDiagnosticSuppressor : DiagnosticSuppressor, new()
 	where TDiagnosticAnalyzer : DiagnosticAnalyzer, new()
 {

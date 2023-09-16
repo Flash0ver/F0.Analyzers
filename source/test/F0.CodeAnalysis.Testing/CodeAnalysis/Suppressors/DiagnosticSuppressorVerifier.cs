@@ -4,7 +4,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace F0.Testing.CodeAnalysis.Suppressors;
 
-public class DiagnosticSuppressorVerifier<TDiagnosticSuppressor>
+public sealed class DiagnosticSuppressorVerifier<TDiagnosticSuppressor>
 	where TDiagnosticSuppressor : DiagnosticAnalyzer, new()
 {
 	internal DiagnosticSuppressorVerifier()
