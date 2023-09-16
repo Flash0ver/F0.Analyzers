@@ -1,4 +1,5 @@
 using System.Collections.Immutable;
+using System.Diagnostics;
 using F0.Benchmarking.CodeAnalysis.Diagnostics;
 using F0.Benchmarking.Extensions;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -45,7 +46,9 @@ public sealed class DiagnosticSuppressorBenchmark<TDiagnosticSuppressor> : Analy
 			project = project.WithAssemblyName(assemblyName);
 		}
 
-		compilation = await project.GetCompilationAsync(CancellationToken.None).ConfigureAwait(false);
+		var compilation = await project.GetCompilationAsync(CancellationToken.None).ConfigureAwait(false);
+		Debug.Assert(compilation is not null, $"Project doesn't support producing compilations: {{ {nameof(Project.SupportsCompilation)} = {project.SupportsCompilation} }}");
+		this.compilation = compilation;
 
 		syntaxTree = compilation.SyntaxTrees.Single();
 
