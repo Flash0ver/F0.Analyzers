@@ -12,7 +12,7 @@ public abstract class AnalyzerBenchmark
 	private const string LanguageName = LanguageNames.CSharp;
 	private const string FileExtension = ".cs";
 
-	internal const string FullFileName = "/0/" + FileName + "0" + FileExtension;
+	internal const string FullFileName = $"/0/{FileName}0{FileExtension}";
 
 	protected AnalyzerBenchmark()
 	{
