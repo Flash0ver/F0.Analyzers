@@ -2,9 +2,3 @@ is_global = true
 
 # CA1062: Validate arguments of public methods
 dotnet_diagnostic.CA1062.severity = none
-
-# CA1309: Use ordinal string comparison
-dotnet_diagnostic.CA1309.severity = none
-
-# CA2000: Dispose objects before losing scope
-dotnet_diagnostic.CA2000.severity = none

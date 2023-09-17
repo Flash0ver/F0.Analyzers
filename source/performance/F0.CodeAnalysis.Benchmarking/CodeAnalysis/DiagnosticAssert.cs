@@ -1,4 +1,5 @@
 using System.Collections.Immutable;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text;
 
@@ -109,7 +110,7 @@ internal static class DiagnosticAssert
 		}
 	}
 
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1305:Specify IFormatProvider", Justification = ".NET Standard 2.0")]
+	[SuppressMessage("Globalization", "CA1305:Specify IFormatProvider", Justification = ".NET Standard 2.0")]
 	private static void AppendLine<T>(this StringBuilder errors, string memberName, T expected, T actual)
 		=> _ = errors.AppendLine($"\t- {memberName}: {expected} | {actual}");
 }

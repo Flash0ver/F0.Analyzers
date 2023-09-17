@@ -94,7 +94,7 @@ public sealed class CodeRefactoringBenchmark<TCodeRefactoring> : AnalyzerBenchma
 		var actualText = await formattedDocument.GetTextAsync(CancellationToken.None).ConfigureAwait(false);
 		var actualCode = actualText.ToString();
 
-		if (!actualCode.Equals(expectedText, StringComparison.InvariantCulture))
+		if (!actualCode.Equals(expectedText, StringComparison.Ordinal))
 		{
 			var message = $"""
 				Unexpected result:

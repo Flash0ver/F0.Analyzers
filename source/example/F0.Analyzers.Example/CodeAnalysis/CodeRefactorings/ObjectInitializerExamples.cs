@@ -1,15 +1,16 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using F0.Analyzers.Example.Dependencies.Dependency;
 using F0.Analyzers.Example.Shared;
 using Microsoft.Extensions.Hosting;
 
 namespace F0.Analyzers.Example.CodeAnalysis.CodeRefactorings
 {
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0022:Use expression body for methods", Justification = "Examples")]
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0059:Unnecessary assignment of a value", Justification = "Examples")]
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "Examples")]
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "Examples")]
+	[SuppressMessage("Style", "IDE0022:Use expression body for methods", Justification = "Examples")]
+	[SuppressMessage("Style", "IDE0059:Unnecessary assignment of a value", Justification = "Examples")]
+	[SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "Examples")]
+	[SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "Examples")]
 	internal sealed class ObjectInitializerExamples
 	{
 		private readonly string _item1 = "bowl of petunias";

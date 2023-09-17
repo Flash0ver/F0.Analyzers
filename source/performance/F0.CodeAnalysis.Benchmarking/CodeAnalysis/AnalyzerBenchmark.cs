@@ -84,7 +84,7 @@ public abstract class AnalyzerBenchmark
 
 	private static Solution CreateSolution(SourceText code, LanguageVersion languageVersion, ProjectId projectId, DocumentId documentId)
 	{
-		var workspace = CreateWorkspace();
+		using var workspace = CreateWorkspace();
 
 		var compilationOptions = new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary);
 		var parseOptions = new CSharpParseOptions(languageVersion, DocumentationMode.Diagnose);
