@@ -12,21 +12,22 @@ public partial class ObjectInitializerTests
 	[Fact]
 	public async Task ComputeRefactoringsAsync_ObjectInitializerAlreadyExists_NoOp()
 	{
-		var code =
-			@"using System;
+		var code = """
+			using System;
 
-				class Model { public string Text { get; set; } }
+			class Model { public string Text { get; set; } }
 
-				class C
+			class C
+			{
+				void Test()
 				{
-					void Test()
+					var model = [|new Model()|]
 					{
-						var model = [|new Model()|]
-						{
-							Text = default
-						};
-					}
-				}";
+						Text = default
+					};
+				}
+			}
+			""";
 
 		await VerifyNoOpAsync(code);
 	}

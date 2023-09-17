@@ -16,22 +16,22 @@ public class F02001ImplicitRecordClassDeclarationBenchmarks
 	[GlobalSetup]
 	public void Setup()
 	{
-		var code =
-@"using System;
+		var code = """
+			using System;
 
-record Record(int Number, string Text);
-record class RecordClass(int Number, string Text);
-record struct RecordStruct(int Number, string Text);
-readonly record struct ReadonlyRecordStruct(int Number, string Text);
+			record Record(int Number, string Text);
+			record class RecordClass(int Number, string Text);
+			record struct RecordStruct(int Number, string Text);
+			readonly record struct ReadonlyRecordStruct(int Number, string Text);
 
-[Obsolete]
-sealed record @record<T> : IDisposable where T : notnull
-{
-	public T Property { get; init; }
+			[Obsolete]
+			sealed record @record<T> : IDisposable where T : notnull
+			{
+				public T Property { get; init; }
 
-	public void Dispose() => throw new NotImplementedException();
-}
-";
+				public void Dispose() => throw new NotImplementedException();
+			}
+			""";
 
 		benchmark.Initialize(code, LanguageVersion.Latest);
 	}

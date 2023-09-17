@@ -79,10 +79,12 @@ public sealed class CodeFixBenchmark<TDiagnosticAnalyzer, TCodeFix> : AnalyzerBe
 
 		if (!actualCode.Equals(expectedText, StringComparison.InvariantCulture))
 		{
-			var message = "Unexpected result: " + Environment.NewLine
-				+ "```cs" + Environment.NewLine
-				+ actualCode + Environment.NewLine
-				+ "```";
+			var message = $"""
+				Unexpected result:
+				```cs
+				{actualCode}
+				```
+				""";
 			throw new InvalidOperationException(message);
 		}
 	}

@@ -13,16 +13,17 @@ public class F00001GoToStatementConsideredHarmfulTests
 	[Fact]
 	public async Task Initialize_NoGotoStatement_ReportsNoDiagnostic()
 	{
-		var code =
-@"using System;
+		var code = """
+			using System;
 
-class Class
-{
-	void Method()
-	{
-		Console.WriteLine(""GOTO Considered Harmful"");
-	}
-}";
+			class Class
+			{
+				void Method()
+				{
+					Console.WriteLine("GOTO Considered Harmful");
+				}
+			}
+			""";
 
 		await VerifyNoOpAsync(code);
 	}
@@ -30,18 +31,19 @@ class Class
 	[Fact]
 	public async Task Initialize_GotoStatement_ReportsWarning()
 	{
-		var code =
-@"using System;
+		var code = """
+			using System;
 
-class Class
-{
-	void Method()
-	{
-	Label:
-		Console.WriteLine(""GOTO Considered Harmful"");
-		{|#0:goto Label;|}
-	}
-}";
+			class Class
+			{
+				void Method()
+				{
+				Label:
+					Console.WriteLine("GOTO Considered Harmful");
+					{|#0:goto Label;|}
+				}
+			}
+			""";
 		var expected = CreateDiagnostic()
 			.WithMessageFormat("Don't use goto statements: '{0}'")
 			.WithArguments("goto Label;")
@@ -54,27 +56,28 @@ class Class
 	[Fact]
 	public async Task Initialize_GotoCaseStatement_ReportsWarning()
 	{
-		var code =
-@"using System;
+		var code = """
+			using System;
 
-class Class
-{
-	void Method(int number)
-	{
-		switch (number)
-		{
-			case 1:
-				Console.WriteLine(""goto case 2"");
-				{|#0:goto case 2;|}
-			case 2:
-				Console.WriteLine(""goto case 1"");
-				{|#1:goto case 1;|}
-			default:
-				Console.WriteLine(""break"");
-				break;
-		}
-	}
-}";
+			class Class
+			{
+				void Method(int number)
+				{
+					switch (number)
+					{
+						case 1:
+							Console.WriteLine("goto case 2");
+							{|#0:goto case 2;|}
+						case 2:
+							Console.WriteLine("goto case 1");
+							{|#1:goto case 1;|}
+						default:
+							Console.WriteLine("break");
+							break;
+					}
+				}
+			}
+			""";
 
 		var expected = new[]
 		{
@@ -96,24 +99,25 @@ class Class
 	[Fact]
 	public async Task Initialize_GotoDefaultStatement_ReportsWarning()
 	{
-		var code =
-@"using System;
+		var code = """
+			using System;
 
-class Class
-{
-	void Method(int number)
-	{
-		switch (number)
-		{
-			case 0:
-				Console.WriteLine(""goto default"");
-				{|#0:goto default;|}
-			default:
-				Console.WriteLine(""break"");
-				break;
-		}
-	}
-}";
+			class Class
+			{
+				void Method(int number)
+				{
+					switch (number)
+					{
+						case 0:
+							Console.WriteLine("goto default");
+							{|#0:goto default;|}
+						default:
+							Console.WriteLine("break");
+							break;
+					}
+				}
+			}
+			""";
 
 		var expected = CreateDiagnostic()
 			.WithMessageFormat("Don't use goto statements: '{0}'")

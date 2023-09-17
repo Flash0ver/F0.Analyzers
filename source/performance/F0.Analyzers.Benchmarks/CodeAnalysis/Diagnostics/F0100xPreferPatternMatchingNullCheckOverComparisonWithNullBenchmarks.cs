@@ -17,25 +17,26 @@ public class F0100xPreferPatternMatchingNullCheckOverComparisonWithNullBenchmark
 	[GlobalSetup]
 	public void Setup()
 	{
-		var code =
-@"using System;
+		var code = """
+			using System;
 
-record Record();
+			record Record();
 
-class Class
-{
-	void Method(Record instance)
-	{
-		_ = instance is null;
-		_ = instance is not null;
+			class Class
+			{
+				void Method(Record instance)
+				{
+					_ = instance is null;
+					_ = instance is not null;
 
-		_ = instance == null;
-		_ = null != instance;
+					_ = instance == null;
+					_ = null != instance;
 
-		_ = (object)instance == null;
-		_ = null != (object)instance;
-	}
-}";
+					_ = (object)instance == null;
+					_ = null != (object)instance;
+				}
+			}
+			""";
 
 		benchmark.Initialize(code, LanguageVersion.Latest);
 	}

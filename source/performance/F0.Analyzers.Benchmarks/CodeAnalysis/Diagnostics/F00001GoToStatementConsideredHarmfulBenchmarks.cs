@@ -16,52 +16,53 @@ public class F00001GoToStatementConsideredHarmfulBenchmarks
 	[GlobalSetup]
 	public void Setup()
 	{
-		var code =
-@"using System;
+		var code = """
+			using System;
 
-class Class
-{
-	void Method1()
-	{
-		Console.WriteLine(""GOTO Considered Harmful"");
-	}
+			class Class
+			{
+				void Method1()
+				{
+					Console.WriteLine("GOTO Considered Harmful");
+				}
 
-	void Method2()
-	{
-	Label:
-		Console.WriteLine(""GOTO Considered Harmful"");
-		goto Label;
-	}
+				void Method2()
+				{
+				Label:
+					Console.WriteLine("GOTO Considered Harmful");
+					goto Label;
+				}
 
-	void Method3(int number)
-	{
-		switch (number)
-		{
-			case 1:
-				Console.WriteLine(""goto case 2"");
-				goto case 2;
-			case 2:
-				Console.WriteLine(""goto case 1"");
-				goto case 1;
-			default:
-				Console.WriteLine(""break"");
-				break;
-		}
-	}
+				void Method3(int number)
+				{
+					switch (number)
+					{
+						case 1:
+							Console.WriteLine("goto case 2");
+							goto case 2;
+						case 2:
+							Console.WriteLine("goto case 1");
+							goto case 1;
+						default:
+							Console.WriteLine("break");
+							break;
+					}
+				}
 
-	void Method4(int number)
-	{
-		switch (number)
-		{
-			case 0:
-				Console.WriteLine(""goto default"");
-				goto default;
-			default:
-				Console.WriteLine(""break"");
-				break;
-		}
-	}
-}";
+				void Method4(int number)
+				{
+					switch (number)
+					{
+						case 0:
+							Console.WriteLine("goto default");
+							goto default;
+						default:
+							Console.WriteLine("break");
+							break;
+					}
+				}
+			}
+			""";
 
 		benchmark.Initialize(code, LanguageVersion.Latest);
 	}
