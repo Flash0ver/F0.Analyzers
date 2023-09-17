@@ -10,5 +10,5 @@ public static class Projects
 	internal const string Extension = ".csproj";
 
 	public static string CreateProjectName(int projectIndex)
-		=> AssemblyName + projectIndex;
+		=> $"{AssemblyName}{projectIndex}";
 }
