@@ -43,7 +43,7 @@ jobs:
       arguments: 'run dotnet-stryker --config-file $(Stryker_Configuration_File)'
       workingDirectory: '$(Test_Project_Directory)'
   # Publish
-  - task: PublishMutationReport@0
+  - task: PublishMutationReport@1
     displayName: 'Publish Mutation Test Report'
     inputs:
       reportPattern: '**/mutation-report.html'
