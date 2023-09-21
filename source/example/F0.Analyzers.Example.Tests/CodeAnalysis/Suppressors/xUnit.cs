@@ -4,7 +4,7 @@ using Xunit;
 
 namespace F0.Analyzers.Example.Tests.CodeAnalysis.Suppressors
 {
-	[SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "xunit")]
+	[SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "xUnit.net")]
 	public class xUnit
 	{
 		private readonly PrimeService primeService;

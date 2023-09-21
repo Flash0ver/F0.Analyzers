@@ -5,8 +5,7 @@ namespace F0.CodeAnalysis.Diagnostics;
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
 internal sealed class F00001GoToStatementConsideredHarmful : DiagnosticAnalyzer
 {
-	[SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "https://github.com/dotnet/roslyn-analyzers/issues/5828")]
-	private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(
+	private static readonly DiagnosticDescriptor Rule = new(
 		DiagnosticIds.F00001,
 		"GotoConsideredHarmful",
 		"Don't use goto statements: '{0}'",
