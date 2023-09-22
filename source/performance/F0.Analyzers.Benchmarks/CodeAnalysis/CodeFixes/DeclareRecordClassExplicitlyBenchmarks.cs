@@ -17,11 +17,11 @@ public class DeclareRecordClassExplicitlyBenchmarks
 	[GlobalSetup]
 	public void Setup()
 	{
-		var code =
-@"using System;
+		var code = """
+			using System;
 
-record Record;
-";
+			record Record;
+			""";
 
 		benchmark.Initialize(code, LanguageVersion.Latest);
 	}
@@ -33,11 +33,11 @@ record Record;
 	[GlobalCleanup]
 	public void Cleanup()
 	{
-		var code =
-@"using System;
+		var code = """
+			using System;
 
-record class Record;
-";
+			record class Record;
+			""";
 
 		benchmark.Inspect(code);
 	}

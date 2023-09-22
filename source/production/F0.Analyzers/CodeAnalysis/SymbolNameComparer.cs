@@ -16,6 +16,7 @@ internal sealed class SymbolNameComparer : EqualityComparer<ISymbol>
 		return x.Name.Equals(y.Name, StringComparison.Ordinal);
 	}
 
+	[SuppressMessage("Globalization", "CA1307:Specify StringComparison for clarity", Justification = ".NET Standard 2.0")]
 	public override int GetHashCode([DisallowNull] ISymbol obj)
 		=> obj.Name.GetHashCode();
 }

@@ -13,12 +13,12 @@ public class F02001ImplicitRecordClassDeclarationTests
 	[Fact]
 	public async Task Initialize_WithoutRecordDeclaration_ReportNoDiagnostic()
 	{
-		var code = @"
-public class Class { }
-public static class StaticClass { }
-public struct Struct { }
-public readonly struct ReadonlyStruct { }
-";
+		var code = """
+			public class Class { }
+			public static class StaticClass { }
+			public struct Struct { }
+			public readonly struct ReadonlyStruct { }
+			""";
 
 		await VerifyNoOpAsync(code);
 	}
@@ -26,11 +26,11 @@ public readonly struct ReadonlyStruct { }
 	[Fact]
 	public async Task Initialize_WithRecordStructDeclaration_ReportNoDiagnostic()
 	{
-		var code = @"
-public record class RecordClass();
-public record struct RecordStruct();
-public readonly record struct ReadonlyRecordStruct();
-";
+		var code = """
+			public record class RecordClass();
+			public record struct RecordStruct();
+			public readonly record struct ReadonlyRecordStruct();
+			""";
 
 		await VerifyNoOpAsync(code);
 	}
@@ -40,31 +40,32 @@ public readonly record struct ReadonlyRecordStruct();
 	[InlineData(LanguageVersion.CSharp10)]
 	public async Task Initialize_WithRecordDeclaration_ReportDiagnosticIfFeatureRecordStructsIsAvailable(LanguageVersion langVersion)
 	{
-		var code = @"using System;
+		var code = """
+			using System;
 
-public record {|#0:Record|};
+			public record {|#0:Record|};
 
-public record {|#1:Record_WithParameterList|}();
-public record {|#2:PositionalRecord|}(int Number, string Text);
+			public record {|#1:Record_WithParameterList|}();
+			public record {|#2:PositionalRecord|}(int Number, string Text);
 
-public record {|#3:Record_WithTypeParameterList|}<T>;
-public record {|#4:Record_WithConstraintClauses|}<T> where T : notnull;
-public record {|#5:Record_WithBaseList|} : Record;
+			public record {|#3:Record_WithTypeParameterList|}<T>;
+			public record {|#4:Record_WithConstraintClauses|}<T> where T : notnull;
+			public record {|#5:Record_WithBaseList|} : Record;
 
-public record {|#6:Record_WithMembers|}
-{
-	public int Number { get; init; }
-	public string Text { get; init; }
-	public void Method() { }
-}
+			public record {|#6:Record_WithMembers|}
+			{
+				public int Number { get; init; }
+				public string Text { get; init; }
+				public void Method() { }
+			}
 
-internal sealed record {|#7:Record_WithModifiers|};
+			internal sealed record {|#7:Record_WithModifiers|};
 
-[Obsolete]
-public record {|#8:Record_WithAttributeLists|};
+			[Obsolete]
+			public record {|#8:Record_WithAttributeLists|};
 
-public record {|#9:@Identifier|};
-";
+			public record {|#9:@Identifier|};
+			""";
 
 		DiagnosticResult[] expected;
 		if (langVersion >= LanguageVersion.CSharp10)

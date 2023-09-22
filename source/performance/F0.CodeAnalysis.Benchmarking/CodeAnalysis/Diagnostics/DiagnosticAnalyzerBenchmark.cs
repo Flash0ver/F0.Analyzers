@@ -1,4 +1,5 @@
 using System.Collections.Immutable;
+using System.Diagnostics;
 using F0.Benchmarking.Extensions;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Text;
@@ -36,7 +37,9 @@ public sealed class DiagnosticAnalyzerBenchmark<TDiagnosticAnalyzer> : AnalyzerB
 
 		var document = CreateDocument(source, languageVersion);
 
-		compilation = await document.Project.GetCompilationAsync(CancellationToken.None).ConfigureAwait(false);
+		var compilation = await document.Project.GetCompilationAsync(CancellationToken.None).ConfigureAwait(false);
+		Debug.Assert(compilation is not null, $"Project doesn't support producing compilations: {{ {nameof(Project.SupportsCompilation)} = {document.Project.SupportsCompilation} }}");
+		this.compilation = compilation;
 
 		syntaxTree = compilation.SyntaxTrees.Single();
 	}

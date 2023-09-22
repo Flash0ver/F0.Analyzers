@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Microsoft.CodeAnalysis.Text;
 
 namespace F0.Benchmarking.CodeAnalysis;
@@ -11,7 +12,7 @@ public abstract class AnalyzerBenchmark
 	private const string LanguageName = LanguageNames.CSharp;
 	private const string FileExtension = ".cs";
 
-	internal const string FullFileName = "/0/" + FileName + "0" + FileExtension;
+	internal const string FullFileName = $"/0/{FileName}0{FileExtension}";
 
 	protected AnalyzerBenchmark()
 	{
@@ -59,7 +60,10 @@ public abstract class AnalyzerBenchmark
 
 		var solution = CreateSolution(code, languageVersion, projectId, documentId);
 
-		return solution.GetDocument(documentId);
+		var document = solution.GetDocument(documentId);
+
+		Debug.Assert(document is not null, $"{nameof(DocumentId)} {documentId} is not an ID of a document that is part of this solution.");
+		return document;
 	}
 
 	protected static Project CreateProject(string code, LanguageVersion languageVersion)
@@ -72,12 +76,15 @@ public abstract class AnalyzerBenchmark
 
 		var solution = CreateSolution(code, languageVersion, projectId, documentId);
 
-		return solution.GetProject(projectId);
+		var project = solution.GetProject(projectId);
+
+		Debug.Assert(project is not null, $"{nameof(ProjectId)} {projectId} is not an ID of a project that is part of this solution.");
+		return project;
 	}
 
 	private static Solution CreateSolution(SourceText code, LanguageVersion languageVersion, ProjectId projectId, DocumentId documentId)
 	{
-		var workspace = CreateWorkspace();
+		using var workspace = CreateWorkspace();
 
 		var compilationOptions = new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary);
 		var parseOptions = new CSharpParseOptions(languageVersion, DocumentationMode.Diagnose);

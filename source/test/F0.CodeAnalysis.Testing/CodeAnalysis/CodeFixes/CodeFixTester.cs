@@ -3,7 +3,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace F0.Testing.CodeAnalysis.CodeFixes;
 
-internal class CodeFixTester<TDiagnosticAnalyzer, TCodeFix> : CSharpCodeFixTest<TDiagnosticAnalyzer, TCodeFix, XUnitVerifier>
+internal sealed class CodeFixTester<TDiagnosticAnalyzer, TCodeFix> : CSharpCodeFixTest<TDiagnosticAnalyzer, TCodeFix, XUnitVerifier>
 	where TDiagnosticAnalyzer : DiagnosticAnalyzer, new()
 	where TCodeFix : CodeFixProvider, new()
 {

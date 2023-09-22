@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using F0.Analyzers.Example.Shared;
 
 namespace F0.Analyzers.Example.CodeAnalysis.CodeFixes
 {
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0041:Use 'is null' check", Justification = "Examples")]
+	[SuppressMessage("Style", "IDE0041:Use 'is null' check", Justification = "Examples")]
 	internal sealed class UsePatternMatchingNullCheckInsteadOfComparisonWithNullExamples
 	{
 		public void PatternMatching(Record instance)

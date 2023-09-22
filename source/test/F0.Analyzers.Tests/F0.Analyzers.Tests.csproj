@@ -1,10 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks Condition="'$(OS)'=='Windows_NT'">net6.0;net472</TargetFrameworks>
-    <TargetFramework Condition="'$(OS)'!='Windows_NT'">net6.0</TargetFramework>
+    <TargetFrameworks Condition="'$(OS)'=='Windows_NT'">net7.0;net472</TargetFrameworks>
+    <TargetFramework Condition="'$(OS)'!='Windows_NT'">net7.0</TargetFramework>
     <AssemblyName>F0.Analyzers.Tests</AssemblyName>
     <RootNamespace>F0.Tests</RootNamespace>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <IsTestProject>true</IsTestProject>
   </PropertyGroup>
 
   <PropertyGroup>

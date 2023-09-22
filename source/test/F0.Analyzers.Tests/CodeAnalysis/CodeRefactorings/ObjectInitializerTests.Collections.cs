@@ -5,16 +5,17 @@ public partial class ObjectInitializerTests
 	[Fact]
 	public async Task ComputeRefactoringsAsync_Array_NoOp()
 	{
-		var code =
-			@"using System;
+		var code = """
+			using System;
 
-				class C
+			class C
+			{
+				void Test()
 				{
-					void Test()
-					{
-						var array = [|new int[42]|];
-					}
-				}";
+					var array = [|new int[42]|];
+				}
+			}
+			""";
 
 		await VerifyNoOpAsync(code);
 	}
@@ -22,17 +23,18 @@ public partial class ObjectInitializerTests
 	[Fact]
 	public async Task ComputeRefactoringsAsync_ArrayList_NoOp()
 	{
-		var code =
-			@"using System;
-				using System.Collections;
+		var code = """
+			using System;
+			using System.Collections;
 
-				class C
+			class C
+			{
+				void Test()
 				{
-					void Test()
-					{
-						var list = [|new ArrayList()|];
-					}
-				}";
+					var list = [|new ArrayList()|];
+				}
+			}
+			""";
 
 		await VerifyNoOpAsync(code);
 	}
@@ -40,17 +42,18 @@ public partial class ObjectInitializerTests
 	[Fact]
 	public async Task ComputeRefactoringsAsync_Collection_NoOp()
 	{
-		var code =
-			@"using System;
-				using System.Collections.Generic;
+		var code = """
+			using System;
+			using System.Collections.Generic;
 
-				class C
+			class C
+			{
+				void Test()
 				{
-					void Test()
-					{
-						var collection = [|new List<int>()|];
-					}
-				}";
+					var collection = [|new List<int>()|];
+				}
+			}
+			""";
 
 		await VerifyNoOpAsync(code);
 	}
@@ -58,17 +61,18 @@ public partial class ObjectInitializerTests
 	[Fact]
 	public async Task ComputeRefactoringsAsync_AssociativeCollection_NoOp()
 	{
-		var code =
-			@"using System;
-				using System.Collections.Generic;
+		var code = """
+			using System;
+			using System.Collections.Generic;
 
-				class C
+			class C
+			{
+				void Test()
 				{
-					void Test()
-					{
-						var map = [|new Dictionary<int, string>()|];
-					}
-				}";
+					var map = [|new Dictionary<int, string>()|];
+				}
+			}
+			""";
 
 		await VerifyNoOpAsync(code);
 	}

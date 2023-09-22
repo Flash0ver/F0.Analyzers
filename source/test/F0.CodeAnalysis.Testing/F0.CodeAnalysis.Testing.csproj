@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>net7.0;netstandard2.0</TargetFrameworks>
     <AssemblyName>F0.CodeAnalysis.Testing</AssemblyName>
     <RootNamespace>F0.Testing</RootNamespace>
   </PropertyGroup>

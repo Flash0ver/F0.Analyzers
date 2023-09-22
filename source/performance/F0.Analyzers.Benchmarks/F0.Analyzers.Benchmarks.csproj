@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFrameworks Condition="'$(OS)'=='Windows_NT'">net6.0;net472</TargetFrameworks>
-    <TargetFramework Condition="'$(OS)'!='Windows_NT'">net6.0</TargetFramework>
+    <TargetFrameworks Condition="'$(OS)'=='Windows_NT'">net7.0;net472</TargetFrameworks>
+    <TargetFramework Condition="'$(OS)'!='Windows_NT'">net7.0</TargetFramework>
     <AssemblyName>F0.Analyzers.Benchmarks</AssemblyName>
     <RootNamespace>F0.Benchmarks</RootNamespace>
   </PropertyGroup>

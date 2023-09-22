@@ -3,7 +3,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace F0.Testing.CodeAnalysis.Diagnostics;
 
-public class DiagnosticAnalyzerVerifier<TDiagnosticAnalyzer>
+public sealed class DiagnosticAnalyzerVerifier<TDiagnosticAnalyzer>
 	where TDiagnosticAnalyzer : DiagnosticAnalyzer, new()
 {
 	internal DiagnosticAnalyzerVerifier()
