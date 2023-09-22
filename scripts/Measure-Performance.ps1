@@ -14,7 +14,7 @@ $SolutionFile = Join-Path -Path $RepositoryRootPath -ChildPath 'source' -Additio
 $BenchmarkProjectFile = Join-Path -Path $RepositoryRootPath -ChildPath 'source' -AdditionalChildPath 'performance', 'F0.Analyzers.Benchmarks', 'F0.Analyzers.Benchmarks.csproj'
 
 $Configuration = 'Release'
-$Framework = 'net6.0'
+$Framework = 'net7.0'
 
 dotnet clean $SolutionFile
 

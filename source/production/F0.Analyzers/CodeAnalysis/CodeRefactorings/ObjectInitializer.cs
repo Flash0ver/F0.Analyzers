@@ -248,11 +248,11 @@ internal sealed class ObjectInitializer : CodeRefactoringProvider
 	{
 		var name = fieldSymbol.Name;
 
-		if (name.StartsWith("_"))
+		if (name.StartsWith("_", StringComparison.Ordinal))
 		{
 			name = name[1..];
 		}
-		else if (name.StartsWith("s_") || name.StartsWith("t_"))
+		else if (name.StartsWith("s_", StringComparison.Ordinal) || name.StartsWith("t_", StringComparison.Ordinal))
 		{
 			name = name[2..];
 		}

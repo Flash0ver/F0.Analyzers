@@ -3,7 +3,7 @@ using Microsoft.CodeAnalysis.CodeRefactorings;
 
 namespace F0.Testing.CodeAnalysis.CodeRefactorings;
 
-public class CodeRefactoringVerifier<TCodeRefactoring>
+public sealed class CodeRefactoringVerifier<TCodeRefactoring>
 	where TCodeRefactoring : CodeRefactoringProvider, new()
 {
 	internal CodeRefactoringVerifier()

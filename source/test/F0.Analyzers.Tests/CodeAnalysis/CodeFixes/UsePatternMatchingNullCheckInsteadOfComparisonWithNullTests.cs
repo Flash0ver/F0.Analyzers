@@ -17,19 +17,20 @@ public class UsePatternMatchingNullCheckInsteadOfComparisonWithNullTests
 	[Fact]
 	public async Task RegisterCodeFixesAsync_PatternMatching_RegisterNoCodeFix()
 	{
-		var code =
-@"using System;
+		var code = """
+			using System;
 
-record Record();
+			record Record();
 
-class Test
-{
-	void Method(Record record)
-	{
-		_ = record is null;
-		_ = record is not null;
-	}
-}";
+			class Test
+			{
+				void Method(Record record)
+				{
+					_ = record is null;
+					_ = record is not null;
+				}
+			}
+			""";
 
 		await VerifyNoOpAsync(code);
 	}
@@ -37,45 +38,47 @@ class Test
 	[Fact]
 	public async Task RegisterCodeFixesAsync_EqualityOperator_FixIfNullCheck()
 	{
-		var code =
-@"using System;
+		var code = """
+			using System;
 
-record Record();
+			record Record();
 
-class Test
-{
-	void Method(Record record, object obj)
-	{
-		_ = {|#0:record == null|};
-		_ = {|#1:null == record|};
-		_ = null == null;
-		_ = record == record;
+			class Test
+			{
+				void Method(Record record, object obj)
+				{
+					_ = {|#0:record == null|};
+					_ = {|#1:null == record|};
+					_ = null == null;
+					_ = record == record;
 
-		_ = {|#2:(Record)obj == null|};
-		_ = {|#3:null == (Record)obj|};
-		_ = (Record)obj == (Record)obj;
-	}
-}";
+					_ = {|#2:(Record)obj == null|};
+					_ = {|#3:null == (Record)obj|};
+					_ = (Record)obj == (Record)obj;
+				}
+			}
+			""";
 
-		var fix =
-@"using System;
+		var fix = """
+			using System;
 
-record Record();
+			record Record();
 
-class Test
-{
-	void Method(Record record, object obj)
-	{
-		_ = record is null;
-		_ = record is null;
-		_ = null == null;
-		_ = record == record;
+			class Test
+			{
+				void Method(Record record, object obj)
+				{
+					_ = record is null;
+					_ = record is null;
+					_ = null == null;
+					_ = record == record;
 
-		_ = obj is null;
-		_ = obj is null;
-		_ = (Record)obj == (Record)obj;
-	}
-}";
+					_ = obj is null;
+					_ = obj is null;
+					_ = (Record)obj == (Record)obj;
+				}
+			}
+			""";
 
 		var expected = new[]
 		{
@@ -92,45 +95,47 @@ class Test
 	[Fact]
 	public async Task RegisterCodeFixesAsync_InequalityOperator_FixIfNullCheck()
 	{
-		var code =
-@"using System;
+		var code = """
+			using System;
 
-record Record();
+			record Record();
 
-class Test
-{
-	void Method(Record record, object obj)
-	{
-		_ = {|#0:record != null|};
-		_ = {|#1:null != record|};
-		_ = null != null;
-		_ = record != record;
+			class Test
+			{
+				void Method(Record record, object obj)
+				{
+					_ = {|#0:record != null|};
+					_ = {|#1:null != record|};
+					_ = null != null;
+					_ = record != record;
 
-		_ = {|#2:(Record)obj != null|};
-		_ = {|#3:null != (Record)obj|};
-		_ = (Record)obj != (Record)obj;
-	}
-}";
+					_ = {|#2:(Record)obj != null|};
+					_ = {|#3:null != (Record)obj|};
+					_ = (Record)obj != (Record)obj;
+				}
+			}
+			""";
 
-		var fix =
-@"using System;
+		var fix = """
+			using System;
 
-record Record();
+			record Record();
 
-class Test
-{
-	void Method(Record record, object obj)
-	{
-		_ = record is not null;
-		_ = record is not null;
-		_ = null != null;
-		_ = record != record;
+			class Test
+			{
+				void Method(Record record, object obj)
+				{
+					_ = record is not null;
+					_ = record is not null;
+					_ = null != null;
+					_ = record != record;
 
-		_ = obj is not null;
-		_ = obj is not null;
-		_ = (Record)obj != (Record)obj;
-	}
-}";
+					_ = obj is not null;
+					_ = obj is not null;
+					_ = (Record)obj != (Record)obj;
+				}
+			}
+			""";
 
 		var expected = new[]
 		{
@@ -147,55 +152,57 @@ class Test
 	[Fact]
 	public async Task RegisterCodeFixesAsync_Comparison_FixIfNullCheck()
 	{
-		var code =
-@"using System;
+		var code = """
+			using System;
 
-record Record();
+			record Record();
 
-class Test
-{
-	void Method(Record record, object obj)
-	{
-		_ = {|#0:(object)record == null|};
-		_ = {|#1:null == (object)record|};
-		_ = (object)record == (object)record;
-		_ = {|#2:obj == null|};
-		_ = {|#3:null == obj|};
-		_ = obj == obj;
+			class Test
+			{
+				void Method(Record record, object obj)
+				{
+					_ = {|#0:(object)record == null|};
+					_ = {|#1:null == (object)record|};
+					_ = (object)record == (object)record;
+					_ = {|#2:obj == null|};
+					_ = {|#3:null == obj|};
+					_ = obj == obj;
 
-		_ = {|#4:(object)record != null|};
-		_ = {|#5:null != (object)record|};
-		_ = (object)record != (object)record;
-		_ = {|#6:obj != null|};
-		_ = {|#7:null != obj|};
-		_ = obj != obj;
-	}
-}";
+					_ = {|#4:(object)record != null|};
+					_ = {|#5:null != (object)record|};
+					_ = (object)record != (object)record;
+					_ = {|#6:obj != null|};
+					_ = {|#7:null != obj|};
+					_ = obj != obj;
+				}
+			}
+			""";
 
-		var fix =
-@"using System;
+		var fix = """
+			using System;
 
-record Record();
+			record Record();
 
-class Test
-{
-	void Method(Record record, object obj)
-	{
-		_ = record is null;
-		_ = record is null;
-		_ = (object)record == (object)record;
-		_ = obj is null;
-		_ = obj is null;
-		_ = obj == obj;
+			class Test
+			{
+				void Method(Record record, object obj)
+				{
+					_ = record is null;
+					_ = record is null;
+					_ = (object)record == (object)record;
+					_ = obj is null;
+					_ = obj is null;
+					_ = obj == obj;
 
-		_ = record is not null;
-		_ = record is not null;
-		_ = (object)record != (object)record;
-		_ = obj is not null;
-		_ = obj is not null;
-		_ = obj != obj;
-	}
-}";
+					_ = record is not null;
+					_ = record is not null;
+					_ = (object)record != (object)record;
+					_ = obj is not null;
+					_ = obj is not null;
+					_ = obj != obj;
+				}
+			}
+			""";
 
 		var expected = new[]
 		{
@@ -216,57 +223,59 @@ class Test
 	[Fact]
 	public async Task RegisterCodeFixesAsync_ObjectEquals_FixIfNullCheck()
 	{
-		var code =
-@"using System;
+		var code = """
+			using System;
 
-record Record();
+			record Record();
 
-class Test
-{
-	void Method(Record record, object obj)
-	{
-		_ = {|#0:record.Equals(null)|};
-		_ = {|#1:!record.Equals(null)|};
-		_ = record.Equals(record);
-		_ = record.Equals(obj);
+			class Test
+			{
+				void Method(Record record, object obj)
+				{
+					_ = {|#0:record.Equals(null)|};
+					_ = {|#1:!record.Equals(null)|};
+					_ = record.Equals(record);
+					_ = record.Equals(obj);
 
-		_ = {|#2:obj.Equals(null)|};
-		_ = {|#3:!obj.Equals(null)|};
-		_ = obj.Equals(obj);
-		_ = obj.Equals(record);
+					_ = {|#2:obj.Equals(null)|};
+					_ = {|#3:!obj.Equals(null)|};
+					_ = obj.Equals(obj);
+					_ = obj.Equals(record);
 
-		_ = {|#4:((Object)record).Equals(null)|};
-		_ = {|#5:!((Object)record).Equals(null)|};
-		_ = ((Object)record).Equals(((Object)record));
-		_ = ((Object)record).Equals(obj);
-	}
-}";
+					_ = {|#4:((Object)record).Equals(null)|};
+					_ = {|#5:!((Object)record).Equals(null)|};
+					_ = ((Object)record).Equals(((Object)record));
+					_ = ((Object)record).Equals(obj);
+				}
+			}
+			""";
 
-		var fix =
-@"using System;
+		var fix = """
+			using System;
 
-record Record();
+			record Record();
 
-class Test
-{
-	void Method(Record record, object obj)
-	{
-		_ = record is null;
-		_ = record is not null;
-		_ = record.Equals(record);
-		_ = record.Equals(obj);
+			class Test
+			{
+				void Method(Record record, object obj)
+				{
+					_ = record is null;
+					_ = record is not null;
+					_ = record.Equals(record);
+					_ = record.Equals(obj);
 
-		_ = obj is null;
-		_ = obj is not null;
-		_ = obj.Equals(obj);
-		_ = obj.Equals(record);
+					_ = obj is null;
+					_ = obj is not null;
+					_ = obj.Equals(obj);
+					_ = obj.Equals(record);
 
-		_ = record is null;
-		_ = record is not null;
-		_ = ((Object)record).Equals(((Object)record));
-		_ = ((Object)record).Equals(obj);
-	}
-}";
+					_ = record is null;
+					_ = record is not null;
+					_ = ((Object)record).Equals(((Object)record));
+					_ = ((Object)record).Equals(obj);
+				}
+			}
+			""";
 
 		var expected = new[]
 		{
@@ -284,51 +293,53 @@ class Test
 	[Fact]
 	public async Task RegisterCodeFixesAsync_StaticObjectEquals_FixIfNullCheck()
 	{
-		var code =
-@"using System;
+		var code = """
+			using System;
 
-record Record();
+			record Record();
 
-class Test
-{
-	void Method(Record record)
-	{
-		_ = {|#0:Object.Equals(record, null)|};
-		_ = {|#1:!Object.Equals(record, null)|};
+			class Test
+			{
+				void Method(Record record)
+				{
+					_ = {|#0:Object.Equals(record, null)|};
+					_ = {|#1:!Object.Equals(record, null)|};
 
-		_ = {|#2:Object.Equals(null, record)|};
-		_ = {|#3:!Object.Equals(null, record)|};
+					_ = {|#2:Object.Equals(null, record)|};
+					_ = {|#3:!Object.Equals(null, record)|};
 
-		_ = Object.Equals(null, null);
-		_ = !Object.Equals(null, null);
+					_ = Object.Equals(null, null);
+					_ = !Object.Equals(null, null);
 
-		_ = Object.Equals(record, record);
-		_ = !Object.Equals(record, record);
-	}
-}";
+					_ = Object.Equals(record, record);
+					_ = !Object.Equals(record, record);
+				}
+			}
+			""";
 
-		var fix =
-@"using System;
+		var fix = """
+			using System;
 
-record Record();
+			record Record();
 
-class Test
-{
-	void Method(Record record)
-	{
-		_ = record is null;
-		_ = record is not null;
+			class Test
+			{
+				void Method(Record record)
+				{
+					_ = record is null;
+					_ = record is not null;
 
-		_ = record is null;
-		_ = record is not null;
+					_ = record is null;
+					_ = record is not null;
 
-		_ = Object.Equals(null, null);
-		_ = !Object.Equals(null, null);
+					_ = Object.Equals(null, null);
+					_ = !Object.Equals(null, null);
 
-		_ = Object.Equals(record, record);
-		_ = !Object.Equals(record, record);
-	}
-}";
+					_ = Object.Equals(record, record);
+					_ = !Object.Equals(record, record);
+				}
+			}
+			""";
 
 		var expected = new[]
 		{
@@ -344,51 +355,53 @@ class Test
 	[Fact]
 	public async Task RegisterCodeFixesAsync_ObjectReferenceEquals_FixIfNullCheck()
 	{
-		var code =
-@"using System;
+		var code = """
+			using System;
 
-record Record();
+			record Record();
 
-class Test
-{
-	void Method(Record record)
-	{
-		_ = {|#0:Object.ReferenceEquals(record, null)|};
-		_ = {|#1:!Object.ReferenceEquals(record, null)|};
+			class Test
+			{
+				void Method(Record record)
+				{
+					_ = {|#0:Object.ReferenceEquals(record, null)|};
+					_ = {|#1:!Object.ReferenceEquals(record, null)|};
 
-		_ = {|#2:Object.ReferenceEquals(null, record)|};
-		_ = {|#3:!Object.ReferenceEquals(null, record)|};
+					_ = {|#2:Object.ReferenceEquals(null, record)|};
+					_ = {|#3:!Object.ReferenceEquals(null, record)|};
 
-		_ = Object.ReferenceEquals(null, null);
-		_ = !Object.ReferenceEquals(null, null);
+					_ = Object.ReferenceEquals(null, null);
+					_ = !Object.ReferenceEquals(null, null);
 
-		_ = Object.ReferenceEquals(record, record);
-		_ = !Object.ReferenceEquals(record, record);
-	}
-}";
+					_ = Object.ReferenceEquals(record, record);
+					_ = !Object.ReferenceEquals(record, record);
+				}
+			}
+			""";
 
-		var fix =
-@"using System;
+		var fix = """
+			using System;
 
-record Record();
+			record Record();
 
-class Test
-{
-	void Method(Record record)
-	{
-		_ = record is null;
-		_ = record is not null;
+			class Test
+			{
+				void Method(Record record)
+				{
+					_ = record is null;
+					_ = record is not null;
 
-		_ = record is null;
-		_ = record is not null;
+					_ = record is null;
+					_ = record is not null;
 
-		_ = Object.ReferenceEquals(null, null);
-		_ = !Object.ReferenceEquals(null, null);
+					_ = Object.ReferenceEquals(null, null);
+					_ = !Object.ReferenceEquals(null, null);
 
-		_ = Object.ReferenceEquals(record, record);
-		_ = !Object.ReferenceEquals(record, record);
-	}
-}";
+					_ = Object.ReferenceEquals(record, record);
+					_ = !Object.ReferenceEquals(record, record);
+				}
+			}
+			""";
 
 		var expected = new[]
 		{
@@ -404,35 +417,37 @@ class Test
 	[Fact]
 	public async Task RegisterCodeFixesAsync_EquatableEquals_FixIfNullCheck()
 	{
-		var code =
-@"using System;
+		var code = """
+			using System;
 
-record Record();
+			record Record();
 
-class Test
-{
-	void Method(IEquatable<Record> equatable)
-	{
-		_ = {|#0:equatable.Equals(null)|};
-		_ = {|#1:!equatable.Equals(null)|};
-		_ = equatable.Equals(new Record());
-	}
-}";
+			class Test
+			{
+				void Method(IEquatable<Record> equatable)
+				{
+					_ = {|#0:equatable.Equals(null)|};
+					_ = {|#1:!equatable.Equals(null)|};
+					_ = equatable.Equals(new Record());
+				}
+			}
+			""";
 
-		var fix =
-@"using System;
+		var fix = """
+			using System;
 
-record Record();
+			record Record();
 
-class Test
-{
-	void Method(IEquatable<Record> equatable)
-	{
-		_ = equatable is null;
-		_ = equatable is not null;
-		_ = equatable.Equals(new Record());
-	}
-}";
+			class Test
+			{
+				void Method(IEquatable<Record> equatable)
+				{
+					_ = equatable is null;
+					_ = equatable is not null;
+					_ = equatable.Equals(new Record());
+				}
+			}
+			""";
 
 		var expected = new[]
 		{
@@ -446,35 +461,37 @@ class Test
 	[Fact]
 	public async Task RegisterCodeFixesAsync_CastEquatable_FixIfNullCheck()
 	{
-		var code =
-@"using System;
+		var code = """
+			using System;
 
-record Record();
+			record Record();
 
-class Test
-{
-	void Method(Record record)
-	{
-		_ = {|#0:((IEquatable<Record>)record).Equals(null)|};
-		_ = {|#1:!((IEquatable<Record>)record).Equals(null)|};
-		_ = ((IEquatable<Record>)record).Equals(new Record());
-	}
-}";
+			class Test
+			{
+				void Method(Record record)
+				{
+					_ = {|#0:((IEquatable<Record>)record).Equals(null)|};
+					_ = {|#1:!((IEquatable<Record>)record).Equals(null)|};
+					_ = ((IEquatable<Record>)record).Equals(new Record());
+				}
+			}
+			""";
 
-		var fix =
-@"using System;
+		var fix = """
+			using System;
 
-record Record();
+			record Record();
 
-class Test
-{
-	void Method(Record record)
-	{
-		_ = record is null;
-		_ = record is not null;
-		_ = ((IEquatable<Record>)record).Equals(new Record());
-	}
-}";
+			class Test
+			{
+				void Method(Record record)
+				{
+					_ = record is null;
+					_ = record is not null;
+					_ = ((IEquatable<Record>)record).Equals(new Record());
+				}
+			}
+			""";
 
 		var expected = new[]
 		{
@@ -488,97 +505,99 @@ class Test
 	[Fact]
 	public async Task RegisterCodeFixesAsync_EqualityComparerEquals_FixIfNullCheck()
 	{
-		var code =
-@"using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
+		var code = """
+			using System.Collections.Generic;
+			using System.Diagnostics.CodeAnalysis;
 
-record Record();
+			record Record();
 
-class RecordEqualityComparer : EqualityComparer<Record>
-{
-	internal static RecordEqualityComparer Instance { get; } = new RecordEqualityComparer();
-	public override bool Equals(Record? x, Record? y) => throw null;
-	public override int GetHashCode([DisallowNull] Record obj) => throw null;
-}
+			class RecordEqualityComparer : EqualityComparer<Record>
+			{
+				internal static RecordEqualityComparer Instance { get; } = new RecordEqualityComparer();
+				public override bool Equals(Record? x, Record? y) => throw null;
+				public override int GetHashCode([DisallowNull] Record obj) => throw null;
+			}
 
-class Test
-{
-	void Method(Record record, IEqualityComparer<Record> comparer, EqualityComparer<Record> defaultComparer, RecordEqualityComparer customComparer)
-	{
-		_ = {|#0:comparer.Equals(record, null)|};
-		_ = {|#1:!comparer.Equals(record, null)|};
-		_ = {|#2:comparer.Equals(null, record)|};
-		_ = {|#3:!comparer.Equals(null, record)|};
-		_ = comparer.Equals(null, null);
-		_ = !comparer.Equals(null, null);
-		_ = comparer.Equals(record, record);
-		_ = !comparer.Equals(record, record);
+			class Test
+			{
+				void Method(Record record, IEqualityComparer<Record> comparer, EqualityComparer<Record> defaultComparer, RecordEqualityComparer customComparer)
+				{
+					_ = {|#0:comparer.Equals(record, null)|};
+					_ = {|#1:!comparer.Equals(record, null)|};
+					_ = {|#2:comparer.Equals(null, record)|};
+					_ = {|#3:!comparer.Equals(null, record)|};
+					_ = comparer.Equals(null, null);
+					_ = !comparer.Equals(null, null);
+					_ = comparer.Equals(record, record);
+					_ = !comparer.Equals(record, record);
 
-		_ = {|#4:defaultComparer.Equals(record, null)|};
-		_ = {|#5:!defaultComparer.Equals(record, null)|};
-		_ = {|#6:defaultComparer.Equals(null, record)|};
-		_ = {|#7:!defaultComparer.Equals(null, record)|};
-		_ = defaultComparer.Equals(null, null);
-		_ = !defaultComparer.Equals(null, null);
-		_ = defaultComparer.Equals(record, record);
-		_ = !defaultComparer.Equals(record, record);
+					_ = {|#4:defaultComparer.Equals(record, null)|};
+					_ = {|#5:!defaultComparer.Equals(record, null)|};
+					_ = {|#6:defaultComparer.Equals(null, record)|};
+					_ = {|#7:!defaultComparer.Equals(null, record)|};
+					_ = defaultComparer.Equals(null, null);
+					_ = !defaultComparer.Equals(null, null);
+					_ = defaultComparer.Equals(record, record);
+					_ = !defaultComparer.Equals(record, record);
 
-		_ = {|#8:customComparer.Equals(record, null)|};
-		_ = {|#9:!customComparer.Equals(record, null)|};
-		_ = {|#10:customComparer.Equals(null, record)|};
-		_ = {|#11:!customComparer.Equals(null, record)|};
-		_ = customComparer.Equals(null, null);
-		_ = !customComparer.Equals(null, null);
-		_ = customComparer.Equals(record, record);
-		_ = !customComparer.Equals(record, record);
-	}
-}";
+					_ = {|#8:customComparer.Equals(record, null)|};
+					_ = {|#9:!customComparer.Equals(record, null)|};
+					_ = {|#10:customComparer.Equals(null, record)|};
+					_ = {|#11:!customComparer.Equals(null, record)|};
+					_ = customComparer.Equals(null, null);
+					_ = !customComparer.Equals(null, null);
+					_ = customComparer.Equals(record, record);
+					_ = !customComparer.Equals(record, record);
+				}
+			}
+			""";
 
-		var fix =
-@"using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
+		var fix = """
+			using System.Collections.Generic;
+			using System.Diagnostics.CodeAnalysis;
 
-record Record();
+			record Record();
 
-class RecordEqualityComparer : EqualityComparer<Record>
-{
-	internal static RecordEqualityComparer Instance { get; } = new RecordEqualityComparer();
-	public override bool Equals(Record? x, Record? y) => throw null;
-	public override int GetHashCode([DisallowNull] Record obj) => throw null;
-}
+			class RecordEqualityComparer : EqualityComparer<Record>
+			{
+				internal static RecordEqualityComparer Instance { get; } = new RecordEqualityComparer();
+				public override bool Equals(Record? x, Record? y) => throw null;
+				public override int GetHashCode([DisallowNull] Record obj) => throw null;
+			}
 
-class Test
-{
-	void Method(Record record, IEqualityComparer<Record> comparer, EqualityComparer<Record> defaultComparer, RecordEqualityComparer customComparer)
-	{
-		_ = record is null;
-		_ = record is not null;
-		_ = record is null;
-		_ = record is not null;
-		_ = comparer.Equals(null, null);
-		_ = !comparer.Equals(null, null);
-		_ = comparer.Equals(record, record);
-		_ = !comparer.Equals(record, record);
+			class Test
+			{
+				void Method(Record record, IEqualityComparer<Record> comparer, EqualityComparer<Record> defaultComparer, RecordEqualityComparer customComparer)
+				{
+					_ = record is null;
+					_ = record is not null;
+					_ = record is null;
+					_ = record is not null;
+					_ = comparer.Equals(null, null);
+					_ = !comparer.Equals(null, null);
+					_ = comparer.Equals(record, record);
+					_ = !comparer.Equals(record, record);
 
-		_ = record is null;
-		_ = record is not null;
-		_ = record is null;
-		_ = record is not null;
-		_ = defaultComparer.Equals(null, null);
-		_ = !defaultComparer.Equals(null, null);
-		_ = defaultComparer.Equals(record, record);
-		_ = !defaultComparer.Equals(record, record);
+					_ = record is null;
+					_ = record is not null;
+					_ = record is null;
+					_ = record is not null;
+					_ = defaultComparer.Equals(null, null);
+					_ = !defaultComparer.Equals(null, null);
+					_ = defaultComparer.Equals(record, record);
+					_ = !defaultComparer.Equals(record, record);
 
-		_ = record is null;
-		_ = record is not null;
-		_ = record is null;
-		_ = record is not null;
-		_ = customComparer.Equals(null, null);
-		_ = !customComparer.Equals(null, null);
-		_ = customComparer.Equals(record, record);
-		_ = !customComparer.Equals(record, record);
-	}
-}";
+					_ = record is null;
+					_ = record is not null;
+					_ = record is null;
+					_ = record is not null;
+					_ = customComparer.Equals(null, null);
+					_ = !customComparer.Equals(null, null);
+					_ = customComparer.Equals(record, record);
+					_ = !customComparer.Equals(record, record);
+				}
+			}
+			""";
 
 		var expected = new[]
 		{
@@ -604,45 +623,47 @@ class Test
 	[Fact]
 	public async Task RegisterCodeFixesAsync_ReferenceEqualityComparerEquals_FixIfNullCheck()
 	{
-		var code =
-@"using System.Collections.Generic;
+		var code = """
+			using System.Collections.Generic;
 
-record Record();
+			record Record();
 
-class Test
-{
-	void Method(Record record, ReferenceEqualityComparer referenceComparer)
-	{
-		_ = {|#0:referenceComparer.Equals(record, null)|};
-		_ = {|#1:!referenceComparer.Equals(record, null)|};
-		_ = {|#2:referenceComparer.Equals(null, record)|};
-		_ = {|#3:!referenceComparer.Equals(null, record)|};
-		_ = referenceComparer.Equals(null, null);
-		_ = !referenceComparer.Equals(null, null);
-		_ = referenceComparer.Equals(record, record);
-		_ = !referenceComparer.Equals(record, record);
-	}
-}";
+			class Test
+			{
+				void Method(Record record, ReferenceEqualityComparer referenceComparer)
+				{
+					_ = {|#0:referenceComparer.Equals(record, null)|};
+					_ = {|#1:!referenceComparer.Equals(record, null)|};
+					_ = {|#2:referenceComparer.Equals(null, record)|};
+					_ = {|#3:!referenceComparer.Equals(null, record)|};
+					_ = referenceComparer.Equals(null, null);
+					_ = !referenceComparer.Equals(null, null);
+					_ = referenceComparer.Equals(record, record);
+					_ = !referenceComparer.Equals(record, record);
+				}
+			}
+			""";
 
-		var fix =
-@"using System.Collections.Generic;
+		var fix = """
+			using System.Collections.Generic;
 
-record Record();
+			record Record();
 
-class Test
-{
-	void Method(Record record, ReferenceEqualityComparer referenceComparer)
-	{
-		_ = record is null;
-		_ = record is not null;
-		_ = record is null;
-		_ = record is not null;
-		_ = referenceComparer.Equals(null, null);
-		_ = !referenceComparer.Equals(null, null);
-		_ = referenceComparer.Equals(record, record);
-		_ = !referenceComparer.Equals(record, record);
-	}
-}";
+			class Test
+			{
+				void Method(Record record, ReferenceEqualityComparer referenceComparer)
+				{
+					_ = record is null;
+					_ = record is not null;
+					_ = record is null;
+					_ = record is not null;
+					_ = referenceComparer.Equals(null, null);
+					_ = !referenceComparer.Equals(null, null);
+					_ = referenceComparer.Equals(record, record);
+					_ = !referenceComparer.Equals(record, record);
+				}
+			}
+			""";
 
 		var expected = new[]
 		{
@@ -658,45 +679,47 @@ class Test
 	[Fact]
 	public async Task RegisterCodeFixesAsync_CastEqualityComparer_FixIfNullCheck()
 	{
-		var code =
-@"using System.Collections.Generic;
+		var code = """
+			using System.Collections.Generic;
 
-record Record();
+			record Record();
 
-class Test
-{
-	void Method(Record record, ReferenceEqualityComparer referenceComparer)
-	{
-		_ = {|#0:((IEqualityComparer<object>)referenceComparer).Equals(record, null)|};
-		_ = {|#1:!((IEqualityComparer<object>)referenceComparer).Equals(record, null)|};
-		_ = {|#2:((IEqualityComparer<object>)referenceComparer).Equals(null, record)|};
-		_ = {|#3:!((IEqualityComparer<object>)referenceComparer).Equals(null, record)|};
-		_ = ((IEqualityComparer<object>)referenceComparer).Equals(null, null);
-		_ = !((IEqualityComparer<object>)referenceComparer).Equals(null, null);
-		_ = ((IEqualityComparer<object>)referenceComparer).Equals(record, record);
-		_ = !((IEqualityComparer<object>)referenceComparer).Equals(record, record);
-	}
-}";
+			class Test
+			{
+				void Method(Record record, ReferenceEqualityComparer referenceComparer)
+				{
+					_ = {|#0:((IEqualityComparer<object>)referenceComparer).Equals(record, null)|};
+					_ = {|#1:!((IEqualityComparer<object>)referenceComparer).Equals(record, null)|};
+					_ = {|#2:((IEqualityComparer<object>)referenceComparer).Equals(null, record)|};
+					_ = {|#3:!((IEqualityComparer<object>)referenceComparer).Equals(null, record)|};
+					_ = ((IEqualityComparer<object>)referenceComparer).Equals(null, null);
+					_ = !((IEqualityComparer<object>)referenceComparer).Equals(null, null);
+					_ = ((IEqualityComparer<object>)referenceComparer).Equals(record, record);
+					_ = !((IEqualityComparer<object>)referenceComparer).Equals(record, record);
+				}
+			}
+			""";
 
-		var fix =
-@"using System.Collections.Generic;
+		var fix = """
+			using System.Collections.Generic;
 
-record Record();
+			record Record();
 
-class Test
-{
-	void Method(Record record, ReferenceEqualityComparer referenceComparer)
-	{
-		_ = record is null;
-		_ = record is not null;
-		_ = record is null;
-		_ = record is not null;
-		_ = ((IEqualityComparer<object>)referenceComparer).Equals(null, null);
-		_ = !((IEqualityComparer<object>)referenceComparer).Equals(null, null);
-		_ = ((IEqualityComparer<object>)referenceComparer).Equals(record, record);
-		_ = !((IEqualityComparer<object>)referenceComparer).Equals(record, record);
-	}
-}";
+			class Test
+			{
+				void Method(Record record, ReferenceEqualityComparer referenceComparer)
+				{
+					_ = record is null;
+					_ = record is not null;
+					_ = record is null;
+					_ = record is not null;
+					_ = ((IEqualityComparer<object>)referenceComparer).Equals(null, null);
+					_ = !((IEqualityComparer<object>)referenceComparer).Equals(null, null);
+					_ = ((IEqualityComparer<object>)referenceComparer).Equals(record, record);
+					_ = !((IEqualityComparer<object>)referenceComparer).Equals(record, record);
+				}
+			}
+			""";
 
 		var expected = new[]
 		{
@@ -712,51 +735,53 @@ class Test
 	[Fact]
 	public async Task RegisterCodeFixesAsync_Compatibility_FixIfNullCheck()
 	{
-		var code =
-@"using System;
-using System.Collections.Generic;
-using System.Linq;
+		var code = """
+			using System;
+			using System.Collections.Generic;
+			using System.Linq;
 
-record Record();
+			record Record();
 
-class Test
-{
-	void Method(Record record, IEnumerable<string> collection)
-	{
-		_ = {|#0:record == null|} == true;
-		_ = {|#1:record != null|} == false;
-		_ = {|#2:record.Equals(null)|} == true;
-		_ = {|#3:!record.Equals(null)|} == false;
+			class Test
+			{
+				void Method(Record record, IEnumerable<string> collection)
+				{
+					_ = {|#0:record == null|} == true;
+					_ = {|#1:record != null|} == false;
+					_ = {|#2:record.Equals(null)|} == true;
+					_ = {|#3:!record.Equals(null)|} == false;
 
-		_ = collection.Where(item => {|#4:item == null|});
-		_ = collection.Where(item => {|#5:item != null|});
-		_ = collection.Where(item => {|#6:item.Equals(null)|});
-		_ = collection.Where(item => {|#7:!item.Equals(null)|});
-	}
-}";
+					_ = collection.Where(item => {|#4:item == null|});
+					_ = collection.Where(item => {|#5:item != null|});
+					_ = collection.Where(item => {|#6:item.Equals(null)|});
+					_ = collection.Where(item => {|#7:!item.Equals(null)|});
+				}
+			}
+			""";
 
-		var fix =
-@"using System;
-using System.Collections.Generic;
-using System.Linq;
+		var fix = """
+			using System;
+			using System.Collections.Generic;
+			using System.Linq;
 
-record Record();
+			record Record();
 
-class Test
-{
-	void Method(Record record, IEnumerable<string> collection)
-	{
-		_ = record is null == true;
-		_ = record is not null == false;
-		_ = record is null == true;
-		_ = record is not null == false;
+			class Test
+			{
+				void Method(Record record, IEnumerable<string> collection)
+				{
+					_ = record is null == true;
+					_ = record is not null == false;
+					_ = record is null == true;
+					_ = record is not null == false;
 
-		_ = collection.Where(item => item is null);
-		_ = collection.Where(item => item is not null);
-		_ = collection.Where(item => item is null);
-		_ = collection.Where(item => item is not null);
-	}
-}";
+					_ = collection.Where(item => item is null);
+					_ = collection.Where(item => item is not null);
+					_ = collection.Where(item => item is null);
+					_ = collection.Where(item => item is not null);
+				}
+			}
+			""";
 
 		var expected = new[]
 		{
@@ -777,45 +802,47 @@ class Test
 	[Fact]
 	public async Task RegisterCodeFixesAsync_Other_FixIfNullCheck()
 	{
-		var code =
-@"using System;
+		var code = """
+			using System;
 
-class Test
-{
-	void Method(Object obj, Nullable<int> value)
-	{
-		_ = obj.GetHashCode() == null;
-		_ = {|#0:obj.GetType() == null|};
-		_ = {|#1:obj.ToString() == null|};
+			class Test
+			{
+				void Method(Object obj, Nullable<int> value)
+				{
+					_ = obj.GetHashCode() == null;
+					_ = {|#0:obj.GetType() == null|};
+					_ = {|#1:obj.ToString() == null|};
 
-		_ = value.HasValue != null;
-		_ = value.Value != null;
-		_ = value.GetHashCode() != null;
-		_ = value.GetValueOrDefault() != null;
-		_ = value.GetValueOrDefault(default) != null;
-		_ = {|#2:value.ToString() != null|};
-	}
-}";
+					_ = value.HasValue != null;
+					_ = value.Value != null;
+					_ = value.GetHashCode() != null;
+					_ = value.GetValueOrDefault() != null;
+					_ = value.GetValueOrDefault(default) != null;
+					_ = {|#2:value.ToString() != null|};
+				}
+			}
+			""";
 
-		var fix =
-@"using System;
+		var fix = """
+			using System;
 
-class Test
-{
-	void Method(Object obj, Nullable<int> value)
-	{
-		_ = obj.GetHashCode() == null;
-		_ = obj.GetType() is null;
-		_ = obj.ToString() is null;
+			class Test
+			{
+				void Method(Object obj, Nullable<int> value)
+				{
+					_ = obj.GetHashCode() == null;
+					_ = obj.GetType() is null;
+					_ = obj.ToString() is null;
 
-		_ = value.HasValue != null;
-		_ = value.Value != null;
-		_ = value.GetHashCode() != null;
-		_ = value.GetValueOrDefault() != null;
-		_ = value.GetValueOrDefault(default) != null;
-		_ = value.ToString() is not null;
-	}
-}";
+					_ = value.HasValue != null;
+					_ = value.Value != null;
+					_ = value.GetHashCode() != null;
+					_ = value.GetValueOrDefault() != null;
+					_ = value.GetValueOrDefault(default) != null;
+					_ = value.ToString() is not null;
+				}
+			}
+			""";
 
 		var expected = new[]
 		{
@@ -831,41 +858,43 @@ class Test
 	[Fact]
 	public async Task RegisterCodeFixesAsync_ArgumentSyntax_FixIfNullCheck()
 	{
-		var code =
-@"using System;
-using System.Diagnostics;
+		var code = """
+			using System;
+			using System.Diagnostics;
 
-record Record();
+			record Record();
 
-class Test
-{
-	void Method(string text)
-	{
-		Debug.Assert({|#0:text == null|});
-		Debug.Assert({|#1:text != null|});
+			class Test
+			{
+				void Method(string text)
+				{
+					Debug.Assert({|#0:text == null|});
+					Debug.Assert({|#1:text != null|});
 
-		Debug.Assert({|#2:text.Equals(null)|});
-		Debug.Assert({|#3:!text.Equals(null)|});
-	}
-}";
+					Debug.Assert({|#2:text.Equals(null)|});
+					Debug.Assert({|#3:!text.Equals(null)|});
+				}
+			}
+			""";
 
-		var fix =
-@"using System;
-using System.Diagnostics;
+		var fix = """
+			using System;
+			using System.Diagnostics;
 
-record Record();
+			record Record();
 
-class Test
-{
-	void Method(string text)
-	{
-		Debug.Assert(text is null);
-		Debug.Assert(text is not null);
+			class Test
+			{
+				void Method(string text)
+				{
+					Debug.Assert(text is null);
+					Debug.Assert(text is not null);
 
-		Debug.Assert(text is null);
-		Debug.Assert(text is not null);
-	}
-}";
+					Debug.Assert(text is null);
+					Debug.Assert(text is not null);
+				}
+			}
+			""";
 
 		var expected = new[]
 		{

@@ -16,53 +16,54 @@ public class CA1707IdentifiersShouldNotContainUnderscoresSuppressorBenchmarks
 	[GlobalSetup]
 	public void Setup()
 	{
-		var code =
-@"using Xunit;
+		var code = """
+			using Xunit;
 
-public class xUnit_Tests
-{
-	[Fact]
-	public void Given_When_Then()
-	{
-		Assert.Equal(240, 0x_F0);
-	}
+			public class xUnit_Tests
+			{
+				[Fact]
+				public void Given_When_Then()
+				{
+					Assert.Equal(240, 0x_F0);
+				}
 
-	[Theory]
-	[InlineData(0x_F0)]
-	public void MethodUnderTest_Scenario_ExpectedResult(int value)
-	{
-		Assert.Equal(240, value);
-	}
-}
+				[Theory]
+				[InlineData(0x_F0)]
+				public void MethodUnderTest_Scenario_ExpectedResult(int value)
+				{
+					Assert.Equal(240, value);
+				}
+			}
 
-namespace Xunit
-{
-	using Xunit.Sdk;
+			namespace Xunit
+			{
+				using Xunit.Sdk;
 
-	[AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
-	public class FactAttribute : Attribute
-	{
-	}
+				[AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
+				public class FactAttribute : Attribute
+				{
+				}
 
-	[AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
-	public class TheoryAttribute : FactAttribute
-	{
-	}
+				[AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
+				public class TheoryAttribute : FactAttribute
+				{
+				}
 
-	[AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
-	public sealed class InlineDataAttribute : DataAttribute
-	{
-		public InlineDataAttribute(params object[] data) => throw null;
-	}
-}
+				[AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
+				public sealed class InlineDataAttribute : DataAttribute
+				{
+					public InlineDataAttribute(params object[] data) => throw null;
+				}
+			}
 
-namespace Xunit.Sdk
-{
-	[AttributeUsage(AttributeTargets.Method, AllowMultiple = true, Inherited = true)]
-	public abstract class DataAttribute : Attribute
-	{
-	}
-}";
+			namespace Xunit.Sdk
+			{
+				[AttributeUsage(AttributeTargets.Method, AllowMultiple = true, Inherited = true)]
+				public abstract class DataAttribute : Attribute
+				{
+				}
+			}
+			""";
 
 		var locations = benchmark.CreateLocations(
 			l => l.With(3, 14, 3, 25),

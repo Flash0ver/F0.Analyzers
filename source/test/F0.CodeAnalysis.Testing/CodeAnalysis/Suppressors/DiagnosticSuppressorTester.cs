@@ -1,9 +1,10 @@
 using System.Collections.Immutable;
+using System.Diagnostics;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace F0.Testing.CodeAnalysis.Suppressors;
 
-internal class DiagnosticSuppressorTester<TDiagnosticSuppressor, TDiagnosticAnalyzer> : CSharpAnalyzerTest<TDiagnosticSuppressor, XUnitVerifier>
+internal sealed class DiagnosticSuppressorTester<TDiagnosticSuppressor, TDiagnosticAnalyzer> : CSharpAnalyzerTest<TDiagnosticSuppressor, XUnitVerifier>
 	where TDiagnosticSuppressor : DiagnosticSuppressor, new()
 	where TDiagnosticAnalyzer : DiagnosticAnalyzer, new()
 {
@@ -27,6 +28,8 @@ internal class DiagnosticSuppressorTester<TDiagnosticSuppressor, TDiagnosticAnal
 
 			var project = solution.GetProject(projectId);
 
+			Debug.Assert(project is not null, $"{nameof(ProjectId)} {projectId} is not an ID of a project that is part of this solution.");
+			Debug.Assert(project.CompilationOptions is not null, $"No {nameof(project.CompilationOptions)} for project '{project.Name}'.");
 			var compilationOptions = (CSharpCompilationOptions)project.CompilationOptions;
 
 			compilationOptions = compilationOptions

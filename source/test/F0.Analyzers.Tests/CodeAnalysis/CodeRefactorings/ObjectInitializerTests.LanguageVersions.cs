@@ -5,18 +5,19 @@ public partial class ObjectInitializerTests
 	[Fact]
 	public async Task ComputeRefactoringsAsync_CSharp2_ObjectInitializerIsNotAvailable()
 	{
-		var code =
-			@"using System;
+		var code = """
+			using System;
 
-				class Model { public int Field; private int backingField; public int Property { get { return backingField; } set { backingField = value; } } }
+			class Model { public int Field; private int backingField; public int Property { get { return backingField; } set { backingField = value; } } }
 
-				class C
+			class C
+			{
+				void Test()
 				{
-					void Test()
-					{
-						Model model = [|new Model()|];
-					}
-				}";
+					Model model = [|new Model()|];
+				}
+			}
+			""";
 
 		await VerifyNoOpAsync(code, LanguageVersion.CSharp2);
 	}
@@ -24,35 +25,37 @@ public partial class ObjectInitializerTests
 	[Fact]
 	public async Task ComputeRefactoringsAsync_CSharp3_ObjectInitializerIsAvailable()
 	{
-		var initialCode =
-			@"using System;
+		var initialCode = """
+			using System;
 
-				class Model { public int Field; private int backingField; public int Property { get { return backingField; } set { backingField = value; } } }
+			class Model { public int Field; private int backingField; public int Property { get { return backingField; } set { backingField = value; } } }
 
-				class C
+			class C
+			{
+				void Test()
 				{
-					void Test()
-					{
-						var model = [|new Model()|];
-					}
-				}";
+					var model = [|new Model()|];
+				}
+			}
+			""";
 
-		var expectedCode =
-			@"using System;
+		var expectedCode = """
+			using System;
 
-				class Model { public int Field; private int backingField; public int Property { get { return backingField; } set { backingField = value; } } }
+			class Model { public int Field; private int backingField; public int Property { get { return backingField; } set { backingField = value; } } }
 
-				class C
+			class C
+			{
+				void Test()
 				{
-					void Test()
+					var model = new Model()
 					{
-						var model = new Model()
-						{
-							Field = default(int),
-							Property = default(int)
-						};
-					}
-				}";
+						Field = default(int),
+						Property = default(int)
+					};
+				}
+			}
+			""";
 
 		await VerifyAsync(initialCode, expectedCode, LanguageVersion.CSharp3);
 	}
@@ -60,56 +63,58 @@ public partial class ObjectInitializerTests
 	[Fact]
 	public async Task ComputeRefactoringsAsync_CSharp7_DefaultOperator()
 	{
-		var initialCode =
-			@"using System;
+		var initialCode = """
+			using System;
 
-				class GlobalType { }
+			class GlobalType { }
 
-				namespace Namespace.Types
+			namespace Namespace.Types
+			{
+				class NamespacedType { }
+			}
+
+			class Model { public GlobalType Global; public Namespace.Types.NamespacedType Namespaced { get; set; } public Tuple<string, Type, System.Data.DbType> Constructed { get; set; } }
+
+			namespace Namespace
+			{
+				class C
 				{
-					class NamespacedType { }
-				}
-
-				class Model { public GlobalType Global; public Namespace.Types.NamespacedType Namespaced { get; set; } public Tuple<string, Type, System.Data.DbType> Constructed { get; set; } }
-
-				namespace Namespace
-				{
-					class C
+					void Test()
 					{
-						void Test()
-						{
-							var model = [|new Model()|];
-						}
+						var model = [|new Model()|];
 					}
-				}";
-
-		var expectedCode =
-			@"using System;
-
-				class GlobalType { }
-
-				namespace Namespace.Types
-				{
-					class NamespacedType { }
 				}
+			}
+			""";
 
-				class Model { public GlobalType Global; public Namespace.Types.NamespacedType Namespaced { get; set; } public Tuple<string, Type, System.Data.DbType> Constructed { get; set; } }
+		var expectedCode = """
+			using System;
 
-				namespace Namespace
+			class GlobalType { }
+
+			namespace Namespace.Types
+			{
+				class NamespacedType { }
+			}
+
+			class Model { public GlobalType Global; public Namespace.Types.NamespacedType Namespaced { get; set; } public Tuple<string, Type, System.Data.DbType> Constructed { get; set; } }
+
+			namespace Namespace
+			{
+				class C
 				{
-					class C
+					void Test()
 					{
-						void Test()
+						var model = new Model()
 						{
-							var model = new Model()
-							{
-								Global = default(GlobalType),
-								Namespaced = default(Types.NamespacedType),
-								Constructed = default(Tuple<string, Type, System.Data.DbType>)
-							};
-						}
+							Global = default(GlobalType),
+							Namespaced = default(Types.NamespacedType),
+							Constructed = default(Tuple<string, Type, System.Data.DbType>)
+						};
 					}
-				}";
+				}
+			}
+			""";
 
 		await VerifyAsync(initialCode, expectedCode, LanguageVersion.CSharp7);
 	}
@@ -117,56 +122,58 @@ public partial class ObjectInitializerTests
 	[Fact]
 	public async Task ComputeRefactoringsAsync_CSharp7_1_DefaultLiteral()
 	{
-		var initialCode =
-			@"using System;
+		var initialCode = """
+			using System;
 
-				class GlobalType { }
+			class GlobalType { }
 
-				namespace Namespace.Types
+			namespace Namespace.Types
+			{
+				class NamespacedType { }
+			}
+
+			class Model { public GlobalType Global; public Namespace.Types.NamespacedType Namespaced { get; set; } public Tuple<string, Type, System.Data.DbType> Constructed { get; set; } }
+
+			namespace Namespace
+			{
+				class C
 				{
-					class NamespacedType { }
-				}
-
-				class Model { public GlobalType Global; public Namespace.Types.NamespacedType Namespaced { get; set; } public Tuple<string, Type, System.Data.DbType> Constructed { get; set; } }
-
-				namespace Namespace
-				{
-					class C
+					void Test()
 					{
-						void Test()
-						{
-							var model = [|new Model()|];
-						}
+						var model = [|new Model()|];
 					}
-				}";
-
-		var expectedCode =
-			@"using System;
-
-				class GlobalType { }
-
-				namespace Namespace.Types
-				{
-					class NamespacedType { }
 				}
+			}
+			""";
 
-				class Model { public GlobalType Global; public Namespace.Types.NamespacedType Namespaced { get; set; } public Tuple<string, Type, System.Data.DbType> Constructed { get; set; } }
+		var expectedCode = """
+			using System;
 
-				namespace Namespace
+			class GlobalType { }
+
+			namespace Namespace.Types
+			{
+				class NamespacedType { }
+			}
+
+			class Model { public GlobalType Global; public Namespace.Types.NamespacedType Namespaced { get; set; } public Tuple<string, Type, System.Data.DbType> Constructed { get; set; } }
+
+			namespace Namespace
+			{
+				class C
 				{
-					class C
+					void Test()
 					{
-						void Test()
+						var model = new Model()
 						{
-							var model = new Model()
-							{
-								Global = default,
-								Namespaced = default,
-								Constructed = default
-							};
-						}
+							Global = default,
+							Namespaced = default,
+							Constructed = default
+						};
 					}
-				}";
+				}
+			}
+			""";
 
 		await VerifyAsync(initialCode, expectedCode, LanguageVersion.CSharp7_1);
 	}
@@ -174,56 +181,58 @@ public partial class ObjectInitializerTests
 	[Fact]
 	public async Task ComputeRefactoringsAsync_CSharp9_InitAccessor()
 	{
-		var initialCode =
-			@"using System;
+		var initialCode = """
+			using System;
 
-				class GlobalType { }
+			class GlobalType { }
 
-				namespace Namespace.Types
+			namespace Namespace.Types
+			{
+				class NamespacedType { }
+			}
+
+			class Model { public GlobalType Global; public Namespace.Types.NamespacedType Namespaced { get; init; } public Tuple<string, Type, System.Data.DbType> Constructed { get; init; } }
+
+			namespace Namespace
+			{
+				class C
 				{
-					class NamespacedType { }
-				}
-
-				class Model { public GlobalType Global; public Namespace.Types.NamespacedType Namespaced { get; init; } public Tuple<string, Type, System.Data.DbType> Constructed { get; init; } }
-
-				namespace Namespace
-				{
-					class C
+					void Test()
 					{
-						void Test()
-						{
-							var model = [|new Model()|];
-						}
+						var model = [|new Model()|];
 					}
-				}";
-
-		var expectedCode =
-			@"using System;
-
-				class GlobalType { }
-
-				namespace Namespace.Types
-				{
-					class NamespacedType { }
 				}
+			}
+			""";
 
-				class Model { public GlobalType Global; public Namespace.Types.NamespacedType Namespaced { get; init; } public Tuple<string, Type, System.Data.DbType> Constructed { get; init; } }
+		var expectedCode = """
+			using System;
 
-				namespace Namespace
+			class GlobalType { }
+
+			namespace Namespace.Types
+			{
+				class NamespacedType { }
+			}
+
+			class Model { public GlobalType Global; public Namespace.Types.NamespacedType Namespaced { get; init; } public Tuple<string, Type, System.Data.DbType> Constructed { get; init; } }
+
+			namespace Namespace
+			{
+				class C
 				{
-					class C
+					void Test()
 					{
-						void Test()
+						var model = new Model()
 						{
-							var model = new Model()
-							{
-								Global = default,
-								Namespaced = default,
-								Constructed = default
-							};
-						}
+							Global = default,
+							Namespaced = default,
+							Constructed = default
+						};
 					}
-				}";
+				}
+			}
+			""";
 
 		await VerifyAsync(initialCode, expectedCode, LanguageVersion.CSharp9, ReferenceAssemblies.Net.Net50);
 	}
@@ -231,56 +240,58 @@ public partial class ObjectInitializerTests
 	[Fact]
 	public async Task ComputeRefactoringsAsync_CSharp9_TargetTypedNewExpression()
 	{
-		var initialCode =
-			@"using System;
+		var initialCode = """
+			using System;
 
-				class GlobalType { }
+			class GlobalType { }
 
-				namespace Namespace.Types
+			namespace Namespace.Types
+			{
+				class NamespacedType { }
+			}
+
+			class Model { public GlobalType Global; public Namespace.Types.NamespacedType Namespaced { get; set; } public Tuple<string, Type, System.Data.DbType> Constructed { get; set; } }
+
+			namespace Namespace
+			{
+				class C
 				{
-					class NamespacedType { }
-				}
-
-				class Model { public GlobalType Global; public Namespace.Types.NamespacedType Namespaced { get; set; } public Tuple<string, Type, System.Data.DbType> Constructed { get; set; } }
-
-				namespace Namespace
-				{
-					class C
+					void Test()
 					{
-						void Test()
-						{
-							Model model = [|new()|];
-						}
+						Model model = [|new()|];
 					}
-				}";
-
-		var expectedCode =
-			@"using System;
-
-				class GlobalType { }
-
-				namespace Namespace.Types
-				{
-					class NamespacedType { }
 				}
+			}
+			""";
 
-				class Model { public GlobalType Global; public Namespace.Types.NamespacedType Namespaced { get; set; } public Tuple<string, Type, System.Data.DbType> Constructed { get; set; } }
+		var expectedCode = """
+			using System;
 
-				namespace Namespace
+			class GlobalType { }
+
+			namespace Namespace.Types
+			{
+				class NamespacedType { }
+			}
+
+			class Model { public GlobalType Global; public Namespace.Types.NamespacedType Namespaced { get; set; } public Tuple<string, Type, System.Data.DbType> Constructed { get; set; } }
+
+			namespace Namespace
+			{
+				class C
 				{
-					class C
+					void Test()
 					{
-						void Test()
+						Model model = new()
 						{
-							Model model = new()
-							{
-								Global = default,
-								Namespaced = default,
-								Constructed = default
-							};
-						}
+							Global = default,
+							Namespaced = default,
+							Constructed = default
+						};
 					}
-				}";
+				}
+			}
+			""";
 
 		await VerifyAsync(initialCode, expectedCode, LanguageVersion.CSharp9);
 	}

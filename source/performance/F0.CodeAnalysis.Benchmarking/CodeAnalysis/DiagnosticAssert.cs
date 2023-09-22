@@ -1,4 +1,6 @@
 using System.Collections.Immutable;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Text;
 
 namespace F0.Benchmarking.CodeAnalysis;
@@ -77,9 +79,9 @@ internal static class DiagnosticAssert
 			errors.AppendLine(nameof(DiagnosticDescriptor.Title), expectedDiagnostic.Descriptor.Title, actualDiagnostic.Descriptor.Title);
 		}
 
-		if (expectedDiagnostic.GetMessage() != actualDiagnostic.GetMessage())
+		if (expectedDiagnostic.GetMessage(CultureInfo.InvariantCulture) != actualDiagnostic.GetMessage(CultureInfo.InvariantCulture))
 		{
-			var message = $"- Message: Expected '{expectedDiagnostic.GetMessage()}', but actually is '{actualDiagnostic.GetMessage()}'.";
+			var message = $"- Message: Expected '{expectedDiagnostic.GetMessage(CultureInfo.InvariantCulture)}', but actually is '{actualDiagnostic.GetMessage(CultureInfo.InvariantCulture)}'.";
 			errors.AppendLine(message);
 		}
 
@@ -108,6 +110,7 @@ internal static class DiagnosticAssert
 		}
 	}
 
+	[SuppressMessage("Globalization", "CA1305:Specify IFormatProvider", Justification = ".NET Standard 2.0")]
 	private static void AppendLine<T>(this StringBuilder errors, string memberName, T expected, T actual)
 		=> _ = errors.AppendLine($"\t- {memberName}: {expected} | {actual}");
 }

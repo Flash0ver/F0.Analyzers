@@ -4,7 +4,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace F0.Testing.CodeAnalysis.CodeFixes;
 
-public class CodeFixVerifier<TCodeFix>
+public sealed class CodeFixVerifier<TCodeFix>
 	where TCodeFix : CodeFixProvider, new()
 {
 	internal CodeFixVerifier()

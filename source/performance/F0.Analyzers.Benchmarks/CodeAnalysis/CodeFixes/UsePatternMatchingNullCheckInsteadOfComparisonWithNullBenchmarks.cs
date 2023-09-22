@@ -17,20 +17,21 @@ public class UsePatternMatchingNullCheckInsteadOfComparisonWithNullBenchmarks
 	[GlobalSetup]
 	public void Setup()
 	{
-		var code =
-@"using System;
+		var code = """
+			using System;
 
-record Record();
+			record Record();
 
-class Class
-{
-	void Method(Record instance)
-	{
-		_ = instance is null;
-		_ = instance is not null;
-		_ = (object)instance != null;
-	}
-}";
+			class Class
+			{
+				void Method(Record instance)
+				{
+					_ = instance is null;
+					_ = instance is not null;
+					_ = (object)instance != null;
+				}
+			}
+			""";
 
 		benchmark.Initialize(code, LanguageVersion.Latest);
 	}
@@ -42,20 +43,21 @@ class Class
 	[GlobalCleanup]
 	public void Cleanup()
 	{
-		var code =
-@"using System;
+		var code = """
+			using System;
 
-record Record();
+			record Record();
 
-class Class
-{
-	void Method(Record instance)
-	{
-		_ = instance is null;
-		_ = instance is not null;
-		_ = instance is not null;
-	}
-}";
+			class Class
+			{
+				void Method(Record instance)
+				{
+					_ = instance is null;
+					_ = instance is not null;
+					_ = instance is not null;
+				}
+			}
+			""";
 
 		benchmark.Inspect(code);
 	}

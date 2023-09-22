@@ -1,10 +1,11 @@
+using System.Diagnostics;
 using System.Reflection;
 using F0.Testing.Extensions;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace F0.Testing.CodeAnalysis.Suppressors;
 
-public class DiagnosticSuppressorVerifier<TDiagnosticSuppressor>
+public sealed class DiagnosticSuppressorVerifier<TDiagnosticSuppressor>
 	where TDiagnosticSuppressor : DiagnosticAnalyzer, new()
 {
 	internal DiagnosticSuppressorVerifier()
@@ -55,6 +56,7 @@ public class DiagnosticSuppressorVerifier<TDiagnosticSuppressor, TDiagnosticAnal
 
 		tester.SolutionTransforms.Add((solution, projectId) =>
 		{
+			Debug.Assert(name.Name is not null, "No assembly name.");
 			solution = solution.WithProjectAssemblyName(projectId, name.Name);
 
 			return solution;

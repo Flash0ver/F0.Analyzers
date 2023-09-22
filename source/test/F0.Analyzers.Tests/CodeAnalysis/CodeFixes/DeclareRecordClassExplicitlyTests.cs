@@ -14,31 +14,33 @@ public class DeclareRecordClassExplicitlyTests
 	[Fact]
 	public async Task RegisterCodeFixesAsync_WithoutClassOrStructKeyword_RegisterCodeFix()
 	{
-		var code = @"using System;
+		var code = """
+			using System;
 
-public record {|#0:Record|};
+			public record {|#0:Record|};
 
-public abstract record {|#1:@RecordClass|}<T>
-{
-	public T Member { get; init; }
-}
+			public abstract record {|#1:@RecordClass|}<T>
+			{
+				public T Member { get; init; }
+			}
 
-[Obsolete]
-internal sealed record {|#2:@PositionalRecord|}<T>(int Number, string Text) : RecordClass<T> where T : notnull;
-";
+			[Obsolete]
+			internal sealed record {|#2:@PositionalRecord|}<T>(int Number, string Text) : RecordClass<T> where T : notnull;
+			""";
 
-		var fix = @"using System;
+		var fix = """
+			using System;
 
-public record class Record;
+			public record class Record;
 
-public abstract record class @RecordClass<T>
-{
-	public T Member { get; init; }
-}
+			public abstract record class @RecordClass<T>
+			{
+				public T Member { get; init; }
+			}
 
-[Obsolete]
-internal sealed record class @PositionalRecord<T>(int Number, string Text) : RecordClass<T> where T : notnull;
-";
+			[Obsolete]
+			internal sealed record class @PositionalRecord<T>(int Number, string Text) : RecordClass<T> where T : notnull;
+			""";
 
 		var expected = new[]
 		{
