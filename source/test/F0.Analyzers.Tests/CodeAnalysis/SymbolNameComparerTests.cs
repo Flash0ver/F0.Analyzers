@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using F0.CodeAnalysis;
 
 namespace F0.Tests.CodeAnalysis;
@@ -60,6 +61,7 @@ public class SymbolNameComparerTests
 	}
 
 	[Fact]
+	[SuppressMessage("Globalization", "CA1307:Specify StringComparison for clarity", Justification = "NET472")]
 	public void GetHashCode_CompareToHashCodeForSymbolName_AreEqual()
 	{
 		// Arrange

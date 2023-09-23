@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using F0.Extensions;
 
 namespace F0.Tests.Extensions;
@@ -72,6 +73,7 @@ public class EnumerableExtensionsTests
 	}
 
 	[Fact]
+	[SuppressMessage("Globalization", "CA1307:Specify StringComparison for clarity", Justification = "NET472")]
 	public void SoleOrDefaultWithPredicate_SequenceContainsMoreThanOneMatch_ReturnsNull()
 	{
 		// Arrange
