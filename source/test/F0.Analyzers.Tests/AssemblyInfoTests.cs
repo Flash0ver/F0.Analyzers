@@ -1,4 +1,3 @@
-#nullable disable
 using System.Diagnostics;
 using System.Reflection;
 using System.Resources;
@@ -22,6 +21,7 @@ public class AssemblyInfoTests
 		var attribute = assembly.GetCustomAttribute<NeutralResourcesLanguageAttribute>();
 
 		attribute.Should().NotBeNull();
+		Debug.Assert(attribute is not null);
 		attribute.CultureName.Should().Be("en");
 		attribute.Location.Should().Be(UltimateResourceFallbackLocation.MainAssembly);
 	}
@@ -33,6 +33,7 @@ public class AssemblyInfoTests
 		var attribute = assembly.GetCustomAttribute<CLSCompliantAttribute>();
 
 		attribute.Should().NotBeNull();
+		Debug.Assert(attribute is not null);
 		attribute.IsCompliant.Should().BeFalse();
 	}
 
@@ -41,7 +42,7 @@ public class AssemblyInfoTests
 		var displayName = $"F0.Analyzers, Version={version}, Culture=neutral, PublicKeyToken=null";
 
 		var assemblies = AppDomain.CurrentDomain.GetAssemblies();
-		var assembly = assemblies.Single(a => a.FullName.Equals(displayName, StringComparison.Ordinal));
+		var assembly = assemblies.Single(assembly => displayName.Equals(assembly.FullName, StringComparison.Ordinal));
 
 		return assembly;
 	}

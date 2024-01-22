@@ -5,8 +5,7 @@ namespace F0.CodeAnalysis.Diagnostics;
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
 internal sealed class F02001ImplicitRecordClassDeclaration : DiagnosticAnalyzer
 {
-	[SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "https://github.com/dotnet/roslyn-analyzers/issues/5828")]
-	private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(
+	private static readonly DiagnosticDescriptor Rule = new(
 		DiagnosticIds.F02001,
 		"Implicit record class declaration",
 		"Record class '{0}' is declared implicitly",
