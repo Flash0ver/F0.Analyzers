@@ -2,6 +2,7 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Resources;
 using F0.CodeAnalysis.Diagnostics;
+using F0.Tests.Assertions;
 
 namespace F0.Tests;
 
@@ -20,8 +21,7 @@ public class AssemblyInfoTests
 		var assembly = GetAnalyzerAssembly();
 		var attribute = assembly.GetCustomAttribute<NeutralResourcesLanguageAttribute>();
 
-		attribute.Should().NotBeNull();
-		Debug.Assert(attribute is not null);
+		attribute.ShouldNotBeNull("custom attribute expected");
 		attribute.CultureName.Should().Be("en");
 		attribute.Location.Should().Be(UltimateResourceFallbackLocation.MainAssembly);
 	}
@@ -32,8 +32,7 @@ public class AssemblyInfoTests
 		var assembly = GetAnalyzerAssembly();
 		var attribute = assembly.GetCustomAttribute<CLSCompliantAttribute>();
 
-		attribute.Should().NotBeNull();
-		Debug.Assert(attribute is not null);
+		attribute.ShouldNotBeNull("custom attribute expected");
 		attribute.IsCompliant.Should().BeFalse();
 	}
 
