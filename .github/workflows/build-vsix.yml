@@ -22,11 +22,16 @@ jobs:
     steps:
     # Init
     - name: Checkout
-      uses: actions/checkout@v2.3.4
-    - name: Setup MSBuild.exe (add msbuild to PATH)
-      uses: microsoft/setup-msbuild@v1.0.3
+      uses: actions/checkout@v4.0.0
       with:
-        vs-prerelease: true
+        fetch-depth: 1
+        show-progress: false
+    - name: Setup MSBuild.exe (add msbuild to PATH)
+      uses: microsoft/setup-msbuild@v1.3.1
+      with:
+        vs-version: '[17.0,18.0)'
+        vs-prerelease: false
+        msbuild-architecture: x64
     # Restore
     - name: Restore ${{ matrix.configuration }}
       run: msbuild ${{ env.Solution_Vsix_File }} /t:Restore /p:Configuration=${{ matrix.configuration }} -nologo
