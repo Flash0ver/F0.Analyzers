@@ -68,9 +68,8 @@ jobs:
       custom: 'tool'
       arguments: 'run reportgenerator -reports:$(Coverage_Reports_Glob) -targetdir:$(Report_Target_Directory) -reporttypes:$(Report_Types)'
   # Report
-  - task: PublishCodeCoverageResults@1
+  - task: PublishCodeCoverageResults@2
     displayName: 'Publish Results'
     inputs:
-      codeCoverageTool: 'Cobertura'
       summaryFileLocation: '$(Report_Target_File)'
       failIfCoverageEmpty: true
